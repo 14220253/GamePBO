@@ -1,0 +1,8 @@
+package com.gdx.objects;
+
+public class Consumable extends Item{
+    //item consumable
+
+    //stats
+    // ¯\_(ツ)_/¯
+}
