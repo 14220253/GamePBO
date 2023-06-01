@@ -6,4 +6,11 @@ public abstract class Item {
     //item detail
     private String itemName;
     private String itemDescription;
+
+    //methods
+
+    public Item(String itemName, String itemDescription) {
+        this.itemName = itemName;
+        this.itemDescription = itemDescription;
+    }
 }

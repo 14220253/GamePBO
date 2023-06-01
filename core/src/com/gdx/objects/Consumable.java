@@ -5,4 +5,9 @@ public class Consumable extends Item{
 
     //stats
     // ¯\_(ツ)_/¯
+
+
+    public Consumable(String itemName, String itemDescription) {
+        super(itemName, itemDescription);
+    }
 }

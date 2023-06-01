@@ -5,4 +5,10 @@ public class Accesories extends Item{
 
     //stats
     // ¯\_(ツ)_/¯
+
+    //methods
+
+    public Accesories(String itemName, String itemDescription) {
+        super(itemName, itemDescription);
+    }
 }
