@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -14,6 +15,7 @@ import java.awt.*;
 public class GameMain extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture tiles;
+	Texture swords;
 	Player player;
 	Texture heroSprites;
 	TextureRegion idle1;
@@ -21,20 +23,26 @@ public class GameMain extends ApplicationAdapter {
 	TextureRegion idle3;
 	TextureRegion idle4;
 	int fps;
+	boolean isMeleeAttacking = false;
+	int frameCount = 0;
 	Rectangle leftBorder;
 	Rectangle rightBorder;
 	Rectangle bottomBorder;
 	Rectangle upperborder;
+	TextureRegion weapon;
+
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		heroSprites = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
+		swords = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		idle1 = new TextureRegion(heroSprites, 0, 0, 32, 32);
 		idle2 = new TextureRegion(heroSprites, 32, 0, 32, 32);
 		idle3 = new TextureRegion(heroSprites, 64, 0, 32, 32);
 		idle4 = new TextureRegion(heroSprites, 96, 0, 32, 32);
+		weapon = new TextureRegion(swords,0, 0,16,46);
 		fps = 0;
 		player = new Player();
 		player.setSprite(idle1);
@@ -91,7 +99,6 @@ public class GameMain extends ApplicationAdapter {
 			}
 		}
 		player.updateHitbox();
-
 		batch.draw(player.getSprite(), player.getPosX(), player.getPosY(), 40, 50);
 
 		if (fps == 1) {
@@ -109,6 +116,19 @@ public class GameMain extends ApplicationAdapter {
 		if (fps == 60) {
 			fps = 0;
 		}
+
+		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+			isMeleeAttacking = true;
+			frameCount = 0;
+		}
+		if (isMeleeAttacking){
+			float angle = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2));
+			batch.draw(weapon,player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2),8,0,16,46,3,3,(240-angle)+(frameCount*8));
+			frameCount++;
+		}
+		if (frameCount == 10){
+			isMeleeAttacking =false;
+		}
 		batch.end();
 	}
 	
@@ -116,5 +136,15 @@ public class GameMain extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		tiles.dispose();
+	}
+	public float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {
+		// Calculate the angle between the character and the mouse position
+		mouseY = Gdx.graphics.getHeight() - mouseY;
+		float deltaX = mouseX - charX;
+		float deltaY = charY - mouseY;
+		float angleRad = (float) Math.atan2(deltaY, deltaX);
+		float angleDeg = (float) Math.toDegrees(angleRad);
+
+		return angleDeg;
 	}
 }
