@@ -20,14 +20,7 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     private Inventory inventory;
     private final int maxEvasion = 60;
     private TextureRegion sprite;
-
-    public TextureRegion getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(TextureRegion sprite) {
-        this.sprite = sprite;
-    }
+    private boolean lookingLeft = false;
 
     @Override
     public void attack() {
@@ -36,22 +29,22 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
 
     @Override
     public void moveUp() {
-
+        setPosY(getPosY() + 5);
     }
 
     @Override
     public void moveDown() {
-
+        setPosY(getPosY() - 5);
     }
 
     @Override
     public void moveRight() {
-
+        setPosX(getPosX() + 5);
     }
 
     @Override
     public void moveLeft() {
-
+        setPosX(getPosX() - 5);
     }
     @Override
     public void takeDamage(double dmg) {
@@ -88,5 +81,21 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     public void levelUp(){
         // exp =- expNeeded
         // level++
+    }
+
+    public TextureRegion getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(TextureRegion sprite) {
+        this.sprite = sprite;
+    }
+
+    public boolean isLookingLeft() {
+        return lookingLeft;
+    }
+
+    public void setLookingLeft(boolean lookingLeft) {
+        this.lookingLeft = lookingLeft;
     }
 }

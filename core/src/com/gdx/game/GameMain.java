@@ -2,16 +2,14 @@ package com.gdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.gdx.objects.Floor;
 import com.gdx.objects.Player;
-import com.gdx.objects.Ruangan;
 
-import static com.gdx.game.Drawer.drawDungeon;
+import java.awt.*;
 
 public class GameMain extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -23,20 +21,30 @@ public class GameMain extends ApplicationAdapter {
 	TextureRegion idle3;
 	TextureRegion idle4;
 	int fps;
-
+	Rectangle leftBorder;
+	Rectangle rightBorder;
+	Rectangle bottomBorder;
+	Rectangle upperborder;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		heroSprites = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
-		idle1 = new TextureRegion(heroSprites, 0, 0, 30, 32);
-		idle2 = new TextureRegion(heroSprites, 32, 0, 30, 32);
-		idle3 = new TextureRegion(heroSprites, 64, 0, 30, 32);
-		idle4 = new TextureRegion(heroSprites, 96, 0, 30, 32);
+		idle1 = new TextureRegion(heroSprites, 0, 0, 32, 32);
+		idle2 = new TextureRegion(heroSprites, 32, 0, 32, 32);
+		idle3 = new TextureRegion(heroSprites, 64, 0, 32, 32);
+		idle4 = new TextureRegion(heroSprites, 96, 0, 32, 32);
 		fps = 0;
 		player = new Player();
 		player.setSprite(idle1);
+		player.setPosX(400);
+		player.setPosY(80);
+		player.setHitBox(new Rectangle(32, 32));
+		leftBorder = new Rectangle(48, 40, 5, 500);
+		rightBorder = new Rectangle(710, 40, 5, 500);
+		bottomBorder = new Rectangle(48, 55, 705, 8);
+		upperborder = new Rectangle(48, 525, 705, 8);
 	}
 
 	@Override
@@ -48,7 +56,43 @@ public class GameMain extends ApplicationAdapter {
 
 		fps ++;
 
-		batch.draw(player.getSprite(), 400, 80, 40, 50);
+		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+			if (player.getPosY() <= upperborder.getY() - player.getSprite().getRegionHeight()) {
+				player.moveUp();
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+			if (player.getPosY() >= bottomBorder.getY()) {
+				player.moveDown();
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+			if (!player.isLookingLeft()) {
+				idle1.flip(true, false);
+				idle2.flip(true, false);
+				idle3.flip(true, false);
+				idle4.flip(true, false);
+				player.setLookingLeft(true);
+			}
+			if (player.getPosX() >= leftBorder.getX() + leftBorder.getWidth()) {
+				player.moveLeft();
+			}
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+			if (player.isLookingLeft()) {
+				idle1.flip(true, false);
+				idle2.flip(true, false);
+				idle3.flip(true, false);
+				idle4.flip(true, false);
+				player.setLookingLeft(false);
+			}
+			if (player.getPosX() <= rightBorder.getX()) {
+				player.moveRight();
+			}
+		}
+		player.updateHitbox();
+
+		batch.draw(player.getSprite(), player.getPosX(), player.getPosY(), 40, 50);
 
 		if (fps == 1) {
 			player.setSprite(idle1);
