@@ -3,6 +3,7 @@ package com.gdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,7 +33,17 @@ public class GameMain extends ApplicationAdapter {
 	Rectangle bottomBorder;
 	Rectangle upperborder;
 	TextureRegion weapon;
-
+	Texture mainMenu;
+	TextureRegion menuWindow;
+	TextureRegion startButtonIdle;
+	TextureRegion optionsButtonIdle;
+	TextureRegion exitButtonIdle;
+	Rectangle startButtonBox;
+	Rectangle optionsButtonBox;
+	Rectangle exitButtonBox;
+	TextureRegion startButtonHover;
+	TextureRegion optionsButtonHover;
+	TextureRegion exitButtonHover;
 
 	@Override
 	public void create () {
@@ -55,6 +66,17 @@ public class GameMain extends ApplicationAdapter {
 		rightBorder = new Rectangle(710, 40, 5, 500);
 		bottomBorder = new Rectangle(48, 55, 705, 8);
 		upperborder = new Rectangle(48, 525, 705, 8);
+		mainMenu = new Texture("mainMenu/menuUI.png");
+		menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
+		startButtonIdle = new TextureRegion(mainMenu, 0, 0, 478, 141);
+		optionsButtonIdle = new TextureRegion(mainMenu, 0, 429, 478, 141);
+		exitButtonIdle = new TextureRegion(mainMenu, 479, 429, 478, 141);
+		startButtonBox = new Rectangle(240, 150, 350, 90);
+		optionsButtonBox = new Rectangle(240, 250, 350, 90);
+		exitButtonBox = new Rectangle(240, 350, 350, 90);
+		startButtonHover = new TextureRegion(mainMenu, 0, 283, 478, 146);
+		optionsButtonHover = new TextureRegion(mainMenu, 0, 711, 478, 146);
+		exitButtonHover = new TextureRegion(mainMenu, 479, 711, 478, 146);
 	}
 
 	@Override
@@ -62,6 +84,50 @@ public class GameMain extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 		batch.begin();
 
+		//main menu
+		batch.draw(menuWindow, 50, 50, 700, 500);
+		if (Gdx.input.getX() >= startButtonBox.getX() &&
+				Gdx.input.getX() <= startButtonBox.getX() + startButtonBox.getWidth() &&
+				Gdx.input.getY() >= startButtonBox.getY() &&
+				Gdx.input.getY() <= startButtonBox.getY() + startButtonBox.getHeight()
+		) {
+			batch.draw(startButtonHover, 240, 350, 350, 90);
+		}
+		else {
+			batch.draw(startButtonIdle, 240, 350, 350, 90);
+		}
+
+		if (Gdx.input.getX() >= optionsButtonBox.getX() &&
+				Gdx.input.getX() <= optionsButtonBox.getX() + optionsButtonBox.getWidth() &&
+				Gdx.input.getY() >= optionsButtonBox.getY() &&
+				Gdx.input.getY() <= optionsButtonBox.getY() + optionsButtonBox.getHeight()
+		) {
+			batch.draw(optionsButtonHover, 240, 250, 350, 90);
+		}
+		else {
+			batch.draw(optionsButtonIdle, 240, 250, 350, 90);
+		}
+
+		if (Gdx.input.getX() >= exitButtonBox.getX() &&
+				Gdx.input.getX() <= exitButtonBox.getX() + exitButtonBox.getWidth() &&
+				Gdx.input.getY() >= exitButtonBox.getY() &&
+				Gdx.input.getY() <= exitButtonBox.getY() + exitButtonBox.getHeight()
+		) {
+			batch.draw(exitButtonHover, 240, 150, 350, 90);
+		}
+		else {
+			batch.draw(exitButtonIdle, 240, 150, 350, 90);
+		}
+
+		batch.end();
+	}
+	
+	@Override
+	public void dispose () {
+		batch.dispose();
+		tiles.dispose();
+	}
+	public void mainGame(SpriteBatch batch) {
 		Drawer.drawDungeon(batch, tiles);
 
 		fps ++;
@@ -136,13 +202,6 @@ public class GameMain extends ApplicationAdapter {
 		if (frameCount == 10){
 			isMeleeAttacking =false;
 		}
-		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		tiles.dispose();
 	}
 	public float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {
 		// Calculate the angle between the character and the mouse position

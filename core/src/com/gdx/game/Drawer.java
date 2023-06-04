@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Drawer {
     /**
      * menggambar floor untuk level dungeon
-     * @param batch
-     * @param tiles
+     * @param batch spriteBatch untuk fungsi draw
+     * @param tiles png dari asset tiles.png
      */
     public static void drawDungeon(SpriteBatch batch, Texture tiles){
         //textures
