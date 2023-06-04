@@ -11,6 +11,7 @@ public class Drawer {
      * @param tiles
      */
     public static void drawDungeon(SpriteBatch batch, Texture tiles){
+        //textures
         TextureRegion wallBump = new TextureRegion(tiles, 8, 0, 55, 50);
         TextureRegion wallBumpWithShadow = new TextureRegion(tiles, 0, 0, 63, 50);
         TextureRegion walls = new TextureRegion(tiles, 8, 0, 32, 50);

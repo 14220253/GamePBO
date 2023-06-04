@@ -19,6 +19,10 @@ public class GameMain extends ApplicationAdapter {
 	Player player;
 	Texture heroSprites;
 	TextureRegion idle1;
+	TextureRegion idle2;
+	TextureRegion idle3;
+	TextureRegion idle4;
+	int fps;
 
 
 	@Override
@@ -26,8 +30,13 @@ public class GameMain extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		heroSprites = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
-		idle1 = new TextureRegion(heroSprites, 0, 0, 30, 30);
-		
+		idle1 = new TextureRegion(heroSprites, 0, 0, 30, 32);
+		idle2 = new TextureRegion(heroSprites, 32, 0, 30, 32);
+		idle3 = new TextureRegion(heroSprites, 64, 0, 30, 32);
+		idle4 = new TextureRegion(heroSprites, 96, 0, 30, 32);
+		fps = 0;
+		player = new Player();
+		player.setSprite(idle1);
 	}
 
 	@Override
@@ -37,8 +46,25 @@ public class GameMain extends ApplicationAdapter {
 
 		Drawer.drawDungeon(batch, tiles);
 
-		batch.draw(idle1, 400, 80, 40, 50);
+		fps ++;
 
+		batch.draw(player.getSprite(), 400, 80, 40, 50);
+
+		if (fps == 1) {
+			player.setSprite(idle1);
+		}
+		if (fps == 15) {
+			player.setSprite(idle2);
+		}
+		if (fps == 30) {
+			player.setSprite(idle3);
+		}
+		if (fps == 45) {
+			player.setSprite(idle4);
+		}
+		if (fps == 60) {
+			fps = 0;
+		}
 		batch.end();
 	}
 	

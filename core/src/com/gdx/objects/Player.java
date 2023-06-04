@@ -1,5 +1,6 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
 
 public class Player extends Karakter implements PlayerActions, Attackable { //interface Skill belum tau
@@ -18,7 +19,15 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     private double exp;
     private Inventory inventory;
     private final int maxEvasion = 60;
+    private TextureRegion sprite;
 
+    public TextureRegion getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(TextureRegion sprite) {
+        this.sprite = sprite;
+    }
 
     @Override
     public void attack() {
