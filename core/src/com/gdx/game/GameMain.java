@@ -225,8 +225,8 @@ public class GameMain extends ApplicationAdapter {
 				}
 			}
 			if (isMeleeAttacking) {
-				float angle = getAngleToMouse(fixX, fixY, player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2));
-				batch.draw(weaponMelee, player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2), 8, 0, 16, 46, weaponSizeScaling, weaponSizeScaling, (240 - angle) + (frameCount * 8));
+				float angle = getAngleToMouse(fixX, fixY, player.getPosX() + (player.getSpriteWidth() / 2.0f), player.getPosY() + (player.getSpriteHeight() / 2.0f));
+				batch.draw(weaponMelee, player.getPosX() + (player.getSpriteWidth() / 2.0f), player.getPosY() + (player.getSpriteHeight() / 2.0f), 8, 0, 16, 46, weaponSizeScaling, weaponSizeScaling, (240 - angle) + (frameCount * 8));
 				frameCount++;
 			}
 			if (frameCount == 10) {
@@ -243,7 +243,7 @@ public class GameMain extends ApplicationAdapter {
 				}
 			}
 			if (isRangedAttacking){
-				float angle = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2));
+				float angle = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX() + (player.getSpriteWidth() / 2.0f), player.getPosY() + (player.getSpriteHeight() / 2.0f));
 				frameCount++;
 				if (frameCount<10){
 					activeAnimation = weaponRanged1;
@@ -252,14 +252,14 @@ public class GameMain extends ApplicationAdapter {
 				} else {
 					activeAnimation = weaponRanged3;
 				}
-				activeAnimation.setX(player.getPosX() + (player.getSpriteWidth() /2));
-				activeAnimation.setY(player.getPosY() + (player.getSpriteHeight() /3));
+				activeAnimation.setX(player.getPosX() + (player.getSpriteWidth() /2.0f));
+				activeAnimation.setY(player.getPosY() + (player.getSpriteHeight() /3.0f));
 				activeAnimation.setRotation(0-angle);
 				activeAnimation.draw(batch);
 			}
 			if (frameCount == 27){
-				float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2));
-				projectiles.add(new Projectile(player.getPosX()+player.getSpriteWidth()/2,player.getPosY()+player.getSpriteHeight()/3, 0 -angleProjectile,20,arrow));
+				float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX() + (player.getSpriteWidth() / 2.0f), player.getPosY() + (player.getSpriteHeight() / 2.0f));
+				projectiles.add(new Projectile(player.getPosX()+player.getSpriteWidth()/2.0f,player.getPosY()+player.getSpriteHeight()/3.0f, 0 -angleProjectile,20,arrow));
 			}
 			if (frameCount == 30){
 				isRangedAttacking = false;
@@ -271,12 +271,12 @@ public class GameMain extends ApplicationAdapter {
 
 		if (isMagicPlayer){
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-
+				//langsung ledakan di cursor SAAT di click BUKAN di lepas
 			}
 		}
 
-		for (int i = 0; i < projectiles.size(); i++) {
-			projectiles.get(i).draw(batch);
+		for (Projectile projectile : projectiles) {
+			projectile.draw(batch);
 			// PERLU TAMBAHI IF CLUSTER UNTUK DELETE JIKA KENA MUSUH (HIT COLLOSION) ATAU NABRAK TEMBOK
 		}
 
