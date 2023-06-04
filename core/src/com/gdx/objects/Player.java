@@ -1,9 +1,9 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
-import com.gdx.Exceptions.NotEnoughCoinsException;
 
-public class Player extends Karakter implements PlayerActions, Attackable, Skill { //interface Skill belum tau
+public class Player extends Karakter implements PlayerActions, Attackable { //interface Skill belum tau
     //karakter yang dikendalikan
 
     //stats
@@ -12,34 +12,15 @@ public class Player extends Karakter implements PlayerActions, Attackable, Skill
     //atk
     //def
     //lvl
-    private int currentMana;
-    private int maxMana; //default
-    private int maxHealth; //default max hp 100, nanti bisa ditambah
+    private int mana;
+    private int maxHealth = 100; //default max hp 100, nanti bisa ditambah
     private int evasion = 0;
-    private double healMultiplier; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
+    private double healMultiplier = 1; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
     private double exp;
     private Inventory inventory;
     private final int maxEvasion = 60;
-    private final double baseExpNeededToLevelUp = 100;
-    private final double expNeededMultiplier = 0.2;//percentage untuk kenaikan exp yang dibutuhkan tiap lvl up
-    private double currentExpNeededToLevelUp;
-    // example: lvl 1 ~> 100
-    // lvl 2 ~> 120  (dapat dari 100 + 100*0.2 dimana 0.2 adalah expNeededMultiplier)
-    // lvl 3 ~> 144  (dapat dari 120 + 120*0.2 dimana 0.2 adalah expNeededMultiplier)
-    // lvl 4 dst...
-
-
-    public Player(double health, int attack, int defense, int maxMana, int maxHealth, int evasion) {
-        super(health, attack, defense, 1);
-        this.maxMana = maxMana;
-        this.currentMana = maxMana;
-        this.maxHealth = maxHealth;
-        this.evasion = evasion;
-        this.exp = 0;
-        this.healMultiplier = 1; //default 1 dulu
-        this.inventory = new Inventory();
-        this.currentExpNeededToLevelUp = baseExpNeededToLevelUp;
-    }
+    private TextureRegion sprite;
+    private boolean lookingLeft = false;
 
     @Override
     public void attack() {
@@ -48,22 +29,22 @@ public class Player extends Karakter implements PlayerActions, Attackable, Skill
 
     @Override
     public void moveUp() {
-
+        setPosY(getPosY() + 5);
     }
 
     @Override
     public void moveDown() {
-
+        setPosY(getPosY() - 5);
     }
 
     @Override
     public void moveRight() {
-
+        setPosX(getPosX() + 5);
     }
 
     @Override
     public void moveLeft() {
-
+        setPosX(getPosX() - 5);
     }
     @Override
     public void takeDamage(double dmg) {
@@ -90,15 +71,6 @@ public class Player extends Karakter implements PlayerActions, Attackable, Skill
     }
     public void gainExp(double exp){
         this.exp += exp;
-        while (canLevelUp()){
-            levelUp();
-        }
-    }
-    public void gainCoin(int coin){
-        inventory.gainCoin(coin);
-    }
-    public void spendCoin(int coin) throws NotEnoughCoinsException {
-        inventory.spendCoin(coin);
     }
     public void takeItem(Item item) throws InventoryFullException {
         inventory.addItem(item);
@@ -107,11 +79,23 @@ public class Player extends Karakter implements PlayerActions, Attackable, Skill
         inventory.deleteItem(indexItem);
     }
     public void levelUp(){
-        exp-= currentExpNeededToLevelUp;
-        level++;
+        // exp =- expNeeded
+        // level++
     }
-    public boolean canLevelUp(){
-        currentExpNeededToLevelUp += currentExpNeededToLevelUp*expNeededMultiplier;
-        return this.exp >= currentExpNeededToLevelUp;
+
+    public TextureRegion getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(TextureRegion sprite) {
+        this.sprite = sprite;
+    }
+
+    public boolean isLookingLeft() {
+        return lookingLeft;
+    }
+
+    public void setLookingLeft(boolean lookingLeft) {
+        this.lookingLeft = lookingLeft;
     }
 }
