@@ -154,4 +154,7 @@ public class GameMain extends ApplicationAdapter {
 
 		return angleDeg;
 	}
+	public void resize(int width, int height) {
+                //viewport.update(width, height);
+        }
 }
