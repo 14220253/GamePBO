@@ -10,13 +10,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.objects.Player;
+import com.gdx.objects.Projectile;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameMain extends ApplicationAdapter {
+	ArrayList<Projectile>projectiles = new ArrayList<>();
 	SpriteBatch batch;
 	Texture tiles;
-	Texture swords;
+	Texture weapons;
 	Player player;
 	Texture heroSprites;
 	TextureRegion idle1;
@@ -25,14 +28,15 @@ public class GameMain extends ApplicationAdapter {
 	TextureRegion idle4;
 	int fps;
 	boolean isMeleeAttacking = false;
+	boolean isRangedAttacking = false;
+	boolean isMagicAttacking = false;
 	int frameCount = 0;
 	int fixX, fixY;
-	int attackCooldown = 0;
+	int attackCooldown;
 	Rectangle leftBorder;
 	Rectangle rightBorder;
 	Rectangle bottomBorder;
 	Rectangle upperborder;
-	TextureRegion weapon;
 	Texture mainMenu;
 	TextureRegion menuWindow;
 	TextureRegion startButtonIdle;
@@ -44,19 +48,48 @@ public class GameMain extends ApplicationAdapter {
 	TextureRegion startButtonHover;
 	TextureRegion optionsButtonHover;
 	TextureRegion exitButtonHover;
+	TextureRegion weaponMelee;
+	Sprite weaponRanged1;
+	Sprite weaponRanged2;
+	Sprite weaponRanged3;
+	Sprite arrow;
+	Sprite activeAnimation;
+	TextureRegion weaponMagic;
+	int weaponSizeScaling;
+	boolean isMeleePlayer;
+	boolean isRangedPlayer;
+	boolean isMagicPlayer;
+
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		heroSprites = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
-		swords = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+
 		idle1 = new TextureRegion(heroSprites, 0, 0, 32, 32);
 		idle2 = new TextureRegion(heroSprites, 32, 0, 32, 32);
 		idle3 = new TextureRegion(heroSprites, 64, 0, 32, 32);
 		idle4 = new TextureRegion(heroSprites, 96, 0, 32, 32);
-		weapon = new TextureRegion(swords,0, 0,16,46);
+
+		weaponMelee = new TextureRegion(weapons,0, 0,16,46);
+
+		weaponRanged1 = new Sprite(weapons,52,48,9,31);
+		weaponRanged1.setScale(1.5f);
+		weaponRanged1.setOrigin(0,weaponRanged1.getHeight()/2);
+		weaponRanged2 = new Sprite(weapons,67,50,12,27);
+		weaponRanged2.setScale(1.5f);
+		weaponRanged2.setOrigin(weaponRanged2.getWidth()/2,weaponRanged2.getHeight()/2);
+		weaponRanged3 = new Sprite(weapons,80,51,15,25);
+		weaponRanged3.setScale(1.5f);
+		weaponRanged3.setOrigin(weaponRanged3.getWidth()/2,weaponRanged3.getHeight()/2);
+
+		arrow = new Sprite(weapons, 32,4,15,6);
+
 		fps = 0;
+		weaponSizeScaling = 2;
+		attackCooldown = 0;
 		player = new Player();
 		player.setSprite(idle1);
 		player.setPosX(400);
@@ -66,6 +99,7 @@ public class GameMain extends ApplicationAdapter {
 		rightBorder = new Rectangle(710, 40, 5, 500);
 		bottomBorder = new Rectangle(48, 55, 705, 8);
 		upperborder = new Rectangle(48, 525, 705, 8);
+		isRangedPlayer= true;
 		mainMenu = new Texture("mainMenu/menuUI.png");
 		menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
 		startButtonIdle = new TextureRegion(mainMenu, 0, 0, 478, 141);
@@ -120,12 +154,6 @@ public class GameMain extends ApplicationAdapter {
 		}
 
 		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		tiles.dispose();
 	}
 	public void mainGame(SpriteBatch batch) {
 		Drawer.drawDungeon(batch, tiles);
@@ -185,23 +213,78 @@ public class GameMain extends ApplicationAdapter {
 			fps = 0;
 		}
 
-		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-			if (!isMeleeAttacking) {
-				isMeleeAttacking = true;
-				frameCount = 0;
-				fixX = Gdx.input.getX();
-				fixY = Gdx.input.getY();
-				attackCooldown = 1;
+		if (isMeleePlayer) {
+			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+				if (!isMeleeAttacking) {
+					isMeleeAttacking = true;
+					frameCount = 0;
+					fixX = Gdx.input.getX();
+					fixY = Gdx.input.getY();
+				}
+			}
+			if (isMeleeAttacking) {
+				float angle = getAngleToMouse(fixX, fixY, player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2));
+				batch.draw(weaponMelee, player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2), 8, 0, 16, 46, weaponSizeScaling, weaponSizeScaling, (240 - angle) + (frameCount * 8));
+				frameCount++;
+			}
+			if (frameCount == 10) {
+				isMeleeAttacking = false;
 			}
 		}
-		if (isMeleeAttacking){
-			float angle = getAngleToMouse(fixX,fixY, player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2));
-			batch.draw(weapon,player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2),8,0,16,46,2,2,(240-angle)+(frameCount*8));
-			frameCount++;
+
+		if (isRangedPlayer){
+			if (attackCooldown == 0) {
+				if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+					attackCooldown = 60;
+					frameCount = 0;
+					isRangedAttacking=true;
+				}
+			}
+			if (isRangedAttacking){
+				float angle = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2));
+				frameCount++;
+				if (frameCount<10){
+					activeAnimation = weaponRanged1;
+				} else if (frameCount < 20){
+					activeAnimation = weaponRanged2;
+				} else {
+					activeAnimation = weaponRanged3;
+				}
+				activeAnimation.setX(player.getPosX() + (player.getSpriteWidth() /2));
+				activeAnimation.setY(player.getPosY() + (player.getSpriteHeight() /3));
+				activeAnimation.setRotation(0-angle);
+				activeAnimation.draw(batch);
+			}
+			if (frameCount == 27){
+				float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX() + (player.getSpriteWidth() / 2), player.getPosY() + (player.getSpriteHeight() / 2));
+				projectiles.add(new Projectile(player.getPosX()+player.getSpriteWidth()/2,player.getPosY()+player.getSpriteHeight()/3, 0 -angleProjectile,20,arrow));
+			}
+			if (frameCount == 30){
+				isRangedAttacking = false;
+			}
+			attackCooldown--;
+			attackCooldown = Math.max(attackCooldown,0);
+
 		}
-		if (frameCount == 10){
-			isMeleeAttacking =false;
+
+		if (isMagicPlayer){
+			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+
+			}
 		}
+
+		for (int i = 0; i < projectiles.size(); i++) {
+			projectiles.get(i).draw(batch);
+			// PERLU TAMBAHI IF CLUSTER UNTUK DELETE JIKA KENA MUSUH (HIT COLLOSION) ATAU NABRAK TEMBOK
+		}
+
+		batch.end();
+	}
+	
+	@Override
+	public void dispose () {
+		batch.dispose();
+		tiles.dispose();
 	}
 	public float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {
 		// Calculate the angle between the character and the mouse position

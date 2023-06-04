@@ -4,7 +4,6 @@ public interface PlayerActions {
     /**
      * supaya setiap class player (Archer, Warrior, Mage) bisa diberikan attack yang berbeda
      */
-    void attack();
     void moveUp();
     void moveDown();
     void moveRight();

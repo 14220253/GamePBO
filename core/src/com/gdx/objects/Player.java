@@ -23,11 +23,6 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     private boolean lookingLeft = false;
 
     @Override
-    public void attack() {
-        //TODO
-    }
-
-    @Override
     public void moveUp() {
         setPosY(getPosY() + 5);
     }
