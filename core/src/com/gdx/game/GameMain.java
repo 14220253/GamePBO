@@ -68,12 +68,6 @@ public class GameMain extends ApplicationAdapter {
 			batch.draw(topShadowFloor, i, 475, 63, 50);
 		}
 
-		//side wall
-		for (int i = 540; i > 40; i -= 25) {
-			batch.draw(sideWall, 745, i, 5, 40);
-			batch.draw(sideWall, 48, i, 5, 40);
-		}
-
 		//upper walls + buff doors
 		for (int i = 700; i >= 50 ; i -= 50) {
 			if (i == 200 || i == 300 || i == 400 || i == 500) {
@@ -90,6 +84,12 @@ public class GameMain extends ApplicationAdapter {
 			else {
 				batch.draw(walls, i, 525, 50, 75);
 			}
+		}
+
+		//side wall
+		for (int i = 540; i > 40; i -= 25) {
+			batch.draw(sideWall, 745, i, 5, 40);
+			batch.draw(sideWall, 48, i, 5, 40);
 		}
 
 		batch.end();
