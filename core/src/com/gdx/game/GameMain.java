@@ -18,6 +18,7 @@ public class GameMain extends ApplicationAdapter {
 	Texture tiles;
 	Player player;
 	Texture heroSprites;
+	TextureRegion idle1;
 
 
 	@Override
@@ -25,6 +26,7 @@ public class GameMain extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		heroSprites = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
+		idle1 = new TextureRegion(heroSprites, 0, 0, 30, 30);
 		
 	}
 
@@ -34,6 +36,8 @@ public class GameMain extends ApplicationAdapter {
 		batch.begin();
 
 		Drawer.drawDungeon(batch, tiles);
+
+		batch.draw(idle1, 400, 80, 40, 50);
 
 		batch.end();
 	}
