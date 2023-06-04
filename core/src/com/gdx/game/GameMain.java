@@ -25,6 +25,8 @@ public class GameMain extends ApplicationAdapter {
 	int fps;
 	boolean isMeleeAttacking = false;
 	int frameCount = 0;
+	int fixX, fixY;
+	int attackCooldown = 0;
 	Rectangle leftBorder;
 	Rectangle rightBorder;
 	Rectangle bottomBorder;
@@ -118,12 +120,17 @@ public class GameMain extends ApplicationAdapter {
 		}
 
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-			isMeleeAttacking = true;
-			frameCount = 0;
+			if (!isMeleeAttacking) {
+				isMeleeAttacking = true;
+				frameCount = 0;
+				fixX = Gdx.input.getX();
+				fixY = Gdx.input.getY();
+				attackCooldown = 1;
+			}
 		}
 		if (isMeleeAttacking){
-			float angle = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2));
-			batch.draw(weapon,player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2),8,0,16,46,3,3,(240-angle)+(frameCount*8));
+			float angle = getAngleToMouse(fixX,fixY, player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2));
+			batch.draw(weapon,player.getPosX()+(player.getSpriteWidth()/2),player.getPosY()+(player.getSpriteHeight()/2),8,0,16,46,2,2,(240-angle)+(frameCount*8));
 			frameCount++;
 		}
 		if (frameCount == 10){
