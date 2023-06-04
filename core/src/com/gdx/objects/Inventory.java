@@ -1,13 +1,14 @@
 package com.gdx.objects;
 
 import com.gdx.Exceptions.InventoryFullException;
+import com.gdx.Exceptions.NotEnoughCoinsException;
 
 import java.util.ArrayList;
 
 public class Inventory {
     //backpack
     private final int CAPACITY = 6;
-    private int money;
+    private int coins = 0;
     private ArrayList<Item> items = new ArrayList<>();
 
     public void addItem(Item item) throws InventoryFullException {
@@ -19,5 +20,15 @@ public class Inventory {
 
     public void deleteItem(int indexItem) {
         items.remove(indexItem);
+    }
+    public void gainCoin(int coin){
+        coins += coin;
+    }
+    public void spendCoin(int coin) throws NotEnoughCoinsException {
+        if ((coins -= coin) < 0){
+            throw new NotEnoughCoinsException();
+        } else {
+            coins -= coin;
+        }
     }
 }
