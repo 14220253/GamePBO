@@ -99,7 +99,9 @@ public class GameMain extends ApplicationAdapter {
 		rightBorder = new Rectangle(710, 40, 5, 500);
 		bottomBorder = new Rectangle(48, 55, 705, 8);
 		upperborder = new Rectangle(48, 525, 705, 8);
-		isRangedPlayer= true;
+
+		isRangedPlayer= true; //testing ranged
+
 		mainMenu = new Texture("mainMenu/menuUI.png");
 		menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
 		startButtonIdle = new TextureRegion(mainMenu, 0, 0, 478, 141);
