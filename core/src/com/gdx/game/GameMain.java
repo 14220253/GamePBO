@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.Monster;
 import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
@@ -22,6 +23,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends ApplicationAdapter {
+	MainMenuUI mainMenuUI;
 	ArrayList<Projectile>projectiles = new ArrayList<>();
 	SpriteBatch batch;
 	Texture tiles;
@@ -40,17 +42,6 @@ public class GameMain extends ApplicationAdapter {
 	Rectangle rightBorder;
 	Rectangle bottomBorder;
 	Rectangle upperborder;
-	Texture mainMenu;
-	TextureRegion menuWindow;
-	TextureRegion startButtonIdle;
-	TextureRegion optionsButtonIdle;
-	TextureRegion exitButtonIdle;
-	Rectangle startButtonBox;
-	Rectangle optionsButtonBox;
-	Rectangle exitButtonBox;
-	TextureRegion startButtonHover;
-	TextureRegion optionsButtonHover;
-	TextureRegion exitButtonHover;
 	Sprite activeProjectile;
 	TextureRegion currentFrame;
 
@@ -87,18 +78,7 @@ public class GameMain extends ApplicationAdapter {
 		upperborder = new Rectangle(48, 525, 705, 8);
 
 		running = false;
-
-		mainMenu = new Texture("mainMenu/menuUI.png");
-		menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
-		startButtonIdle = new TextureRegion(mainMenu, 0, 0, 478, 141);
-		optionsButtonIdle = new TextureRegion(mainMenu, 0, 429, 478, 141);
-		exitButtonIdle = new TextureRegion(mainMenu, 479, 429, 478, 141);
-		startButtonBox = new Rectangle(240, 150, 350, 90);
-		optionsButtonBox = new Rectangle(240, 250, 350, 90);
-		exitButtonBox = new Rectangle(240, 350, 350, 90);
-		startButtonHover = new TextureRegion(mainMenu, 0, 283, 478, 146);
-		optionsButtonHover = new TextureRegion(mainMenu, 0, 711, 478, 146);
-		exitButtonHover = new TextureRegion(mainMenu, 479, 711, 478, 146);
+		mainMenuUI.forCreate();
 
 		playerIdleRight = Drawer.animate(knightSprite, 4, 1);
 		playerIdleLeft = Drawer.animateFlip(knightSprite, 4, 1);
@@ -117,7 +97,8 @@ public class GameMain extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		batch.begin();
-		mainGame(batch);
+		mainMenuUI.forRender(); //comment untuk cek game
+		mainGame(batch); //comment untuk cek UI
 
 		batch.end();
 	}
