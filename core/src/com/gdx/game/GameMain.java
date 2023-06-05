@@ -28,6 +28,7 @@ public class GameMain extends ApplicationAdapter {
 	Player player;
 	Texture knightSprite;
 	Texture knightRunSprite;
+	Texture orcIdle;
 	int fps;
 	boolean running;
 	boolean isAttacking = false;
@@ -56,6 +57,7 @@ public class GameMain extends ApplicationAdapter {
 	Animation<TextureRegion> playerIdleLeft;
 	Animation<TextureRegion> playerRunLeft;
 	Animation<TextureRegion> playerRunRight;
+	Animation<TextureRegion> orcIdleRight;
 	Monster monster1;
 
 	@Override
@@ -66,13 +68,13 @@ public class GameMain extends ApplicationAdapter {
 		knightSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
 		knightRunSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
 		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		orcIdle = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
 		fps = 0;
 
 		player = makeRangedPlayer();
-		player.setSprite(idle1);
 		player.setPosX(400);
 		player.setPosY(80);
 		player.setHitBox(new Rectangle(32, 32));
@@ -99,13 +101,13 @@ public class GameMain extends ApplicationAdapter {
 		playerIdleLeft = Drawer.animateFlip(knightSprite, 4, 1);
 		playerRunLeft = Drawer.animateFlip(knightRunSprite, 6, 1);
 		playerRunRight = Drawer.animate(knightRunSprite, 6, 1);
+		orcIdleRight = Drawer.animate(orcIdle, 4, 1);
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
 
-		mainGame(batch);
 		batch.begin();
 		mainGame(batch);
 		//main menu
@@ -146,7 +148,6 @@ public class GameMain extends ApplicationAdapter {
 		batch.end();
 	}
 	public void mainGame(SpriteBatch batch) {
-		batch.begin();
 
 		Drawer.drawDungeon(batch, tiles);
 
