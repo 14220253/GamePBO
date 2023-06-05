@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.Monster;
 import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
@@ -21,6 +22,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends ApplicationAdapter {
+	MainMenuUI mainMenuUI;
 	ArrayList<Projectile>projectiles = new ArrayList<>();
 	SpriteBatch batch;
 	Texture tiles;
@@ -39,17 +41,6 @@ public class GameMain extends ApplicationAdapter {
 	Rectangle rightBorder;
 	Rectangle bottomBorder;
 	Rectangle upperborder;
-	Texture mainMenu;
-	TextureRegion menuWindow;
-	TextureRegion startButtonIdle;
-	TextureRegion optionsButtonIdle;
-	TextureRegion exitButtonIdle;
-	Rectangle startButtonBox;
-	Rectangle optionsButtonBox;
-	Rectangle exitButtonBox;
-	TextureRegion startButtonHover;
-	TextureRegion optionsButtonHover;
-	TextureRegion exitButtonHover;
 	Sprite activeProjectile;
 	TextureRegion currentFrame;
 
@@ -63,6 +54,7 @@ public class GameMain extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		mainMenuUI = new MainMenuUI();
 		batch = new SpriteBatch();
 		stateTime = 0f;
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
@@ -87,17 +79,7 @@ public class GameMain extends ApplicationAdapter {
 
 		running = false;
 
-		mainMenu = new Texture("mainMenu/menuUI.png");
-		menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
-		startButtonIdle = new TextureRegion(mainMenu, 0, 0, 478, 141);
-		optionsButtonIdle = new TextureRegion(mainMenu, 0, 429, 478, 141);
-		exitButtonIdle = new TextureRegion(mainMenu, 479, 429, 478, 141);
-		startButtonBox = new Rectangle(240, 150, 350, 90);
-		optionsButtonBox = new Rectangle(240, 250, 350, 90);
-		exitButtonBox = new Rectangle(240, 350, 350, 90);
-		startButtonHover = new TextureRegion(mainMenu, 0, 283, 478, 146);
-		optionsButtonHover = new TextureRegion(mainMenu, 0, 711, 478, 146);
-		exitButtonHover = new TextureRegion(mainMenu, 479, 711, 478, 146);
+		mainMenuUI.forCreate(); //create UInya
 
 		playerIdleRight = Drawer.animate(knightSprite, 4, 1);
 		playerIdleLeft = Drawer.animateFlip(knightSprite, 4, 1);
@@ -114,41 +96,8 @@ public class GameMain extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		batch.begin();
-		mainGame(batch);
-		//main menu
-//		batch.draw(menuWindow, 50, 50, 700, 500);
-//		if (Gdx.input.getX() >= startButtonBox.getX() &&
-//				Gdx.input.getX() <= startButtonBox.getX() + startButtonBox.getWidth() &&
-//				Gdx.input.getY() >= startButtonBox.getY() &&
-//				Gdx.input.getY() <= startButtonBox.getY() + startButtonBox.getHeight()
-//		) {
-//			batch.draw(startButtonHover, 240, 350, 350, 90);
-//		}
-//		else {
-//			batch.draw(startButtonIdle, 240, 350, 350, 90);
-//		}
-//
-//		if (Gdx.input.getX() >= optionsButtonBox.getX() &&
-//				Gdx.input.getX() <= optionsButtonBox.getX() + optionsButtonBox.getWidth() &&
-//				Gdx.input.getY() >= optionsButtonBox.getY() &&
-//				Gdx.input.getY() <= optionsButtonBox.getY() + optionsButtonBox.getHeight()
-//		) {
-//			batch.draw(optionsButtonHover, 240, 250, 350, 90);
-//		}
-//		else {
-//			batch.draw(optionsButtonIdle, 240, 250, 350, 90);
-//		}
-//
-//		if (Gdx.input.getX() >= exitButtonBox.getX() &&
-//				Gdx.input.getX() <= exitButtonBox.getX() + exitButtonBox.getWidth() &&
-//				Gdx.input.getY() >= exitButtonBox.getY() &&
-//				Gdx.input.getY() <= exitButtonBox.getY() + exitButtonBox.getHeight()
-//		) {
-//			batch.draw(exitButtonHover, 240, 150, 350, 90);
-//		}
-//		else {
-//			batch.draw(exitButtonIdle, 240, 150, 350, 90);
-//		}
+		mainMenuUI.forRender(); //comment func forRender untuk cek game
+		mainGame(batch); //comment func mainGame ini untuk cek main menu
 
 		batch.end();
 	}
