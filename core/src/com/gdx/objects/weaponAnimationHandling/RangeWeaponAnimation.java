@@ -51,7 +51,7 @@ public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
     @Override
     public Projectile createProjectile(Player player, Sprite arrow) {
         float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (float) (player.getHitBox().getY() + (player.getHitBox().height / 3.0f)));
-        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)),(float) (player.getHitBox().getY() + (player.getHitBox().height / 3.0f)), 0 -angleProjectile,20,arrow);
+        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)),(float) (player.getHitBox().getY() + (player.getHitBox().height / 3.0f)), 0-angleProjectile,20,arrow);
     }
 
     @Override
