@@ -2,11 +2,8 @@ package com.gdx.objects.weaponAnimationHandling;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.objects.Player;
-import com.gdx.objects.Projectile;
-
 import java.util.ArrayList;
 
 public class MagicWeaponAnimation implements WeaponAnimation{
