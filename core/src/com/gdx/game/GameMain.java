@@ -24,10 +24,12 @@ public class GameMain extends ApplicationAdapter {
 	Texture weapons;
 	Player player;
 	Texture knightSprite;
+	Texture knightRunSprite;
 	int fps;
 	boolean isMeleeAttacking = false;
 	boolean isRangedAttacking = false;
 	boolean isMagicAttacking = false;
+	boolean running;
 	int frameCount = 0;
 	int fixX, fixY;
 	int attackCooldown;
@@ -61,6 +63,8 @@ public class GameMain extends ApplicationAdapter {
 	float stateTime;
 	Animation<TextureRegion> playerIdleRight;
 	Animation<TextureRegion> playerIdleLeft;
+	Animation<TextureRegion> playerRunLeft;
+	Animation<TextureRegion> playerRunRight;
 	Monster monster1;
 
 	@Override
@@ -69,9 +73,8 @@ public class GameMain extends ApplicationAdapter {
 		stateTime = 0f;
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		knightSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
+		knightRunSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
 		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-
-
 
 		weaponMelee = new TextureRegion(weapons,0, 0,16,46);
 
@@ -100,6 +103,7 @@ public class GameMain extends ApplicationAdapter {
 		upperborder = new Rectangle(48, 525, 705, 8);
 
 		isRangedPlayer= true; //testing ranged
+		running = false;
 
 		mainMenu = new Texture("mainMenu/menuUI.png");
 		menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
@@ -115,6 +119,8 @@ public class GameMain extends ApplicationAdapter {
 
 		playerIdleRight = Drawer.animate(knightSprite, 4, 1);
 		playerIdleLeft = Drawer.animateFlip(knightSprite, 4, 1);
+		playerRunLeft = Drawer.animateFlip(knightRunSprite, 6, 1);
+		playerRunRight = Drawer.animate(knightRunSprite, 6, 1);
 	}
 
 	@Override
@@ -167,15 +173,23 @@ public class GameMain extends ApplicationAdapter {
 		stateTime += Gdx.graphics.getDeltaTime();
 
 
-		if (player.isLookingLeft()) {
+		if (player.isLookingLeft() && !running) {
 			currentFrame = playerIdleLeft.getKeyFrame(stateTime, true);
-		} else {
+		} else if (!running){
 			currentFrame = playerIdleRight.getKeyFrame(stateTime, true);
+		} else if (running && player.isLookingLeft()) {
+			currentFrame = playerRunLeft.getKeyFrame(stateTime, true);
+		} else {
+			currentFrame = playerRunRight.getKeyFrame(stateTime, true);
 		}
 
 		player.setSprite(currentFrame);
 
-		batch.draw(currentFrame, player.getPosX(), player.getPosY(), 40, 50);
+		if (running) {
+			batch.draw(currentFrame, player.getPosX() - 20, player.getPosY(), 80, 100);
+		} else {
+			batch.draw(currentFrame, player.getPosX(), player.getPosY(), 40, 50);
+		}
 
 		fps ++;
 
@@ -183,11 +197,13 @@ public class GameMain extends ApplicationAdapter {
 			if (player.getPosY() <= upperborder.getY() - 20) {
 				player.moveUp();
 			}
+			running = true;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			if (player.getPosY() >= bottomBorder.getY()) {
 				player.moveDown();
 			}
+			running = true;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			if (!player.isLookingLeft()) {
@@ -196,6 +212,7 @@ public class GameMain extends ApplicationAdapter {
 			if (player.getPosX() >= leftBorder.getX() + 10) {
 				player.moveLeft();
 			}
+			running = true;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			if (player.isLookingLeft()) {
@@ -204,6 +221,13 @@ public class GameMain extends ApplicationAdapter {
 			if (player.getPosX() <= rightBorder.getX()) {
 				player.moveRight();
 			}
+			running = true;
+		}
+		if (!Gdx.input.isKeyPressed(Input.Keys.W) &&
+				!Gdx.input.isKeyPressed(Input.Keys.S) &&
+				!Gdx.input.isKeyPressed(Input.Keys.A) &&
+				!Gdx.input.isKeyPressed(Input.Keys.D)) {
+			running = false;
 		}
 		player.updateHitbox();
 
