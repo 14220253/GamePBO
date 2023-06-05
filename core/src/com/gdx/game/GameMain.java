@@ -173,6 +173,8 @@ public class GameMain extends ApplicationAdapter {
 			currentFrame = playerIdleRight.getKeyFrame(stateTime, true);
 		}
 
+		player.setSprite(currentFrame);
+
 		batch.draw(currentFrame, player.getPosX(), player.getPosY(), 40, 50);
 
 		fps ++;

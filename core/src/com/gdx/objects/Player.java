@@ -94,9 +94,9 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
         this.lookingLeft = lookingLeft;
     }
     public int getSpriteWidth(){
-        return 40;
+        return sprite.getRegionWidth();
     }
     public int getSpriteHeight(){
-        return 50;
+        return sprite.getRegionHeight();
     }
 }
