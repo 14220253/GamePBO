@@ -1,6 +1,8 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
 
@@ -60,6 +62,11 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
             this.health -= checkNegativeDmg((dmg-defense));
             checkHealth();
         }
+    }
+
+    @Override
+    public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
+
     }
 
     public Weapon getWeapon() {

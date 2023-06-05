@@ -30,7 +30,7 @@ public class GameMain extends ApplicationAdapter {
 	Texture knightRunSprite;
 	Texture orcIdle;
 	Texture healthBar;
-	int fps;
+	Texture orcDie;
 	boolean running;
 	boolean isAttacking = false;
 	int frameCount = 0;
@@ -59,6 +59,7 @@ public class GameMain extends ApplicationAdapter {
 	Animation<TextureRegion> playerRunLeft;
 	Animation<TextureRegion> playerRunRight;
 	Animation<TextureRegion> orcIdleRight;
+	Animation<TextureRegion> orcDeath;
 	Monster monster1;
 
 	@Override
@@ -71,10 +72,9 @@ public class GameMain extends ApplicationAdapter {
 		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		orcIdle = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
 		healthBar = new Texture("healthbar/monsterHealthBar.png");
+		orcDie = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
-
-		fps = 0;
 
 		player = makeRangedPlayer();
 		player.setPosX(400);
@@ -104,9 +104,11 @@ public class GameMain extends ApplicationAdapter {
 		playerRunLeft = Drawer.animateFlip(knightRunSprite, 6, 1);
 		playerRunRight = Drawer.animate(knightRunSprite, 6, 1);
 		orcIdleRight = Drawer.animate(orcIdle, 4, 1);
+		orcDeath = Drawer.animate(orcDie, 6, 1);
 
 		monster1 = new Monster(9999, 1, 1, 1, 400, 400,
-				new Rectangle(40, 50), 1, 1, 1, orcIdleRight, healthBar);
+				new Rectangle(40, 50), 1, 1, 1,
+				orcIdleRight, orcDeath, healthBar);
 	}
 
 	@Override
@@ -115,51 +117,25 @@ public class GameMain extends ApplicationAdapter {
 
 		batch.begin();
 		mainGame(batch);
-		//main menu
-//		batch.draw(menuWindow, 50, 50, 700, 500);
-//		if (Gdx.input.getX() >= startButtonBox.getX() &&
-//				Gdx.input.getX() <= startButtonBox.getX() + startButtonBox.getWidth() &&
-//				Gdx.input.getY() >= startButtonBox.getY() &&
-//				Gdx.input.getY() <= startButtonBox.getY() + startButtonBox.getHeight()
-//		) {
-//			batch.draw(startButtonHover, 240, 350, 350, 90);
-//		}
-//		else {
-//			batch.draw(startButtonIdle, 240, 350, 350, 90);
-//		}
-//
-//		if (Gdx.input.getX() >= optionsButtonBox.getX() &&
-//				Gdx.input.getX() <= optionsButtonBox.getX() + optionsButtonBox.getWidth() &&
-//				Gdx.input.getY() >= optionsButtonBox.getY() &&
-//				Gdx.input.getY() <= optionsButtonBox.getY() + optionsButtonBox.getHeight()
-//		) {
-//			batch.draw(optionsButtonHover, 240, 250, 350, 90);
-//		}
-//		else {
-//			batch.draw(optionsButtonIdle, 240, 250, 350, 90);
-//		}
-//
-//		if (Gdx.input.getX() >= exitButtonBox.getX() &&
-//				Gdx.input.getX() <= exitButtonBox.getX() + exitButtonBox.getWidth() &&
-//				Gdx.input.getY() >= exitButtonBox.getY() &&
-//				Gdx.input.getY() <= exitButtonBox.getY() + exitButtonBox.getHeight()
-//		) {
-//			batch.draw(exitButtonHover, 240, 150, 350, 90);
-//		}
-//		else {
-//			batch.draw(exitButtonIdle, 240, 150, 350, 90);
-//		}
 
 		batch.end();
+	}
+
+	public Boolean overlap(Rectangle rectangle1, Rectangle rectangle2) {
+		return true;
 	}
 	public void mainGame(SpriteBatch batch) {
 
 		Drawer.drawDungeon(batch, tiles);
-
-		fps++;
 		stateTime += Gdx.graphics.getDeltaTime();
 
-		monster1.draw(batch, stateTime);
+		if (monster1.getHealth() != 0) {
+			monster1.draw(batch, stateTime);
+		}
+		else {
+			monster1.die(batch, orcDeath, stateTime);
+		}
+		monster1.takeDamage(100);
 
 
 		if (player.isLookingLeft() && !running) {
@@ -179,8 +155,6 @@ public class GameMain extends ApplicationAdapter {
 		} else {
 			batch.draw(currentFrame, player.getPosX(), player.getPosY(), 40, 50);
 		}
-
-		fps ++;
 
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			if (player.getPosY() <= upperborder.getY() - 20) {
