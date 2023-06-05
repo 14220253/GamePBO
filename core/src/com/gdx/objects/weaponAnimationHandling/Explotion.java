@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Explotion {
     int frame = 0;
-    Texture texture = new Texture("VFX/Effect_TheVortex/30fps/Frames/Effect_TheVortex_1_427x431.png");
+    Texture texture = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
     ArrayList<TextureRegion> frames = new ArrayList<>();
 
     public Explotion() {

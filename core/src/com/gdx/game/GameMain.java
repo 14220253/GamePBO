@@ -14,6 +14,7 @@ import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
 import com.gdx.objects.Weapon;
 import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
+import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
 
@@ -76,7 +77,7 @@ public class GameMain extends ApplicationAdapter {
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
-		player = makeRangedPlayer();
+		player = makeMagicPlayer();
 		player.setPosX(400);
 		player.setPosY(80);
 		player.setHitBox(new Rectangle(32, 32));
@@ -210,6 +211,12 @@ public class GameMain extends ApplicationAdapter {
 			isAttacking = false;
 			frameCount = 0;
 		}
+		if (player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation){
+			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && attackCooldown == 0){
+				frameCount = 0;
+				attackCooldown = player.getWeapon().getCooldown();
+			}
+		}
 		if (player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() == frameCount){
 			Projectile p = ((CreateProjectile) player.getWeapon().getWeaponAnimation()).createProjectile(player,activeProjectile);
 			projectiles.add(p);
@@ -252,6 +259,13 @@ public class GameMain extends ApplicationAdapter {
 		weapon.addTextureRegion(new TextureRegion(weapons,52,48,9,31));
 		weapon.addTextureRegion(new TextureRegion(weapons,67,50,12,27));
 		weapon.addTextureRegion(new TextureRegion(weapons,80,51,15,25));
+		Player player1 = new Player(weapon);
+		return player1;
+	}
+	public Player makeMagicPlayer(){
+		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
+		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0f, 1.5f,120,magicWeaponAnimation);
+		weapon.addTextureRegion(new TextureRegion(weapons,81,3,28,9));
 		Player player1 = new Player(weapon);
 		return player1;
 	}
