@@ -5,10 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.gdx.objects.Monster;
 import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
 
@@ -21,11 +23,7 @@ public class GameMain extends ApplicationAdapter {
 	Texture tiles;
 	Texture weapons;
 	Player player;
-	Texture heroSprites;
-	TextureRegion idle1;
-	TextureRegion idle2;
-	TextureRegion idle3;
-	TextureRegion idle4;
+	Texture knightSprite;
 	int fps;
 	boolean isMeleeAttacking = false;
 	boolean isRangedAttacking = false;
@@ -49,6 +47,7 @@ public class GameMain extends ApplicationAdapter {
 	TextureRegion optionsButtonHover;
 	TextureRegion exitButtonHover;
 	TextureRegion weaponMelee;
+	TextureRegion currentFrame;
 	Sprite weaponRanged1;
 	Sprite weaponRanged2;
 	Sprite weaponRanged3;
@@ -59,19 +58,20 @@ public class GameMain extends ApplicationAdapter {
 	boolean isMeleePlayer;
 	boolean isRangedPlayer;
 	boolean isMagicPlayer;
-
+	float stateTime;
+	Animation<TextureRegion> playerIdleRight;
+	Animation<TextureRegion> playerIdleLeft;
+	Monster monster1;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		stateTime = 0f;
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-		heroSprites = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
+		knightSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
 		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 
-		idle1 = new TextureRegion(heroSprites, 0, 0, 32, 32);
-		idle2 = new TextureRegion(heroSprites, 32, 0, 32, 32);
-		idle3 = new TextureRegion(heroSprites, 64, 0, 32, 32);
-		idle4 = new TextureRegion(heroSprites, 96, 0, 32, 32);
+
 
 		weaponMelee = new TextureRegion(weapons,0, 0,16,46);
 
@@ -91,7 +91,6 @@ public class GameMain extends ApplicationAdapter {
 		weaponSizeScaling = 2;
 		attackCooldown = 0;
 		player = new Player();
-		player.setSprite(idle1);
 		player.setPosX(400);
 		player.setPosY(80);
 		player.setHitBox(new Rectangle(32, 32));
@@ -113,83 +112,91 @@ public class GameMain extends ApplicationAdapter {
 		startButtonHover = new TextureRegion(mainMenu, 0, 283, 478, 146);
 		optionsButtonHover = new TextureRegion(mainMenu, 0, 711, 478, 146);
 		exitButtonHover = new TextureRegion(mainMenu, 479, 711, 478, 146);
+
+		playerIdleRight = Drawer.animate(knightSprite, 4, 1);
+		playerIdleLeft = Drawer.animateFlip(knightSprite, 4, 1);
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
-		batch.begin();
 
+		mainGame(batch);
 		//main menu
-		batch.draw(menuWindow, 50, 50, 700, 500);
-		if (Gdx.input.getX() >= startButtonBox.getX() &&
-				Gdx.input.getX() <= startButtonBox.getX() + startButtonBox.getWidth() &&
-				Gdx.input.getY() >= startButtonBox.getY() &&
-				Gdx.input.getY() <= startButtonBox.getY() + startButtonBox.getHeight()
-		) {
-			batch.draw(startButtonHover, 240, 350, 350, 90);
-		}
-		else {
-			batch.draw(startButtonIdle, 240, 350, 350, 90);
-		}
-
-		if (Gdx.input.getX() >= optionsButtonBox.getX() &&
-				Gdx.input.getX() <= optionsButtonBox.getX() + optionsButtonBox.getWidth() &&
-				Gdx.input.getY() >= optionsButtonBox.getY() &&
-				Gdx.input.getY() <= optionsButtonBox.getY() + optionsButtonBox.getHeight()
-		) {
-			batch.draw(optionsButtonHover, 240, 250, 350, 90);
-		}
-		else {
-			batch.draw(optionsButtonIdle, 240, 250, 350, 90);
-		}
-
-		if (Gdx.input.getX() >= exitButtonBox.getX() &&
-				Gdx.input.getX() <= exitButtonBox.getX() + exitButtonBox.getWidth() &&
-				Gdx.input.getY() >= exitButtonBox.getY() &&
-				Gdx.input.getY() <= exitButtonBox.getY() + exitButtonBox.getHeight()
-		) {
-			batch.draw(exitButtonHover, 240, 150, 350, 90);
-		}
-		else {
-			batch.draw(exitButtonIdle, 240, 150, 350, 90);
-		}
+//		batch.draw(menuWindow, 50, 50, 700, 500);
+//		if (Gdx.input.getX() >= startButtonBox.getX() &&
+//				Gdx.input.getX() <= startButtonBox.getX() + startButtonBox.getWidth() &&
+//				Gdx.input.getY() >= startButtonBox.getY() &&
+//				Gdx.input.getY() <= startButtonBox.getY() + startButtonBox.getHeight()
+//		) {
+//			batch.draw(startButtonHover, 240, 350, 350, 90);
+//		}
+//		else {
+//			batch.draw(startButtonIdle, 240, 350, 350, 90);
+//		}
+//
+//		if (Gdx.input.getX() >= optionsButtonBox.getX() &&
+//				Gdx.input.getX() <= optionsButtonBox.getX() + optionsButtonBox.getWidth() &&
+//				Gdx.input.getY() >= optionsButtonBox.getY() &&
+//				Gdx.input.getY() <= optionsButtonBox.getY() + optionsButtonBox.getHeight()
+//		) {
+//			batch.draw(optionsButtonHover, 240, 250, 350, 90);
+//		}
+//		else {
+//			batch.draw(optionsButtonIdle, 240, 250, 350, 90);
+//		}
+//
+//		if (Gdx.input.getX() >= exitButtonBox.getX() &&
+//				Gdx.input.getX() <= exitButtonBox.getX() + exitButtonBox.getWidth() &&
+//				Gdx.input.getY() >= exitButtonBox.getY() &&
+//				Gdx.input.getY() <= exitButtonBox.getY() + exitButtonBox.getHeight()
+//		) {
+//			batch.draw(exitButtonHover, 240, 150, 350, 90);
+//		}
+//		else {
+//			batch.draw(exitButtonIdle, 240, 150, 350, 90);
+//		}
 
 		batch.end();
 	}
 	public void mainGame(SpriteBatch batch) {
+		batch.begin();
+
 		Drawer.drawDungeon(batch, tiles);
+
+		stateTime += Gdx.graphics.getDeltaTime();
+
+
+		if (player.isLookingLeft()) {
+			currentFrame = playerIdleLeft.getKeyFrame(stateTime, true);
+		} else {
+			currentFrame = playerIdleRight.getKeyFrame(stateTime, true);
+		}
+
+		batch.draw(currentFrame, player.getPosX(), player.getPosY(), 40, 50);
 
 		fps ++;
 
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			if (player.getPosY() <= upperborder.getY() - player.getSprite().getRegionHeight()) {
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			if (player.getPosY() <= upperborder.getY() - 20) {
 				player.moveUp();
 			}
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			if (player.getPosY() >= bottomBorder.getY()) {
 				player.moveDown();
 			}
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			if (!player.isLookingLeft()) {
-				idle1.flip(true, false);
-				idle2.flip(true, false);
-				idle3.flip(true, false);
-				idle4.flip(true, false);
 				player.setLookingLeft(true);
 			}
-			if (player.getPosX() >= leftBorder.getX() + leftBorder.getWidth()) {
+			if (player.getPosX() >= leftBorder.getX() + 10) {
 				player.moveLeft();
 			}
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			if (player.isLookingLeft()) {
-				idle1.flip(true, false);
-				idle2.flip(true, false);
-				idle3.flip(true, false);
-				idle4.flip(true, false);
 				player.setLookingLeft(false);
 			}
 			if (player.getPosX() <= rightBorder.getX()) {
@@ -197,23 +204,8 @@ public class GameMain extends ApplicationAdapter {
 			}
 		}
 		player.updateHitbox();
-		batch.draw(player.getSprite(), player.getPosX(), player.getPosY(), 40, 50);
 
-		if (fps == 1) {
-			player.setSprite(idle1);
-		}
-		if (fps == 15) {
-			player.setSprite(idle2);
-		}
-		if (fps == 30) {
-			player.setSprite(idle3);
-		}
-		if (fps == 45) {
-			player.setSprite(idle4);
-		}
-		if (fps == 60) {
-			fps = 0;
-		}
+
 
 		if (isMeleePlayer) {
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -279,8 +271,6 @@ public class GameMain extends ApplicationAdapter {
 			projectile.draw(batch);
 			// PERLU TAMBAHI IF CLUSTER UNTUK DELETE JIKA KENA MUSUH (HIT COLLOSION) ATAU NABRAK TEMBOK
 		}
-
-		batch.end();
 	}
 	
 	@Override
@@ -301,4 +291,5 @@ public class GameMain extends ApplicationAdapter {
 	public void resize(int width, int height) {
                 //viewport.update(width, height);
         }
+
 }

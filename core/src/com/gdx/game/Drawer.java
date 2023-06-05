@@ -1,6 +1,7 @@
 package com.gdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -63,5 +64,44 @@ public class Drawer {
             batch.draw(sideWall, 745, i, 5, 40);
             batch.draw(sideWall, 48, i, 5, 40);
         }
+    }
+
+    /**
+     * split animasi sprite yang sizenya sama semua menjadi array untuk class animation
+     * @param texture texture yang displit
+     * @param column column dalam sheet
+     * @param row row dalam sheet
+     * @return
+     */
+    protected static TextureRegion[] textureSplitter(Texture texture, int column, int row) {
+        TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / column, texture.getHeight() / row);
+        TextureRegion[] frames = new TextureRegion[column * row];
+        int index = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                frames[index++] = temp[i][j];
+            }
+        }
+        return frames;
+    }
+
+    /**
+     * mereturn class animation untuk animasi
+     * @param texture texture animasi
+     * @param column column
+     * @param row row
+     * @return
+     */
+    protected static Animation<TextureRegion> animate(Texture texture, int column, int row) {
+        TextureRegion[] array = textureSplitter(texture, column, row);
+        return new Animation<TextureRegion>(0.2f, array);
+    }
+
+    protected static Animation<TextureRegion> animateFlip(Texture texture, int column, int row) {
+        TextureRegion[] array = textureSplitter(texture, column, row);
+        for (TextureRegion t: array) {
+            t.flip(true, false);
+        }
+        return new Animation<TextureRegion>(0.2f, array);
     }
 }

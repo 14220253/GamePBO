@@ -24,22 +24,22 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
 
     @Override
     public void moveUp() {
-        setPosY(getPosY() + 5);
+        setPosY(getPosY() + 3);
     }
 
     @Override
     public void moveDown() {
-        setPosY(getPosY() - 5);
+        setPosY(getPosY() - 3);
     }
 
     @Override
     public void moveRight() {
-        setPosX(getPosX() + 5);
+        setPosX(getPosX() + 3);
     }
 
     @Override
     public void moveLeft() {
-        setPosX(getPosX() - 5);
+        setPosX(getPosX() - 3);
     }
     @Override
     public void takeDamage(double dmg) {
@@ -94,9 +94,9 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
         this.lookingLeft = lookingLeft;
     }
     public int getSpriteWidth(){
-        return sprite.getRegionWidth();
+        return 40;
     }
     public int getSpriteHeight(){
-        return sprite.getRegionHeight();
+        return 50;
     }
 }
