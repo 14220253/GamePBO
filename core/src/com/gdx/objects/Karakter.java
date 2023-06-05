@@ -30,6 +30,10 @@ public abstract class Karakter {
         this.hitBox = hitBox;
     }
 
+    public double getHealth() {
+        return health;
+    }
+
     public Rectangle getHitBox() {
         return hitBox;
     }

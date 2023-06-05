@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.Monster;
 import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
 import com.gdx.objects.Weapon;
 import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
+import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
 
@@ -22,7 +22,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends ApplicationAdapter {
-	MainMenuUI mainMenuUI;
 	ArrayList<Projectile>projectiles = new ArrayList<>();
 	SpriteBatch batch;
 	Texture tiles;
@@ -32,7 +31,7 @@ public class GameMain extends ApplicationAdapter {
 	Texture knightRunSprite;
 	Texture orcIdle;
 	Texture healthBar;
-	int fps;
+	Texture orcDie;
 	boolean running;
 	boolean isAttacking = false;
 	int frameCount = 0;
@@ -41,6 +40,17 @@ public class GameMain extends ApplicationAdapter {
 	Rectangle rightBorder;
 	Rectangle bottomBorder;
 	Rectangle upperborder;
+	Texture mainMenu;
+	TextureRegion menuWindow;
+	TextureRegion startButtonIdle;
+	TextureRegion optionsButtonIdle;
+	TextureRegion exitButtonIdle;
+	Rectangle startButtonBox;
+	Rectangle optionsButtonBox;
+	Rectangle exitButtonBox;
+	TextureRegion startButtonHover;
+	TextureRegion optionsButtonHover;
+	TextureRegion exitButtonHover;
 	Sprite activeProjectile;
 	TextureRegion currentFrame;
 
@@ -50,11 +60,11 @@ public class GameMain extends ApplicationAdapter {
 	Animation<TextureRegion> playerRunLeft;
 	Animation<TextureRegion> playerRunRight;
 	Animation<TextureRegion> orcIdleRight;
+	Animation<TextureRegion> orcDeath;
 	Monster monster1;
 
 	@Override
 	public void create () {
-		mainMenuUI = new MainMenuUI();
 		batch = new SpriteBatch();
 		stateTime = 0f;
 		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
@@ -63,12 +73,11 @@ public class GameMain extends ApplicationAdapter {
 		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		orcIdle = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
 		healthBar = new Texture("healthbar/monsterHealthBar.png");
+		orcDie = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
-		fps = 0;
-
-		player = makeRangedPlayer();
+		player = makeMagicPlayer();
 		player.setPosX(400);
 		player.setPosY(80);
 		player.setHitBox(new Rectangle(32, 32));
@@ -79,16 +88,28 @@ public class GameMain extends ApplicationAdapter {
 
 		running = false;
 
-		mainMenuUI.forCreate(); //create UInya
+		mainMenu = new Texture("mainMenu/menuUI.png");
+		menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
+		startButtonIdle = new TextureRegion(mainMenu, 0, 0, 478, 141);
+		optionsButtonIdle = new TextureRegion(mainMenu, 0, 429, 478, 141);
+		exitButtonIdle = new TextureRegion(mainMenu, 479, 429, 478, 141);
+		startButtonBox = new Rectangle(240, 150, 350, 90);
+		optionsButtonBox = new Rectangle(240, 250, 350, 90);
+		exitButtonBox = new Rectangle(240, 350, 350, 90);
+		startButtonHover = new TextureRegion(mainMenu, 0, 283, 478, 146);
+		optionsButtonHover = new TextureRegion(mainMenu, 0, 711, 478, 146);
+		exitButtonHover = new TextureRegion(mainMenu, 479, 711, 478, 146);
 
 		playerIdleRight = Drawer.animate(knightSprite, 4, 1);
 		playerIdleLeft = Drawer.animateFlip(knightSprite, 4, 1);
 		playerRunLeft = Drawer.animateFlip(knightRunSprite, 6, 1);
 		playerRunRight = Drawer.animate(knightRunSprite, 6, 1);
 		orcIdleRight = Drawer.animate(orcIdle, 4, 1);
+		orcDeath = Drawer.animate(orcDie, 6, 1);
 
 		monster1 = new Monster(9999, 1, 1, 1, 400, 400,
-				new Rectangle(40, 50), 1, 1, 1, orcIdleRight, healthBar);
+				new Rectangle(40, 50), 1, 1, 1,
+				orcIdleRight, orcDeath, healthBar);
 	}
 
 	@Override
@@ -96,19 +117,26 @@ public class GameMain extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		batch.begin();
-		mainMenuUI.forRender(); //comment func forRender untuk cek game
-		mainGame(batch); //comment func mainGame ini untuk cek main menu
+		mainGame(batch);
 
 		batch.end();
+	}
+
+	public Boolean overlap(Rectangle rectangle1, Rectangle rectangle2) {
+		return true;
 	}
 	public void mainGame(SpriteBatch batch) {
 
 		Drawer.drawDungeon(batch, tiles);
-
-		fps++;
 		stateTime += Gdx.graphics.getDeltaTime();
 
-		monster1.draw(batch, stateTime);
+		if (monster1.getHealth() != 0) {
+			monster1.draw(batch, stateTime);
+		}
+		else {
+			monster1.die(batch, orcDeath, stateTime);
+		}
+		monster1.takeDamage(100);
 
 
 		if (player.isLookingLeft() && !running) {
@@ -128,8 +156,6 @@ public class GameMain extends ApplicationAdapter {
 		} else {
 			batch.draw(currentFrame, player.getPosX(), player.getPosY(), 40, 50);
 		}
-
-		fps ++;
 
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			if (player.getPosY() <= upperborder.getY() - 20) {
@@ -185,6 +211,12 @@ public class GameMain extends ApplicationAdapter {
 			isAttacking = false;
 			frameCount = 0;
 		}
+		if (player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation){
+			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && attackCooldown == 0){
+				frameCount = 0;
+				attackCooldown = player.getWeapon().getCooldown();
+			}
+		}
 		if (player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() == frameCount){
 			Projectile p = ((CreateProjectile) player.getWeapon().getWeaponAnimation()).createProjectile(player,activeProjectile);
 			projectiles.add(p);
@@ -227,6 +259,13 @@ public class GameMain extends ApplicationAdapter {
 		weapon.addTextureRegion(new TextureRegion(weapons,52,48,9,31));
 		weapon.addTextureRegion(new TextureRegion(weapons,67,50,12,27));
 		weapon.addTextureRegion(new TextureRegion(weapons,80,51,15,25));
+		Player player1 = new Player(weapon);
+		return player1;
+	}
+	public Player makeMagicPlayer(){
+		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
+		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0f, 1.5f,120,magicWeaponAnimation);
+		weapon.addTextureRegion(new TextureRegion(weapons,81,3,28,9));
 		Player player1 = new Player(weapon);
 		return player1;
 	}
