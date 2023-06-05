@@ -22,12 +22,15 @@ public class Monster extends Karakter implements Attackable{
     private double damageMultiplier;
     private double defenceMultiplier;
     private Animation<TextureRegion> animation;
+    private Animation<TextureRegion> death;
     private TextureRegion sprite;
     private TextureRegion currentFrame;
     private Texture healthBar;
     private double maxHealth;
 
-    public Monster(double health, int attack, int defense, int level, int posX, int posY, Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, Animation<TextureRegion> animation, Texture healthBar) {
+    public Monster(double health, int attack, int defense, int level, int posX, int posY,
+                   Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier,
+                   Animation<TextureRegion> animation, Animation<TextureRegion> death,Texture healthBar) {
         super(health, attack, defense, level, posX, posY, hitBox);
         this.hpMultiplier = hpMultiplier;
         this.damageMultiplier = damageMultiplier;
@@ -36,6 +39,7 @@ public class Monster extends Karakter implements Attackable{
         this.hitBox.setLocation(this.posX, this.posY);
         this.healthBar = healthBar;
         maxHealth = this.health;
+        this.death = death;
     }
 
     public TextureRegion getSprite() {
@@ -47,16 +51,16 @@ public class Monster extends Karakter implements Attackable{
     }
 
     private TextureRegion hpBar() {
-        double hpPercent = health / maxHealth;
+        double hpPercent = getHealth() / maxHealth;
         double width = healthBar.getWidth() * hpPercent;
-        return new TextureRegion(healthBar, (int) width, healthBar.getHeight());
+        return new TextureRegion(healthBar, 0, 0, (int) width, healthBar.getHeight());
     }
 
     public void draw(SpriteBatch batch, float stateTime) {
         currentFrame = animation.getKeyFrame(stateTime, true);
         setSprite(currentFrame);
         batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
-        batch.draw(hpBar(), getPosX(), getPosY() + 50, 40, 5);
+        batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
     }
 
 
@@ -65,6 +69,14 @@ public class Monster extends Karakter implements Attackable{
         health -= checkNegativeDmg(dmg-defense);
         checkHealth();
     }
+
+    @Override
+    public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
+        currentFrame = animation.getKeyFrame(stateTime, true);
+        setSprite(currentFrame);
+        batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);
+    }
+
     public void checkHealth() {
         health = Math.max(health, 0);
     }

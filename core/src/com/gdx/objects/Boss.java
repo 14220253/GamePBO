@@ -1,5 +1,9 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 public class Boss extends Karakter implements Skill, Attackable{
     //musuh boss
 
@@ -14,6 +18,12 @@ public class Boss extends Karakter implements Skill, Attackable{
         health -= checkNegativeDmg(dmg-defense);
         checkHealth();
     }
+
+    @Override
+    public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
+
+    }
+
     public void checkHealth() {
         health = Math.max(health, 0);
     }
