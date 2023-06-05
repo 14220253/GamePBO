@@ -29,6 +29,7 @@ public class GameMain extends ApplicationAdapter {
 	Texture knightSprite;
 	Texture knightRunSprite;
 	Texture orcIdle;
+	Texture healthBar;
 	int fps;
 	boolean running;
 	boolean isAttacking = false;
@@ -69,6 +70,7 @@ public class GameMain extends ApplicationAdapter {
 		knightRunSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
 		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		orcIdle = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
+		healthBar = new Texture("healthbar/monsterHealthBar.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
@@ -102,6 +104,9 @@ public class GameMain extends ApplicationAdapter {
 		playerRunLeft = Drawer.animateFlip(knightRunSprite, 6, 1);
 		playerRunRight = Drawer.animate(knightRunSprite, 6, 1);
 		orcIdleRight = Drawer.animate(orcIdle, 4, 1);
+
+		monster1 = new Monster(9999, 1, 1, 1, 400, 400,
+				new Rectangle(40, 50), 1, 1, 1, orcIdleRight, healthBar);
 	}
 
 	@Override
@@ -153,6 +158,8 @@ public class GameMain extends ApplicationAdapter {
 
 		fps++;
 		stateTime += Gdx.graphics.getDeltaTime();
+
+		monster1.draw(batch, stateTime);
 
 
 		if (player.isLookingLeft() && !running) {

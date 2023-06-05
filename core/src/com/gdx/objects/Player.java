@@ -98,22 +98,6 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
         // exp =- expNeeded
         // level++
     }
-
-    public TextureRegion getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(TextureRegion sprite) {
-        this.sprite = sprite;
-    }
-
-    public boolean isLookingLeft() {
-        return lookingLeft;
-    }
-
-    public void setLookingLeft(boolean lookingLeft) {
-        this.lookingLeft = lookingLeft;
-    }
     public int getSpriteWidth(){
         return sprite.getRegionWidth();
     }

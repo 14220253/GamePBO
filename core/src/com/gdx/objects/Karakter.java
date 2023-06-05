@@ -1,5 +1,7 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import java.awt.*;
 
 public abstract class Karakter {
@@ -12,6 +14,21 @@ public abstract class Karakter {
     protected int posX;
     protected int posY;
     protected Rectangle hitBox;
+    protected TextureRegion sprite;
+    protected boolean lookingLeft;
+
+    public Karakter() {
+    }
+
+    public Karakter(double health, int attack, int defense, int level, int posX, int posY, Rectangle hitBox) {
+        this.health = health;
+        this.attack = attack;
+        this.defense = defense;
+        this.level = level;
+        this.posX = posX;
+        this.posY = posY;
+        this.hitBox = hitBox;
+    }
 
     public Rectangle getHitBox() {
         return hitBox;
@@ -39,5 +56,20 @@ public abstract class Karakter {
 
     public void setPosY(int posY) {
         this.posY = posY;
+    }
+    public TextureRegion getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(TextureRegion sprite) {
+        this.sprite = sprite;
+    }
+
+    public boolean isLookingLeft() {
+        return lookingLeft;
+    }
+
+    public void setLookingLeft(boolean lookingLeft) {
+        this.lookingLeft = lookingLeft;
     }
 }
