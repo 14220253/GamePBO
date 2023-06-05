@@ -1,5 +1,6 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
 
@@ -21,6 +22,17 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     private final int maxEvasion = 60;
     private TextureRegion sprite;
     private boolean lookingLeft = false;
+    Weapon weapon;
+
+    public Player(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
+
+    public void attack(int frame, Batch batch) {
+
+        weapon.attack(this,frame,batch);
+    }
 
     @Override
     public void moveUp() {
@@ -49,6 +61,15 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
             checkHealth();
         }
     }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
     public void gainHealth(double healing) {
         this.health += healing*healMultiplier;
     }
