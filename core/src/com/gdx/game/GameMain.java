@@ -12,10 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
-import com.gdx.objects.Monster;
-import com.gdx.objects.Player;
-import com.gdx.objects.Projectile;
-import com.gdx.objects.Weapon;
+import com.gdx.objects.*;
 import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
 import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
@@ -41,24 +38,26 @@ public class GameMain extends ApplicationAdapter {
 	boolean isAttacking = false;
 	int frameCount = 0;
 	int attackCooldown;
-	Rectangle leftBorder;
-	Rectangle rightBorder;
-	Rectangle bottomBorder;
-	Rectangle upperborder;
 	Sprite activeProjectile;
 	TextureRegion currentFrame;
 
 	float stateTime;
+	ArrayList<Monster> monsterList;
+	ArrayList<Floor> floors;
 	Animation<TextureRegion> playerIdleRight;
 	Animation<TextureRegion> playerIdleLeft;
 	Animation<TextureRegion> playerRunLeft;
 	Animation<TextureRegion> playerRunRight;
 	Animation<TextureRegion> orcIdleRight;
 	Animation<TextureRegion> orcDeath;
+	Ruangan ruangan;
 	Monster monster1;
+	int deathFrame;
 
 	@Override
 	public void create () {
+		batch = new SpriteBatch();
+		stateTime = 0f;
 		manager = new AssetManager();
 		manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
@@ -69,9 +68,10 @@ public class GameMain extends ApplicationAdapter {
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png", Texture.class);
 		manager.finishLoading();
 
+		floors = new ArrayList<>();
+		ruangan = new Ruangan("Dungeon");
+		ruangan.initialize(batch);
 
-		batch = new SpriteBatch();
-		stateTime = 0f;
 		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		knightSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
 		knightRunSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
@@ -82,14 +82,10 @@ public class GameMain extends ApplicationAdapter {
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
-		player = makeMeleePlayer();
+		player = makeMagicPlayer();
 		player.setPosX(400);
 		player.setPosY(80);
 		player.setHitBox(new Rectangle(32, 32));
-		leftBorder = new Rectangle(48, 40, 5, 500);
-		rightBorder = new Rectangle(710, 40, 5, 500);
-		bottomBorder = new Rectangle(48, 55, 705, 8);
-		upperborder = new Rectangle(48, 525, 705, 8);
 
 		running = false;
 		mainMenuUI.forCreate();
@@ -104,6 +100,9 @@ public class GameMain extends ApplicationAdapter {
 		monster1 = new Monster(9999, 1, 1, 1, 400, 400,
 				new Rectangle(40, 50), 1, 1, 1,
 				orcIdleRight, orcDeath, healthBar);
+		monsterList = new ArrayList<>();
+		monsterList.add(monster1);
+		int deathFrame = 0;
 	}
 
 	@Override
@@ -118,16 +117,21 @@ public class GameMain extends ApplicationAdapter {
 	}
 	public void mainGame(SpriteBatch batch) {
 
-		Drawer.drawDungeon(batch, tiles);
+		ruangan.draw(batch);
 		stateTime += Gdx.graphics.getDeltaTime();
 
-		if (monster1.getHealth() != 0) {
-			monster1.draw(batch, stateTime);
+		if (deathFrame != 40) {
+			if (monster1.getHealth() != 0) {
+				monster1.draw(batch, stateTime);
+			} else {
+				deathFrame++;
+				monster1.die(batch, orcDeath, stateTime);
+			}
 		}
 		else {
-			monster1.die(batch, orcDeath, stateTime);
+			monsterList.remove(monster1);
 		}
-		monster1.takeDamage(1);
+		monster1.takeDamage(0);
 
 
 		if (player.isLookingLeft() && !running) {
@@ -149,13 +153,13 @@ public class GameMain extends ApplicationAdapter {
 		}
 
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			if (player.getPosY() <= upperborder.getY() - 20) {
+			if (player.getPosY() <= ruangan.getUpperborder().getY() - 20) {
 				player.moveUp();
 			}
 			running = true;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			if (player.getPosY() >= bottomBorder.getY()) {
+			if (player.getPosY() >=ruangan.getBottomBorder().getY()) {
 				player.moveDown();
 			}
 			running = true;
@@ -164,7 +168,7 @@ public class GameMain extends ApplicationAdapter {
 			if (!player.isLookingLeft()) {
 				player.setLookingLeft(true);
 			}
-			if (player.getPosX() >= leftBorder.getX() + 10) {
+			if (player.getPosX() >= ruangan.getLeftBorder().getX() + 10) {
 				player.moveLeft();
 			}
 			running = true;
@@ -173,7 +177,7 @@ public class GameMain extends ApplicationAdapter {
 			if (player.isLookingLeft()) {
 				player.setLookingLeft(false);
 			}
-			if (player.getPosX() <= rightBorder.getX()) {
+			if (player.getPosX() <= ruangan.getRightBorder().getX()) {
 				player.moveRight();
 			}
 			running = true;
@@ -222,13 +226,7 @@ public class GameMain extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		tiles.dispose();
-		weapons.dispose();
-		knightSprite.dispose();
-		knightRunSprite.dispose();
-		orcIdle.dispose();
-		healthBar.dispose();
-		orcDie.dispose();
+		manager.dispose();
 
 	}
 	public static float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {

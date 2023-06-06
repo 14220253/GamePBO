@@ -72,6 +72,7 @@ public class Monster extends Karakter implements Attackable{
 
     @Override
     public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
+        getHitBox().setSize(0, 0);
         currentFrame = animation.getKeyFrame(stateTime, true);
         setSprite(currentFrame);
         batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);

@@ -110,4 +110,11 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     public int getSpriteHeight(){
         return sprite.getRegionHeight();
     }
+    enum state {
+        IDLE,
+        RUN
+    }
+    enum move {
+        //w, s, a, d
+    }
 }
