@@ -4,15 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gdx.game.GameMain;
 
 import java.util.ArrayList;
 
 public class Explotion {
     int frame = 0;
-    Texture texture = new Texture("Vortex/Effect_TheVortex_1_427x431.png");
+    Texture texture;
+    GameMain app;
     ArrayList<TextureRegion> frames = new ArrayList<>();
 
     public Explotion() {
+        app = (GameMain) Gdx.app.getApplicationListener();
+        texture= app.getManager().get("Vortex/Effect_TheVortex_1_427x431.png");
         int X = 0;
         int Y = 0;
         for (int i = 0; i < 30; i++) {

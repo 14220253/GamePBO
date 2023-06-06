@@ -4,8 +4,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 
-public class Drawer {
+import java.util.Random;
+
+public class Static {
+    /**
+     * coin flip 0/1
+     * @return 0/1
+     */
+    public static int coinFlip() {
+        return new Random().nextInt(0, 2);
+    }
     /**
      * menggambar floor untuk level dungeon
      * @param batch spriteBatch untuk fungsi draw
@@ -72,7 +82,7 @@ public class Drawer {
      * @param row row dalam sheet
      * @return frames dalam array
      */
-    protected static TextureRegion[] textureSplitter(Texture texture, int column, int row) {
+    public static TextureRegion[] textureSplitter(Texture texture, int column, int row) {
         TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / column, texture.getHeight() / row);
         TextureRegion[] frames = new TextureRegion[column * row];
         int index = 0;
@@ -91,15 +101,12 @@ public class Drawer {
      * @param row row
      * @return Animation<TextureRegion>
      */
-    protected static Animation<TextureRegion> animate(Texture texture, int column, int row) {
+    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY) {
         TextureRegion[] array = textureSplitter(texture, column, row);
-        return new Animation<>(0.2f, array);
-    }
-
-    protected static Animation<TextureRegion> animateFlip(Texture texture, int column, int row) {
-        TextureRegion[] array = textureSplitter(texture, column, row);
-        for (TextureRegion t: array) {
-            t.flip(true, false);
+        if (flipX || flipY) {
+            for (TextureRegion t: array) {
+                t.flip(flipX, flipY);
+            }
         }
         return new Animation<>(0.2f, array);
     }

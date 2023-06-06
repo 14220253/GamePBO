@@ -3,6 +3,7 @@ package com.gdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -33,7 +34,11 @@ public class GameMain extends ApplicationAdapter {
 	Texture knightRunSprite;
 	Texture orcIdle;
 	Texture healthBar;
+	Texture orcRun;
 	Texture orcDie;
+	Texture skeletonIdle;
+	Texture skeletonRun;
+	Texture skeletonDie;
 	boolean running;
 	boolean isAttacking = false;
 	int frameCount = 0;
@@ -66,12 +71,20 @@ public class GameMain extends ApplicationAdapter {
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
 		manager.load("healthbar/monsterHealthBar.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png", Texture.class);
+		manager.load("Vortex/Effect_TheVortex_1_427x431.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png", Texture.class);
 		manager.finishLoading();
 
 		floors = new ArrayList<>();
 		ruangan = new Ruangan("Dungeon");
-		ruangan.initialize(batch);
+		ruangan.initialize(1, 1);
 
+		skeletonIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
+		skeletonRun = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png");
+		skeletonDie = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
 		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		knightSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
 		knightRunSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
@@ -79,6 +92,7 @@ public class GameMain extends ApplicationAdapter {
 		orcIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
 		healthBar = manager.get("healthbar/monsterHealthBar.png");
 		orcDie = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
+		orcRun = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
@@ -90,16 +104,16 @@ public class GameMain extends ApplicationAdapter {
 		running = false;
 		mainMenuUI.forCreate();
 
-		playerIdleRight = Drawer.animate(knightSprite, 4, 1);
-		playerIdleLeft = Drawer.animateFlip(knightSprite, 4, 1);
-		playerRunLeft = Drawer.animateFlip(knightRunSprite, 6, 1);
-		playerRunRight = Drawer.animate(knightRunSprite, 6, 1);
-		orcIdleRight = Drawer.animate(orcIdle, 4, 1);
-		orcDeath = Drawer.animate(orcDie, 6, 1);
+		playerIdleRight = Static.animate(knightSprite, 4, 1, false,false);
+		playerIdleLeft = Static.animate(knightSprite, 4, 1, true, false);
+		playerRunLeft = Static.animate(knightRunSprite, 6, 1,true, false);
+		playerRunRight = Static.animate(knightRunSprite, 6, 1, false, false);
+		orcIdleRight = Static.animate(orcIdle, 4, 1, false, false);
+		orcDeath = Static.animate(orcDie, 6, 1, false, false);
 
 		monster1 = new Monster(9999, 1, 1, 1, 400, 400,
 				new Rectangle(40, 50), 1, 1, 1,
-				orcIdleRight, orcDeath, healthBar);
+				"orc");
 		monsterList = new ArrayList<>();
 		monsterList.add(monster1);
 		int deathFrame = 0;
@@ -117,7 +131,7 @@ public class GameMain extends ApplicationAdapter {
 	}
 	public void mainGame(SpriteBatch batch) {
 
-		ruangan.draw(batch);
+		ruangan.draw(batch, stateTime);
 		stateTime += Gdx.graphics.getDeltaTime();
 
 		if (deathFrame != 40) {
