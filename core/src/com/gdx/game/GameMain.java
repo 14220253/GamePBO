@@ -68,6 +68,8 @@ public class GameMain extends ApplicationAdapter {
 		manager.load("healthbar/monsterHealthBar.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png", Texture.class);
 		manager.finishLoading();
+
+
 		batch = new SpriteBatch();
 		stateTime = 0f;
 		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
@@ -264,5 +266,9 @@ public class GameMain extends ApplicationAdapter {
 		weapon.addTextureRegion(new TextureRegion(weapons,81,3,28,9));
 		Player player1 = new Player(weapon);
 		return player1;
+	}
+
+	public AssetManager getManager() {
+		return manager;
 	}
 }
