@@ -32,10 +32,6 @@ public class GameMain extends ApplicationAdapter {
 	Player player;
 	Texture knightSprite;
 	Texture knightRunSprite;
-	Texture orcIdle;
-	Texture healthBar;
-	Texture orcRun;
-	Texture orcDie;
 	Texture skeletonIdle;
 	Texture skeletonRun;
 	Texture skeletonDie;
@@ -47,17 +43,12 @@ public class GameMain extends ApplicationAdapter {
 	TextureRegion currentFrame;
 
 	float stateTime;
-	ArrayList<Monster> monsterList;
 	ArrayList<Floor> floors;
 	Animation<TextureRegion> playerIdleRight;
 	Animation<TextureRegion> playerIdleLeft;
 	Animation<TextureRegion> playerRunLeft;
 	Animation<TextureRegion> playerRunRight;
-	Animation<TextureRegion> orcIdleRight;
-	Animation<TextureRegion> orcDeath;
 	Ruangan ruangan;
-	Monster monster1;
-	int deathFrame;
 
 	@Override
 	public void create () {
@@ -80,7 +71,7 @@ public class GameMain extends ApplicationAdapter {
 
 		floors = new ArrayList<>();
 		ruangan = new Ruangan("Dungeon");
-		ruangan.initialize(1, 1);
+		ruangan.initialize(5, 1);
 
 		skeletonIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
 		skeletonRun = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png");
@@ -89,10 +80,6 @@ public class GameMain extends ApplicationAdapter {
 		knightSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
 		knightRunSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
 		weapons = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		orcIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
-		healthBar = manager.get("healthbar/monsterHealthBar.png");
-		orcDie = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
-		orcRun = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
@@ -108,15 +95,6 @@ public class GameMain extends ApplicationAdapter {
 		playerIdleLeft = Static.animate(knightSprite, 4, 1, true, false);
 		playerRunLeft = Static.animate(knightRunSprite, 6, 1,true, false);
 		playerRunRight = Static.animate(knightRunSprite, 6, 1, false, false);
-		orcIdleRight = Static.animate(orcIdle, 4, 1, false, false);
-		orcDeath = Static.animate(orcDie, 6, 1, false, false);
-
-		monster1 = new Monster(9999, 1, 1, 1, 400, 400,
-				new Rectangle(40, 50), 1, 1, 1,
-				"orc");
-		monsterList = new ArrayList<>();
-		monsterList.add(monster1);
-		int deathFrame = 0;
 	}
 
 	@Override
@@ -131,22 +109,9 @@ public class GameMain extends ApplicationAdapter {
 	}
 	public void mainGame(SpriteBatch batch) {
 
-		ruangan.draw(batch, stateTime);
+		Static.drawDungeonShop(batch, tiles);
+//		Static.drawDungeon(batch, tiles);
 		stateTime += Gdx.graphics.getDeltaTime();
-
-		if (deathFrame != 40) {
-			if (monster1.getHealth() != 0) {
-				monster1.draw(batch, stateTime);
-			} else {
-				deathFrame++;
-				monster1.die(batch, orcDeath, stateTime);
-			}
-		}
-		else {
-			monsterList.remove(monster1);
-		}
-		monster1.takeDamage(0);
-
 
 		if (player.isLookingLeft() && !running) {
 			currentFrame = playerIdleLeft.getKeyFrame(stateTime, true);

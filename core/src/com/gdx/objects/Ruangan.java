@@ -24,40 +24,248 @@ public class Ruangan {
         this.type = type;
     }
 
+    /**
+     * initialize enemy rooms
+     * @param template 1-6 monster location template
+     * @param level level scaling (belum diimplement)
+     */
     public void initialize(int template, int level) {
         app = (GameMain) Gdx.app.getApplicationListener();
         monsters = new ArrayList<>();
-        int coinFlip;
 
         if (template == 1) {
             Monster monster1, monster2, monster3;
             if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 400, 400,
+                monster1= new Monster(50, 10, 0, level, 400, 450,
                         new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
             } else {
-                monster1= new Monster(50, 10, 0, level, 400, 400,
+                monster1= new Monster(50, 10, 0, level, 400, 450,
                         new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
             }
 
             if (Static.coinFlip() == 0) {
-                monster2= new Monster(50, 10, 0, level, 250, 400,
+                monster2= new Monster(50, 10, 0, level, 200, 450,
                         new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
             } else {
-                monster2= new Monster(50, 10, 0, level, 250, 400,
+                monster2= new Monster(50, 10, 0, level, 200, 450,
                         new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
             }
 
             if (Static.coinFlip() == 0) {
-                monster3= new Monster(50, 10, 0, level, 550, 400,
+                monster3= new Monster(50, 10, 0, level, 600, 450,
                         new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
             } else {
-                monster3= new Monster(50, 10, 0, level, 550, 400,
+                monster3= new Monster(50, 10, 0, level, 600, 450,
                         new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
             }
 
             monsters.add(monster1);
             monsters.add(monster2);
             monsters.add(monster3);
+        }
+        if (template == 2) {
+            Monster monster1, monster2, monster3;
+            if (Static.coinFlip() == 0) {
+                monster1= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster1= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster2= new Monster(50, 10, 0, level, 125, 300,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster2= new Monster(50, 10, 0, level, 125, 300,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster3= new Monster(50, 10, 0, level, 675, 300,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster3= new Monster(50, 10, 0, level, 675, 300,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            monsters.add(monster1);
+            monsters.add(monster2);
+            monsters.add(monster3);
+        }
+        if (template == 3) {
+            Monster monster1, monster2, monster3, monster4;
+            if (Static.coinFlip() == 0) {
+                monster1= new Monster(50, 10, 0, level, 100, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster1= new Monster(50, 10, 0, level, 100, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster2= new Monster(50, 10, 0, level, 300, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster2= new Monster(50, 10, 0, level, 300, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster3= new Monster(50, 10, 0, level, 450, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster3= new Monster(50, 10, 0, level, 450, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster4= new Monster(50, 10, 0, level, 650, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster4= new Monster(50, 10, 0, level, 650, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            monsters.add(monster1);
+            monsters.add(monster2);
+            monsters.add(monster3);
+            monsters.add(monster4);
+        }
+        if (template == 4) {
+            Monster monster1, monster2, monster3, monster4;
+            if (Static.coinFlip() == 0) {
+                monster1= new Monster(50, 10, 0, level, 100, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster1= new Monster(50, 10, 0, level, 100, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster2= new Monster(50, 10, 0, level, 250, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster2= new Monster(50, 10, 0, level, 250, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster3= new Monster(50, 10, 0, level, 550, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster3= new Monster(50, 10, 0, level, 550, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster4= new Monster(50, 10, 0, level, 650, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster4= new Monster(50, 10, 0, level, 650, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            monsters.add(monster1);
+            monsters.add(monster2);
+            monsters.add(monster3);
+            monsters.add(monster4);
+        }
+        if (template == 5) {
+            Monster monster1, monster2, monster3, monster4, monster5;
+            if (Static.coinFlip() == 0) {
+                monster1= new Monster(50, 10, 0, level, 150, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster1= new Monster(50, 10, 0, level, 150, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster2= new Monster(50, 10, 0, level, 150, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster2= new Monster(50, 10, 0, level, 150, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster3= new Monster(50, 10, 0, level, 650, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster3= new Monster(50, 10, 0, level, 650, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster4= new Monster(50, 10, 0, level, 650, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster4= new Monster(50, 10, 0, level, 650, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster5= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster5= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            monsters.add(monster1);
+            monsters.add(monster2);
+            monsters.add(monster3);
+            monsters.add(monster4);
+            monsters.add(monster5);
+        }
+        if (template == 6) {
+            Monster monster1, monster2, monster3, monster4, monster5;
+            if (Static.coinFlip() == 0) {
+                monster1= new Monster(50, 10, 0, level, 150, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster1= new Monster(50, 10, 0, level, 150, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster2= new Monster(50, 10, 0, level, 250, 375,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster2= new Monster(50, 10, 0, level, 250, 375,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster3= new Monster(50, 10, 0, level, 550, 375,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster3= new Monster(50, 10, 0, level, 550, 375,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster4= new Monster(50, 10, 0, level, 650, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster4= new Monster(50, 10, 0, level, 650, 250,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            if (Static.coinFlip() == 0) {
+                monster5= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster5= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            }
+
+            monsters.add(monster1);
+            monsters.add(monster2);
+            monsters.add(monster3);
+            monsters.add(monster4);
+            monsters.add(monster5);
         }
     }
 
@@ -79,8 +287,10 @@ public class Ruangan {
         }
 
         //enemies
-        for(Monster monster: monsters) {
-            monster.draw(batch, stateTime);
+        if (!type.equalsIgnoreCase("Shop")) {
+            for (Monster monster : monsters) {
+                monster.draw(batch, stateTime);
+            }
         }
     }
 
