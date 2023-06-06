@@ -17,7 +17,7 @@ public class MagicWeaponAnimation implements WeaponAnimation{
             fixY = Gdx.input.getY();
         }
         if (!player.isLookingLeft()) {
-            if (frame<30){
+            if (frame<60){
                 explotion.draw(fixX,fixY,batch);
                 batch.draw(weapon.get(0), (float) player.getHitBox().getCenterX(), (float) (player.getHitBox().getCenterY()), 0, weapon.get(0).getRegionHeight() / 2.0f, (float) weapon.get(0).getRegionWidth(),
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
@@ -26,7 +26,7 @@ public class MagicWeaponAnimation implements WeaponAnimation{
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
             }
         } else {
-            if (frame<30){
+            if (frame<60){
                 explotion.draw(fixX,fixY,batch);
                 batch.draw(weapon.get(0), (float) player.getHitBox().getCenterX()+7, (float) (player.getHitBox().getCenterY()), 0, weapon.get(0).getRegionHeight() / 2.0f, (float) weapon.get(0).getRegionWidth(),
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
@@ -35,7 +35,7 @@ public class MagicWeaponAnimation implements WeaponAnimation{
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
             }
         }
-        if (fixX > 0 && frame > 30){
+        if (fixX > 0 && frame > 60){
             fixX = -1;
         }
     }
