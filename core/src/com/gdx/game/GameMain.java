@@ -23,7 +23,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends ApplicationAdapter {
-	MainMenuUI mainMenuUI;
+	MainMenuUI mainMenuUI = new MainMenuUI();
 	ArrayList<Projectile>projectiles = new ArrayList<>();
 	SpriteBatch batch;
 	Texture tiles;
@@ -98,7 +98,7 @@ public class GameMain extends ApplicationAdapter {
 
 		batch.begin();
 		mainMenuUI.forRender(); //comment untuk cek game
-		mainGame(batch); //comment untuk cek UI
+		//mainGame(batch); //comment untuk cek UI
 
 		batch.end();
 	}
