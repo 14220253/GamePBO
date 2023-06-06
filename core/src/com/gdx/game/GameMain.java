@@ -68,7 +68,7 @@ public class GameMain extends ApplicationAdapter {
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
-		player = makeMagicPlayer();
+		player = makeMeleePlayer();
 		player.setPosX(400);
 		player.setPosY(80);
 		player.setHitBox(new Rectangle(32, 32));
