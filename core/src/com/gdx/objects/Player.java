@@ -23,7 +23,6 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     private Inventory inventory;
     private final int maxEvasion = 60;
     private TextureRegion sprite;
-    private boolean lookingLeft = false;
     Weapon weapon;
 
     public Player(Weapon weapon) {
@@ -38,22 +37,22 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
 
     @Override
     public void moveUp() {
-        setPosY(getPosY() + 3);
+        setPosY(getPosY() + 4);
     }
 
     @Override
     public void moveDown() {
-        setPosY(getPosY() - 3);
+        setPosY(getPosY() - 4);
     }
 
     @Override
     public void moveRight() {
-        setPosX(getPosX() + 3);
+        setPosX(getPosX() + 4);
     }
 
     @Override
     public void moveLeft() {
-        setPosX(getPosX() - 3);
+        setPosX(getPosX() - 4);
     }
     @Override
     public void takeDamage(double dmg) {

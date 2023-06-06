@@ -3,11 +3,13 @@ package com.gdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.Monster;
@@ -23,6 +25,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends ApplicationAdapter {
+	AssetManager manager;
 	MainMenuUI mainMenuUI = new MainMenuUI();
 	ArrayList<Projectile>projectiles = new ArrayList<>();
 	SpriteBatch batch;
@@ -56,15 +59,24 @@ public class GameMain extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		manager = new AssetManager();
+		manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
+		manager.load("healthbar/monsterHealthBar.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png", Texture.class);
+		manager.finishLoading();
 		batch = new SpriteBatch();
 		stateTime = 0f;
-		tiles = new Texture("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-		knightSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
-		knightRunSprite = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
-		weapons = new Texture("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		orcIdle = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
-		healthBar = new Texture("healthbar/monsterHealthBar.png");
-		orcDie = new Texture("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
+		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
+		knightSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
+		knightRunSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
+		weapons = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		orcIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
+		healthBar = manager.get("healthbar/monsterHealthBar.png");
+		orcDie = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
@@ -97,14 +109,10 @@ public class GameMain extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		batch.begin();
-		mainMenuUI.forRender(); //comment untuk cek game
-		//mainGame(batch); //comment untuk cek UI
+//		mainMenuUI.forRender(); //comment untuk cek game
+		mainGame(batch); //comment untuk cek UI
 
 		batch.end();
-	}
-
-	public Boolean overlap(Rectangle rectangle1, Rectangle rectangle2) {
-		return true;
 	}
 	public void mainGame(SpriteBatch batch) {
 
@@ -117,7 +125,7 @@ public class GameMain extends ApplicationAdapter {
 		else {
 			monster1.die(batch, orcDeath, stateTime);
 		}
-		monster1.takeDamage(100);
+		monster1.takeDamage(1);
 
 
 		if (player.isLookingLeft() && !running) {
@@ -213,6 +221,13 @@ public class GameMain extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		tiles.dispose();
+		weapons.dispose();
+		knightSprite.dispose();
+		knightRunSprite.dispose();
+		orcIdle.dispose();
+		healthBar.dispose();
+		orcDie.dispose();
+
 	}
 	public static float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {
 		// Calculate the angle between the character and the mouse position

@@ -2,7 +2,6 @@ package com.gdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -71,7 +70,7 @@ public class Drawer {
      * @param texture texture yang displit
      * @param column column dalam sheet
      * @param row row dalam sheet
-     * @return
+     * @return frames dalam array
      */
     protected static TextureRegion[] textureSplitter(Texture texture, int column, int row) {
         TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / column, texture.getHeight() / row);
@@ -90,11 +89,11 @@ public class Drawer {
      * @param texture texture animasi
      * @param column column
      * @param row row
-     * @return
+     * @return Animation<TextureRegion>
      */
     protected static Animation<TextureRegion> animate(Texture texture, int column, int row) {
         TextureRegion[] array = textureSplitter(texture, column, row);
-        return new Animation<TextureRegion>(0.2f, array);
+        return new Animation<>(0.2f, array);
     }
 
     protected static Animation<TextureRegion> animateFlip(Texture texture, int column, int row) {
@@ -102,6 +101,6 @@ public class Drawer {
         for (TextureRegion t: array) {
             t.flip(true, false);
         }
-        return new Animation<TextureRegion>(0.2f, array);
+        return new Animation<>(0.2f, array);
     }
 }
