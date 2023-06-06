@@ -10,6 +10,11 @@ public class MagicWeaponAnimation implements WeaponAnimation{
     Explotion explotion = new Explotion();
     int fixX = -1;
     int fixY;
+
+    public Explotion getExplotion() {
+        return explotion;
+    }
+
     @Override
     public void attack(Player player, ArrayList<TextureRegion> weapon, int frame, Batch batch, float sizeScaling) {
         if (fixX < 0){
