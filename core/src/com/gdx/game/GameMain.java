@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.*;
 import com.gdx.objects.playerAnimationHandling.MeleePlayerAnimation;
+import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
 import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
 import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
@@ -32,24 +33,16 @@ public class GameMain extends Game {
 	Texture tiles;
 	Texture weapons;
 	Player player;
-	Texture knightSprite;
-	Texture knightRunSprite;
 	Texture skeletonIdle;
 	Texture skeletonRun;
 	Texture skeletonDie;
-	boolean running;
 	boolean isAttacking = false;
 	int frameCount = 0;
 	int attackCooldown;
-	Sprite activeProjectile;
-	TextureRegion currentFrame;
+	Sprite activePlayerProjectile;
 
 	float stateTime;
 	ArrayList<Floor> floors;
-	Animation<TextureRegion> playerIdleRight;
-	Animation<TextureRegion> playerIdleLeft;
-	Animation<TextureRegion> playerRunLeft;
-	Animation<TextureRegion> playerRunRight;
 	Ruangan ruangan;
 
 	@Override
@@ -59,7 +52,9 @@ public class GameMain extends Game {
 		manager = new AssetManager();
 		manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet-Resize.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Idle/Idle-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Run/Run-Sheet.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
 		manager.load("healthbar/monsterHealthBar.png", Texture.class);
@@ -79,24 +74,13 @@ public class GameMain extends Game {
 		skeletonRun = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png");
 		skeletonDie = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
 		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-		knightSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
-		knightRunSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet-Resize.png");
 		weapons = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 
-		activeProjectile = new Sprite(weapons, 32,4,15,6);
-
-		player = makeMeleePlayer();
+		player = makeRangedPlayer();
 		player.setPosX(400);
 		player.setPosY(300);
-		player.setHitBox(new Rectangle(32, 32));
 
-		running = false;
 		mainMenuUI.forCreate();
-
-		playerIdleRight = Static.animate(knightSprite, 4, 1, false,false);
-		playerIdleLeft = Static.animate(knightSprite, 4, 1, true, false);
-		playerRunLeft = Static.animate(knightRunSprite, 6, 1,true, false);
-		playerRunRight = Static.animate(knightRunSprite, 6, 1, false, false);
 	}
 
 	@Override
@@ -153,7 +137,7 @@ public class GameMain extends Game {
 			}
 		}
 		if (player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() == frameCount){
-			Projectile p = ((CreateProjectile) player.getWeapon().getWeaponAnimation()).createProjectile(player,activeProjectile);
+			Projectile p = ((CreateProjectile) player.getWeapon().getWeaponAnimation()).createProjectile(player,activePlayerProjectile);
 			projectiles.add(p);
 		}
 
@@ -195,7 +179,9 @@ public class GameMain extends Game {
 		weapon.addTextureRegion(new TextureRegion(weapons,52,48,9,31));
 		weapon.addTextureRegion(new TextureRegion(weapons,67,50,12,27));
 		weapon.addTextureRegion(new TextureRegion(weapons,80,51,15,25));
-		Player player1 = new Player(weapon, new MeleePlayerAnimation());
+		Texture tmp = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		activePlayerProjectile = new Sprite(tmp,32,4,15,6);
+		Player player1 = new Player(weapon, new RangedPlayerAnimation());
 		return player1;
 	}
 	public Player makeMagicPlayer(){

@@ -162,4 +162,10 @@ public class Static {
         }
         return new Animation<>(0.2f, array);
     }
+    public static TextureRegion[] flipImageX(TextureRegion[] textureRegion){
+        for (TextureRegion i: textureRegion) {
+            i.flip(true,false);
+        }
+        return textureRegion;
+    }
 }

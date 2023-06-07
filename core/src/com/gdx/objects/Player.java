@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
 import com.gdx.objects.playerAnimationHandling.PlayerAnimation;
 
+import java.awt.*;
+
 public class Player extends Karakter implements Attackable { //interface Skill belum tau
     //karakter yang dikendalikan
 
@@ -45,6 +47,9 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         this.weapon = weapon;
         this.playerAnimation = playerAnimation;
         currentFrame = playerAnimation.getCurrentFrame(0,true,isAttacking,isLookingLeft,!isRunning);
+        Rectangle rectangle = new Rectangle();
+        rectangle.setSize((int) (currentFrame.getRegionWidth()*playerAnimation.getScalingX()) - 5, (int) (currentFrame.getRegionHeight()*playerAnimation.getScalingY()) - 5);
+        setHitBox(rectangle);
         moveUpKey = Input.Keys.W;
         moveDownKey = Input.Keys.S;
         moveRightKey = Input.Keys.D;
@@ -175,7 +180,7 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         return sprite.getRegionHeight();
     }
     public void draw(Batch batch){
-        batch.draw(currentFrame,getPosX(),getPosY());
+        batch.draw(currentFrame,getPosX(),getPosY(),0,0,currentFrame.getRegionWidth(),currentFrame.getRegionHeight(),playerAnimation.getScalingX(),playerAnimation.getScalingY(),0);
     }
     public void update(float deltaTime, float stateTime){
         //params frameTime, lalu getCurrentFrame dari playerAnimation
@@ -205,6 +210,7 @@ public class Player extends Karakter implements Attackable { //interface Skill b
             isRunning = false;
         }
         currentFrame = playerAnimation.getCurrentFrame(stateTime, true,isAttacking,isLookingLeft,!isRunning);
+        updateHitbox();
     }
     enum state {
         IDLE,
