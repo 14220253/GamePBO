@@ -82,7 +82,7 @@ public class Player extends Karakter implements Attackable { //interface Skill b
 
     @Override
     public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
-        //rian what is this, i already make death animation in playerAnimationHandling that runs on player(update)
+        //TODO rian what is this, i already make death animation in playerAnimationHandling that runs on player(update)
     }
 
     public void revive(int health){
