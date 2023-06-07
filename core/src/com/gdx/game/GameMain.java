@@ -109,8 +109,8 @@ public class GameMain extends ApplicationAdapter {
 	}
 	public void mainGame(SpriteBatch batch) {
 
-		Static.drawDungeonShop(batch, tiles);
-//		Static.drawDungeon(batch, tiles);
+//		Static.drawDungeonShop(batch, tiles);
+		ruangan.draw(batch, stateTime);
 		stateTime += Gdx.graphics.getDeltaTime();
 
 		if (player.isLookingLeft() && !running) {
