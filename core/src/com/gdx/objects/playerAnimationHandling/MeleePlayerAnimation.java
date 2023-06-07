@@ -20,7 +20,7 @@ public class MeleePlayerAnimation implements PlayerAnimation{
         texture = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
         playerIdleRight = Static.animate(texture, 4, 1, false,false);
         playerIdleLeft = Static.animate(texture, 4, 1, true, false);
-        texture = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
+        texture = new Texture("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet-Resize.png");
         playerRunLeft = Static.animate(texture, 6, 1,true, false);
         playerRunRight = Static.animate(texture, 6, 1, false, false);
     }

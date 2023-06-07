@@ -59,7 +59,7 @@ public class GameMain extends Game {
 		manager = new AssetManager();
 		manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet-Resize.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
 		manager.load("healthbar/monsterHealthBar.png", Texture.class);
@@ -80,7 +80,7 @@ public class GameMain extends Game {
 		skeletonDie = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
 		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		knightSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png");
-		knightRunSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
+		knightRunSprite = manager.get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet-Resize.png");
 		weapons = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
