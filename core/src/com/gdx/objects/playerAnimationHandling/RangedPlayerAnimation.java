@@ -11,6 +11,11 @@ import com.gdx.game.Static;
 import java.util.ArrayList;
 
 public class RangedPlayerAnimation implements PlayerAnimation{
+    //kiko mini todo list
+    // make rangedplayer death animation, make magicPlayer wizard animation
+    // rework attacks so it runs of stateTime
+    // rework projectile creation on ranged player
+    // rework magicWeaponAnimation + explotion
     private GameMain app;
     private Texture textureIdle;
     private Texture textureRun;
@@ -18,6 +23,8 @@ public class RangedPlayerAnimation implements PlayerAnimation{
     private Animation<TextureRegion> playerIdleLeft;
     private Animation<TextureRegion> playerRunRight;
     private Animation<TextureRegion> playerRunLeft;
+    private Animation<TextureRegion> playerDyingRight;
+    private Animation<TextureRegion> playerDyingLeft;
     private TextureRegion currentFrame;
     private float scalingX, scalingY;
 

@@ -67,7 +67,7 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     }
 
 
-    public void attack(int frame, Batch batch) {
+    public void drawAttack(int frame, Batch batch) {
         weapon.attack(this,frame,batch);
     }
 
@@ -82,9 +82,20 @@ public class Player extends Karakter implements Attackable { //interface Skill b
 
     @Override
     public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
-
+        //rian what is this, i already make death animation in playerAnimationHandling that runs on player(update)
     }
 
+    public void revive(int health){
+        isDying = false;
+        isDead = false;
+        Rectangle rectangle = new Rectangle();
+        rectangle.setSize((int) (currentFrame.getRegionWidth()*playerAnimation.getScalingX()) - 5, (int) (currentFrame.getRegionHeight()*playerAnimation.getScalingY()) - 5);
+        setHitBox(rectangle);
+        this.health = health;
+    }
+    public boolean isDying(){
+        return isDying;
+    }
     public void setMoveUpKey(int moveUpKey) {
         this.moveUpKey = moveUpKey;
     }
@@ -198,6 +209,7 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         if (health <= 0 && !isDying){
             isDying = true;
             deathStateTime = 0;
+            hitBox = null;
         }
         if (!isDying) {
             isRunning = false;
@@ -232,7 +244,7 @@ public class Player extends Karakter implements Attackable { //interface Skill b
             if (deathStateTime <= playerAnimation.getMaxDyingStateTime()) {
                 currentFrame = playerAnimation.getDyingFrame(deathStateTime, isLookingLeft);
                 System.out.println("wasd");
-            } else {
+            } else if (deathStateTime+2.5f > playerAnimation.getMaxDyingStateTime()) {
                 isDead = true;
             }
         }

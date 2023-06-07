@@ -112,12 +112,11 @@ public class GameMain extends Game {
 		if (player.getPosX() >= ruangan.getRightBorder().getX()) {
 			player.setCanMoveRight(false);
 			}
-		player.updateHitbox();
 		player.update(Gdx.graphics.getDeltaTime(),stateTime);
 		player.draw(batch);
 		player.takeDamage(5);
 
-		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isAttacking && attackCooldown == 0) {
+		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isAttacking && attackCooldown == 0 && !player.isDying()) {
 			isAttacking = true;
 			frameCount = 0;
 			attackCooldown = player.getWeapon().getCooldown();
@@ -125,7 +124,7 @@ public class GameMain extends Game {
 		attackCooldown--;
 		attackCooldown = Math.max(attackCooldown, 0);
 		if (isAttacking) {
-			player.attack(frameCount, batch);
+			player.drawAttack(frameCount, batch);
 			frameCount++;
 		}
 		if (frameCount == player.getWeapon().getMaxFrame()) {
