@@ -1,12 +1,15 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
+import com.gdx.objects.playerAnimationHandling.PlayerAnimation;
 
-public class Player extends Karakter implements PlayerActions, Attackable { //interface Skill belum tau
+public class Player extends Karakter implements Attackable { //interface Skill belum tau
     //karakter yang dikendalikan
 
     //stats
@@ -22,38 +25,41 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     private double exp;
     private Inventory inventory;
     private final int maxEvasion = 60;
-    private TextureRegion sprite;
+    private PlayerAnimation playerAnimation;
+    private TextureRegion currentFrame;
+    private boolean isRunning;
+    private boolean isLookingLeft;
+    private boolean isAttacking;
+    private boolean canMoveLeft;
+    private boolean canMoveRight;
+    private boolean canMoveUp;
+    private boolean canMoveDown;
+    private int moveUpKey;
+    private int moveDownKey;
+    private int moveRightKey;
+    private int moveLeftKey;
+    private float speed; //speed in units per frame
     Weapon weapon;
 
-    public Player(Weapon weapon) {
+    public Player(Weapon weapon, PlayerAnimation playerAnimation) {
         this.weapon = weapon;
+        this.playerAnimation = playerAnimation;
+        currentFrame = playerAnimation.getCurrentFrame(0,true,isAttacking,isLookingLeft,!isRunning);
+        moveUpKey = Input.Keys.W;
+        moveDownKey = Input.Keys.S;
+        moveRightKey = Input.Keys.D;
+        moveLeftKey = Input.Keys.A;
+        isRunning = false;
+        isLookingLeft = false;
+        isAttacking = false;
+        speed = 300f; // 300 pixels a second
     }
 
 
     public void attack(int frame, Batch batch) {
-
         weapon.attack(this,frame,batch);
     }
 
-    @Override
-    public void moveUp() {
-        setPosY(getPosY() + 4);
-    }
-
-    @Override
-    public void moveDown() {
-        setPosY(getPosY() - 4);
-    }
-
-    @Override
-    public void moveRight() {
-        setPosX(getPosX() + 4);
-    }
-
-    @Override
-    public void moveLeft() {
-        setPosX(getPosX() - 4);
-    }
     @Override
     public void takeDamage(double dmg) {
         int roll = (int)(Math.random()*101); // random 0-100
@@ -66,6 +72,64 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     @Override
     public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
 
+    }
+
+    public void setMoveUpKey(int moveUpKey) {
+        this.moveUpKey = moveUpKey;
+    }
+
+    public void setMoveDownKey(int moveDownKey) {
+        this.moveDownKey = moveDownKey;
+    }
+
+    public void setMoveRightKey(int moveRightKey) {
+        this.moveRightKey = moveRightKey;
+    }
+
+    public void setMoveLeftKey(int moveLeftKey) {
+        this.moveLeftKey = moveLeftKey;
+    }
+
+    public PlayerAnimation getPlayerAnimation() {
+        return playerAnimation;
+    }
+
+    public void setPlayerAnimation(PlayerAnimation playerAnimation) {
+        this.playerAnimation = playerAnimation;
+    }
+
+    public void setCanMoveLeft(boolean canMoveLeft) {
+        this.canMoveLeft = canMoveLeft;
+    }
+
+    public void setCanMoveRight(boolean canMoveRight) {
+        this.canMoveRight = canMoveRight;
+    }
+
+    public void setCanMoveUp(boolean canMoveUp) {
+        this.canMoveUp = canMoveUp;
+    }
+
+    public void setCanMoveDown(boolean canMoveDown) {
+        this.canMoveDown = canMoveDown;
+    }
+    public void canMoveFree(){
+        canMoveUp = true;
+        canMoveDown = true;
+        canMoveRight = true;
+        canMoveLeft = true;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
     }
 
     public Weapon getWeapon() {
@@ -109,6 +173,38 @@ public class Player extends Karakter implements PlayerActions, Attackable { //in
     }
     public int getSpriteHeight(){
         return sprite.getRegionHeight();
+    }
+    public void draw(Batch batch){
+        batch.draw(currentFrame,getPosX(),getPosY());
+    }
+    public void update(float deltaTime, float stateTime){
+        //params frameTime, lalu getCurrentFrame dari playerAnimation
+        isRunning = false;
+        if (Gdx.input.isKeyPressed(moveUpKey) && canMoveUp){
+            posY += speed*deltaTime;
+            isRunning=true;
+        }
+        if (Gdx.input.isKeyPressed(moveDownKey) && canMoveDown){
+            posY -= speed*deltaTime;
+            isRunning=true;
+        }
+        if (Gdx.input.isKeyPressed(moveLeftKey) && canMoveLeft){
+            posX -= speed*deltaTime;
+            isRunning=true;
+            isLookingLeft=true;
+        }
+        if (Gdx.input.isKeyPressed(moveRightKey) && canMoveRight){
+            posX += speed*deltaTime;
+            isRunning=true;
+            isLookingLeft=false;
+        }
+        if (!Gdx.input.isKeyPressed(moveUpKey) &&
+                !Gdx.input.isKeyPressed(moveDownKey) &&
+                !Gdx.input.isKeyPressed(moveRightKey) &&
+                !Gdx.input.isKeyPressed(moveLeftKey)) {
+            isRunning = false;
+        }
+        currentFrame = playerAnimation.getCurrentFrame(stateTime, true,isAttacking,isLookingLeft,!isRunning);
     }
     enum state {
         IDLE,

@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.*;
+import com.gdx.objects.playerAnimationHandling.MeleePlayerAnimation;
 import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
 import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
@@ -83,7 +84,7 @@ public class GameMain extends ApplicationAdapter {
 
 		activeProjectile = new Sprite(weapons, 32,4,15,6);
 
-		player = makeMagicPlayer();
+		player = makeMeleePlayer();
 		player.setPosX(400);
 		player.setPosY(80);
 		player.setHitBox(new Rectangle(32, 32));
@@ -113,62 +114,22 @@ public class GameMain extends ApplicationAdapter {
 		ruangan.draw(batch, stateTime);
 		stateTime += Gdx.graphics.getDeltaTime();
 
-		if (player.isLookingLeft() && !running) {
-			currentFrame = playerIdleLeft.getKeyFrame(stateTime, true);
-		} else if (!running){
-			currentFrame = playerIdleRight.getKeyFrame(stateTime, true);
-		} else if (running && player.isLookingLeft()) {
-			currentFrame = playerRunLeft.getKeyFrame(stateTime, true);
-		} else {
-			currentFrame = playerRunRight.getKeyFrame(stateTime, true);
-		}
-
-		player.setSprite(currentFrame);
-
-		if (running) {
-			batch.draw(currentFrame, player.getPosX() - 20, player.getPosY(), 80, 100);
-		} else {
-			batch.draw(currentFrame, player.getPosX(), player.getPosY(), 40, 50);
-		}
-
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			if (player.getPosY() <= ruangan.getUpperborder().getY() - 20) {
-				player.moveUp();
+		player.canMoveFree();
+		if (player.getPosY() >= ruangan.getUpperborder().getY() - 20) {
+			player.setCanMoveUp(false);
 			}
-			running = true;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			if (player.getPosY() >=ruangan.getBottomBorder().getY()) {
-				player.moveDown();
+		if (player.getPosY() <=ruangan.getBottomBorder().getY()) {
+			player.setCanMoveDown(false);
 			}
-			running = true;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			if (!player.isLookingLeft()) {
-				player.setLookingLeft(true);
+		if (player.getPosX() <= ruangan.getLeftBorder().getX() + 10) {
+			player.setCanMoveLeft(false);
 			}
-			if (player.getPosX() >= ruangan.getLeftBorder().getX() + 10) {
-				player.moveLeft();
+		if (player.getPosX() >= ruangan.getRightBorder().getX()) {
+			player.setCanMoveRight(false);
 			}
-			running = true;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			if (player.isLookingLeft()) {
-				player.setLookingLeft(false);
-			}
-			if (player.getPosX() <= ruangan.getRightBorder().getX()) {
-				player.moveRight();
-			}
-			running = true;
-		}
-		if (!Gdx.input.isKeyPressed(Input.Keys.W) &&
-				!Gdx.input.isKeyPressed(Input.Keys.S) &&
-				!Gdx.input.isKeyPressed(Input.Keys.A) &&
-				!Gdx.input.isKeyPressed(Input.Keys.D)) {
-			running = false;
-		}
 		player.updateHitbox();
-
+		player.update(Gdx.graphics.getDeltaTime(),stateTime);
+		player.draw(batch);
 
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isAttacking && attackCooldown == 0) {
 			isAttacking = true;
@@ -225,7 +186,7 @@ public class GameMain extends ApplicationAdapter {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
 		Weapon weapon = new Weapon("Excalibur", "OP", 99, 1, 2.0f, 2.0f,30,meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(weapons,0, 0,16,46));
-		Player player1 = new Player(weapon);
+		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
 	}
 	public Player makeRangedPlayer(){
@@ -234,14 +195,14 @@ public class GameMain extends ApplicationAdapter {
 		weapon.addTextureRegion(new TextureRegion(weapons,52,48,9,31));
 		weapon.addTextureRegion(new TextureRegion(weapons,67,50,12,27));
 		weapon.addTextureRegion(new TextureRegion(weapons,80,51,15,25));
-		Player player1 = new Player(weapon);
+		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
 	}
 	public Player makeMagicPlayer(){
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
 		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0f, 1.5f,120,magicWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(weapons,81,3,28,9));
-		Player player1 = new Player(weapon);
+		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
 	}
 
