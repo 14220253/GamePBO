@@ -1,6 +1,7 @@
 package com.gdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
@@ -22,7 +23,7 @@ import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GameMain extends ApplicationAdapter {
+public class GameMain extends Game {
 	AssetManager manager;
 	MainMenuUI mainMenuUI = new MainMenuUI();
 	ArrayList<Projectile>projectiles = new ArrayList<>();
