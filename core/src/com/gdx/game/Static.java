@@ -99,11 +99,11 @@ public class Static {
         batch.draw(bottomLeftWall, 210, 200, 40, 40);
 
         //floor
-        for (int i = 215; i <= 500; i += 63) { //kiri ke kanan
+        for (int i = 216; i <= 510; i += 47) { //kiri ke kanan
             for (int j = 208; j <= 330 ; j += 50) { //atas ke bawah
-                batch.draw(floor, i, j, 63, 50);
+                batch.draw(floor, i, j, 47, 50);
             }
-            batch.draw(topShadowFloor, i, 331, 63, 50);
+            batch.draw(topShadowFloor, i, 331, 47, 50);
         }
 
         //bottom wall pt.2
