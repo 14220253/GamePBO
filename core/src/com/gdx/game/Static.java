@@ -134,8 +134,9 @@ public class Static {
      * @return frames dalam array
      */
     public static TextureRegion[] textureSplitter(Texture texture, int column, int row) {
+        TextureRegion[] frames;
         TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / column, texture.getHeight() / row);
-        TextureRegion[] frames = new TextureRegion[column * row];
+        frames = new TextureRegion[column * row];
         int index = 0;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
@@ -155,7 +156,7 @@ public class Static {
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY) {
         TextureRegion[] array = textureSplitter(texture, column, row);
         if (flipX || flipY) {
-            for (TextureRegion t: array) {
+            for (TextureRegion t : array) {
                 t.flip(flipX, flipY);
             }
         }
