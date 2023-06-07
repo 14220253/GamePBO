@@ -82,6 +82,16 @@ public class RangedPlayerAnimation implements PlayerAnimation{
     }
 
     @Override
+    public TextureRegion getDyingFrame(float stateTime, boolean isLookingLeft) {
+        return null;
+    }
+
+    @Override
+    public float getMaxDyingStateTime() {
+        return 0;
+    }
+
+    @Override
     public float getScalingX() {
         return scalingX;
     }

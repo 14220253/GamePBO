@@ -53,6 +53,7 @@ public class GameMain extends Game {
 		manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png", Texture.class);
+		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Death/Death-Sheet.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Idle/Idle-Sheet.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Run/Run-Sheet.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
@@ -76,7 +77,7 @@ public class GameMain extends Game {
 		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		weapons = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 
-		player = makeRangedPlayer();
+		player = makeMeleePlayer();
 		player.setPosX(400);
 		player.setPosY(300);
 
@@ -114,6 +115,7 @@ public class GameMain extends Game {
 		player.updateHitbox();
 		player.update(Gdx.graphics.getDeltaTime(),stateTime);
 		player.draw(batch);
+		player.takeDamage(5);
 
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isAttacking && attackCooldown == 0) {
 			isAttacking = true;

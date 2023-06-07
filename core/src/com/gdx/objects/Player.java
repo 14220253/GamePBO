@@ -36,11 +36,14 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     private boolean canMoveRight;
     private boolean canMoveUp;
     private boolean canMoveDown;
+    private boolean isDying;
+    private boolean isDead;
     private int moveUpKey;
     private int moveDownKey;
     private int moveRightKey;
     private int moveLeftKey;
     private float speed; //speed in units per frame
+    private float deathStateTime;
     Weapon weapon;
 
     public Player(Weapon weapon, PlayerAnimation playerAnimation) {
@@ -57,6 +60,9 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         isRunning = false;
         isLookingLeft = false;
         isAttacking = false;
+        isDead = false;
+        isDying = false;
+        health = 100;
         speed = 300f; // 300 pixels a second
     }
 
@@ -124,6 +130,12 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         canMoveRight = true;
         canMoveLeft = true;
     }
+    public void cannotMove(){
+        canMoveUp = false;
+        canMoveDown = false;
+        canMoveRight = false;
+        canMoveLeft = false;
+    }
 
     public float getSpeed() {
         return speed;
@@ -183,34 +195,47 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         batch.draw(currentFrame,getPosX(),getPosY(),0,0,currentFrame.getRegionWidth(),currentFrame.getRegionHeight(),playerAnimation.getScalingX(),playerAnimation.getScalingY(),0);
     }
     public void update(float deltaTime, float stateTime){
-        //params frameTime, lalu getCurrentFrame dari playerAnimation
-        isRunning = false;
-        if (Gdx.input.isKeyPressed(moveUpKey) && canMoveUp){
-            posY += speed*deltaTime;
-            isRunning=true;
+        if (health <= 0 && !isDying){
+            isDying = true;
+            deathStateTime = 0;
         }
-        if (Gdx.input.isKeyPressed(moveDownKey) && canMoveDown){
-            posY -= speed*deltaTime;
-            isRunning=true;
-        }
-        if (Gdx.input.isKeyPressed(moveLeftKey) && canMoveLeft){
-            posX -= speed*deltaTime;
-            isRunning=true;
-            isLookingLeft=true;
-        }
-        if (Gdx.input.isKeyPressed(moveRightKey) && canMoveRight){
-            posX += speed*deltaTime;
-            isRunning=true;
-            isLookingLeft=false;
-        }
-        if (!Gdx.input.isKeyPressed(moveUpKey) &&
-                !Gdx.input.isKeyPressed(moveDownKey) &&
-                !Gdx.input.isKeyPressed(moveRightKey) &&
-                !Gdx.input.isKeyPressed(moveLeftKey)) {
+        if (!isDying) {
             isRunning = false;
+            if (Gdx.input.isKeyPressed(moveUpKey) && canMoveUp) {
+                posY += speed * deltaTime;
+                isRunning = true;
+            }
+            if (Gdx.input.isKeyPressed(moveDownKey) && canMoveDown) {
+                posY -= speed * deltaTime;
+                isRunning = true;
+            }
+            if (Gdx.input.isKeyPressed(moveLeftKey) && canMoveLeft) {
+                posX -= speed * deltaTime;
+                isRunning = true;
+                isLookingLeft = true;
+            }
+            if (Gdx.input.isKeyPressed(moveRightKey) && canMoveRight) {
+                posX += speed * deltaTime;
+                isRunning = true;
+                isLookingLeft = false;
+            }
+            if (!Gdx.input.isKeyPressed(moveUpKey) &&
+                    !Gdx.input.isKeyPressed(moveDownKey) &&
+                    !Gdx.input.isKeyPressed(moveRightKey) &&
+                    !Gdx.input.isKeyPressed(moveLeftKey)) {
+                isRunning = false;
+            }
+            currentFrame = playerAnimation.getCurrentFrame(stateTime, true, isAttacking, isLookingLeft, !isRunning);
+            updateHitbox();
+        } else {
+            deathStateTime+=deltaTime;
+            if (deathStateTime <= playerAnimation.getMaxDyingStateTime()) {
+                currentFrame = playerAnimation.getDyingFrame(deathStateTime, isLookingLeft);
+                System.out.println("wasd");
+            } else {
+                isDead = true;
+            }
         }
-        currentFrame = playerAnimation.getCurrentFrame(stateTime, true,isAttacking,isLookingLeft,!isRunning);
-        updateHitbox();
     }
     enum state {
         IDLE,
