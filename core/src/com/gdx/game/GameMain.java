@@ -70,7 +70,7 @@ public class GameMain extends ApplicationAdapter {
 		manager.finishLoading();
 
 		floors = new ArrayList<>();
-		ruangan = new Ruangan("Dungeon");
+		ruangan = new Ruangan("shop");
 		ruangan.initialize(5, 1);
 
 		skeletonIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
@@ -85,7 +85,7 @@ public class GameMain extends ApplicationAdapter {
 
 		player = makeMagicPlayer();
 		player.setPosX(400);
-		player.setPosY(80);
+		player.setPosY(300);
 		player.setHitBox(new Rectangle(32, 32));
 
 		running = false;
@@ -109,7 +109,6 @@ public class GameMain extends ApplicationAdapter {
 	}
 	public void mainGame(SpriteBatch batch) {
 
-//		Static.drawDungeonShop(batch, tiles);
 		ruangan.draw(batch, stateTime);
 		stateTime += Gdx.graphics.getDeltaTime();
 

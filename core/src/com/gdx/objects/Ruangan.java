@@ -283,7 +283,12 @@ public class Ruangan {
             //TODO
         }
         else if (type.equalsIgnoreCase("Shop")) {
-            //TODO
+            texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
+            Static.drawDungeonShop(batch, texture);
+            rightBorder = new Rectangle(510, 203, 5, 300);
+            leftBorder = new Rectangle(205, 203, 5, 300);
+            bottomBorder = new Rectangle(205, 213, 347, 8);
+            upperborder = new Rectangle(205, 362, 347, 8);
         }
 
         //enemies
