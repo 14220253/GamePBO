@@ -8,6 +8,7 @@ import com.gdx.game.GameMain;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Ruangan {
     //bounds
@@ -35,8 +36,22 @@ public class Ruangan {
         monsters = new ArrayList<>();
         breakables = new ArrayList<>();
 
+        initializeBreakable();
+        initializeTemplate(template, level);
+    }
+    private void initializeBreakable() {
+        Random randomizer = new Random();
+        int breakableAmount = randomizer.nextInt(1, 6);
+        for (int i = 0; i < breakableAmount; i++) {
+            int posX, posY;
+            posX = randomizer.nextInt(58, 736); //posX
+            posY = randomizer.nextInt(50,520); //posY
 
-
+            Breakable breakable = new Breakable(posX, posY);
+            breakables.add(breakable);
+        }
+    }
+    private void initializeTemplate(int template, int level) {
         if (template == 1) {
             Monster monster1, monster2, monster3;
             if (Static.coinFlip() == 0) {
@@ -296,9 +311,12 @@ public class Ruangan {
         }
 
         //enemies
-        if (!type.equalsIgnoreCase("Shop")) {
+        if (!type.equalsIgnoreCase("Shop") && !type.equalsIgnoreCase("boss")) {
             for (Monster monster : monsters) {
                 monster.draw(batch, stateTime);
+            }
+            for (Breakable b: breakables) {
+                b.draw(batch);
             }
         }
     }
