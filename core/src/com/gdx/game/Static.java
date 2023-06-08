@@ -6,9 +6,45 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 
+import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.util.Random;
 
 public class Static {
+    /**
+     * mengecek apakah dua rectangle lagi saling kena
+     * @param rect1 rectangle1
+     * @param rect2 rectangle2
+     * @return boolean
+     */
+    public static boolean rectangleCollisionDetect(Rectangle rect1, Rectangle rect2) {
+        boolean result = false;
+        if (rect1.getX() < rect2.getX()+ rect2.getWidth() && //rect 2 di kiri 1 di kanan
+                rect1.getY() < rect2.getY() + rect2.getHeight() &&//cek tingginya kalo rect2 di bawah
+                rect1.getY() + rect1.getHeight() > rect2.getY() //kalo rect1 di bawah
+         ) {
+            result = true;
+        }
+        if (rect1.getX()+ rect1.getWidth() > rect2.getX() && //rect 2 di kanan 1 di kiri
+                rect1.getY() < rect2.getY() + rect2.getHeight() &&
+                rect1.getY() + rect1.getHeight() > rect2.getY()
+        ) {
+            result = true;
+        }
+        if (rect1.getY() + rect1.getHeight() > rect2.getY() && //rect 2 di atas 1 di bawah
+                rect1.getX() < rect2.getX() + rect2.getWidth() &&
+                rect1.getX() + rect1.getWidth() > rect2.getX()
+        ) {
+            result = true;
+        }
+        if (rect1.getY() < rect2.getY() + rect2.getHeight() && //rect 2 di bawah 1 di atas
+                rect1.getX() < rect2.getX() + rect2.getWidth() &&
+                rect1.getX() + rect1.getWidth() > rect2.getX()
+        ) {
+            result = true;
+        }
+        return result;
+    }
     /**
      * coin flip 0/1
      * @return 0/1
