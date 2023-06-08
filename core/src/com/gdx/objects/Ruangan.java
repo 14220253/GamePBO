@@ -44,7 +44,7 @@ public class Ruangan {
         int breakableAmount = randomizer.nextInt(1, 6);
         for (int i = 0; i < breakableAmount; i++) {
             int posX, posY;
-            posX = randomizer.nextInt(58, 736); //posX
+            posX = randomizer.nextInt(58, 720); //posX
             posY = randomizer.nextInt(50,520); //posY
 
             Breakable breakable = new Breakable(posX, posY);

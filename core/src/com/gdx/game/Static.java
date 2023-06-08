@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Circle;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Static {

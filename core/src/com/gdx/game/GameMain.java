@@ -1,34 +1,36 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.gdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
-import com.gdx.objects.*;
+import com.gdx.objects.Floor;
+import com.gdx.objects.Player;
+import com.gdx.objects.Projectile;
+import com.gdx.objects.Ruangan;
+import com.gdx.objects.Weapon;
 import com.gdx.objects.playerAnimationHandling.MeleePlayerAnimation;
 import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
 import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
 import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
-
-import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends Game {
 	AssetManager manager;
 	MainMenuUI mainMenuUI = new MainMenuUI();
-	ArrayList<Projectile>projectiles = new ArrayList<>();
+	ArrayList<Projectile> projectiles = new ArrayList();
 	SpriteBatch batch;
 	Texture tiles;
 	Texture weapons;
@@ -36,164 +38,175 @@ public class GameMain extends Game {
 	Texture skeletonIdle;
 	Texture skeletonRun;
 	Texture skeletonDie;
-	boolean isAttacking = false;
-	int frameCount = 0;
-	int attackCooldown;
+	float attackStateTime;
+	float attackCooldown;
 	Sprite activePlayerProjectile;
-
 	float stateTime;
 	ArrayList<Floor> floors;
 	Ruangan ruangan;
 
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		stateTime = 0f;
-		manager = new AssetManager();
-		manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Death/Death-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Idle/Idle-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Run/Run-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
-		manager.load("healthbar/monsterHealthBar.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png", Texture.class);
-		manager.load("Vortex/Effect_TheVortex_1_427x431.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png", Texture.class);
-		manager.finishLoading();
-
-		floors = new ArrayList<>();
-		ruangan = new Ruangan("dungeon");
-		ruangan.initialize(5, 1);
-
-		skeletonIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
-		skeletonRun = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png");
-		skeletonDie = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
-		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-		weapons = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-
-		player = makeMeleePlayer();
-		player.setPosX(400);
-		player.setPosY(300);
-
-		mainMenuUI.forCreate();
+	public GameMain() {
 	}
 
-	@Override
-	public void render () {
-		ScreenUtils.clear(0, 0, 0, 1);
+	public void create() {
+		this.batch = new SpriteBatch();
+		this.stateTime = 0.0F;
+		this.manager = new AssetManager();
+		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Death/Death-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Idle/Idle-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
+		this.manager.load("healthbar/monsterHealthBar.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png", Texture.class);
+		this.manager.load("Vortex/Effect_TheVortex_1_427x431.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
+		this.manager.finishLoading();
 
-		batch.begin();
-//		mainMenuUI.forRender(); //comment untuk cek game
-		mainGame(batch); //comment untuk cek UI
-
-		batch.end();
+		this.floors = new ArrayList();
+		this.ruangan = new Ruangan("dungeon");
+		this.ruangan.initialize(5, 1);
+		this.skeletonIdle = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
+		this.skeletonRun = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png");
+		this.skeletonDie = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
+		this.tiles = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
+		this.weapons = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		this.player = this.makeMagicPlayer();
+		this.player.setPosX(400);
+		this.player.setPosY(300);
+		this.mainMenuUI.forCreate();
 	}
+
+	public void render() {
+		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
+		this.batch.begin();
+		this.mainGame(this.batch);
+		this.batch.end();
+	}
+
 	public void mainGame(SpriteBatch batch) {
-
-		ruangan.draw(batch, stateTime);
-		stateTime += Gdx.graphics.getDeltaTime();
-
-		player.canMoveFree();
-		if (player.getPosY() >= ruangan.getUpperborder().getY() - 20) {
-			player.setCanMoveUp(false);
-			}
-		if (player.getPosY() <=ruangan.getBottomBorder().getY()) {
-			player.setCanMoveDown(false);
-			}
-		if (player.getPosX() <= ruangan.getLeftBorder().getX() + 10) {
-			player.setCanMoveLeft(false);
-			}
-		if (player.getPosX() >= ruangan.getRightBorder().getX()) {
-			player.setCanMoveRight(false);
-			}
-		player.update(Gdx.graphics.getDeltaTime(),stateTime);
-		player.draw(batch);
-		player.takeDamage(5);
-
-		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isAttacking && attackCooldown == 0 && !player.isDying()) {
-			isAttacking = true;
-			frameCount = 0;
-			attackCooldown = player.getWeapon().getCooldown();
-		}
-		attackCooldown--;
-		attackCooldown = Math.max(attackCooldown, 0);
-		if (isAttacking) {
-			player.drawAttack(frameCount, batch);
-			frameCount++;
-		}
-		if (frameCount == player.getWeapon().getMaxFrame()) {
-			isAttacking = false;
-			frameCount = 0;
-		}
-		if (player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation){
-			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && attackCooldown == 0){
-				frameCount = 0;
-				attackCooldown = player.getWeapon().getCooldown();
-			}
-		}
-		if (player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() == frameCount){
-			Projectile p = ((CreateProjectile) player.getWeapon().getWeaponAnimation()).createProjectile(player,activePlayerProjectile);
-			projectiles.add(p);
+		this.ruangan.draw(batch, this.stateTime);
+		this.stateTime += Gdx.graphics.getDeltaTime();
+		this.player.canMoveFree();
+		if ((double) this.player.getPosY() >= this.ruangan.getUpperborder().getY() - 20.0) {
+			this.player.setCanMoveUp(false);
 		}
 
-		for (Projectile projectile : projectiles) {
-			projectile.draw(batch);
-			// PERLU TAMBAHI IF CLUSTER UNTUK DELETE JIKA KENA MUSUH (HIT COLLOSION) ATAU NABRAK TEMBOK
+		if ((double) this.player.getPosY() <= this.ruangan.getBottomBorder().getY()) {
+			this.player.setCanMoveDown(false);
 		}
+
+		if ((double) this.player.getPosX() <= this.ruangan.getLeftBorder().getX() + 10.0) {
+			this.player.setCanMoveLeft(false);
+		}
+
+		if ((double) this.player.getPosX() >= this.ruangan.getRightBorder().getX()) {
+			this.player.setCanMoveRight(false);
+		}
+
+		this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
+		this.player.draw(batch);
+		if (Gdx.input.isButtonJustPressed(0) && !this.player.isAttacking() && this.attackCooldown == 0.0F && !this.player.isDying()) {
+			this.player.setAttacking(true);
+			this.attackStateTime = 0.0F;
+			this.attackCooldown = this.player.getWeapon().getCooldown();
+		}
+
+		this.attackCooldown -= Gdx.graphics.getDeltaTime();
+		this.attackCooldown = Math.max(this.attackCooldown, 0.0F);
+		if (this.player.isAttacking()) {
+			this.player.drawAttack(this.attackStateTime, batch);
+			this.attackStateTime += Gdx.graphics.getDeltaTime();
+			System.out.println(this.attackStateTime);
+		}
+
+		if (this.attackStateTime >= this.player.getWeapon().getMaxFrame()) {
+			this.player.setAttacking(false);
+			this.attackStateTime = 0.0F;
+		}
+
+		if (this.player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation && Gdx.input.isButtonJustPressed(0) && this.attackCooldown == 0.0F) {
+			this.attackStateTime = 0.0F;
+			this.attackCooldown = this.player.getWeapon().getCooldown();
+		}
+
+		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
+			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
+			this.projectiles.add(p);
+		}
+
+		this.updateAllProjectile();
 	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		manager.dispose();
 
+	public void dispose() {
+		this.batch.dispose();
+		this.manager.dispose();
 	}
+
 	public static float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {
-		// Calculate the angle between the character and the mouse position
-		mouseY = Gdx.graphics.getHeight() - mouseY;
+		mouseY = (float) Gdx.graphics.getHeight() - mouseY;
 		float deltaX = mouseX - charX;
 		float deltaY = charY - mouseY;
-		float angleRad = (float) Math.atan2(deltaY, deltaX);
-		float angleDeg = (float) Math.toDegrees(angleRad);
-
+		float angleRad = (float) Math.atan2((double) deltaY, (double) deltaX);
+		float angleDeg = (float) Math.toDegrees((double) angleRad);
 		return angleDeg;
 	}
+
 	public void resize(int width, int height) {
-                //viewport.update(width, height);
 	}
-	public Player makeMeleePlayer(){
+
+	public Player makeMeleePlayer() {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
-		Weapon weapon = new Weapon("Excalibur", "OP", 99, 1, 2.0f, 2.0f,30,meleeWeaponAnimation);
-		weapon.addTextureRegion(new TextureRegion(weapons,0, 0,16,46));
+		Weapon weapon = new Weapon("Excalibur", "OP", 99, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
 		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
 	}
-	public Player makeRangedPlayer(){
+
+	public Player makeRangedPlayer() {
 		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
-		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0f, 1.5f,60,rangeWeaponAnimation);
-		weapon.addTextureRegion(new TextureRegion(weapons,52,48,9,31));
-		weapon.addTextureRegion(new TextureRegion(weapons,67,50,12,27));
-		weapon.addTextureRegion(new TextureRegion(weapons,80,51,15,25));
-		Texture tmp = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		activePlayerProjectile = new Sprite(tmp,32,4,15,6);
+		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0F, 1.5F, 1.0F, rangeWeaponAnimation);
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
+		Texture tmp = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
 		Player player1 = new Player(weapon, new RangedPlayerAnimation());
 		return player1;
 	}
-	public Player makeMagicPlayer(){
+
+	public Player makeMagicPlayer() {
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
-		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0f, 1.5f,120,magicWeaponAnimation);
-		weapon.addTextureRegion(new TextureRegion(weapons,81,3,28,9));
+		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0F, 1.5F, 2.0F, magicWeaponAnimation);
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 81, 3, 28, 9));
 		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
 	}
 
 	public AssetManager getManager() {
-		return manager;
+		return this.manager;
+	}
+
+	public void updateAllProjectile() {
+		ArrayList<Integer> indexToDelete = new ArrayList();
+
+		int i;
+		for (i = 0; i < this.projectiles.size(); ++i) {
+			((Projectile) this.projectiles.get(i)).draw(this.batch);
+			((Projectile) this.projectiles.get(i)).update();
+			if ((double) ((Projectile) this.projectiles.get(i)).getPositionY() >= this.ruangan.getUpperborder().getY()) {
+				indexToDelete.add(i);
+			} else if ((double) ((Projectile) this.projectiles.get(i)).getPositionY() <= this.ruangan.getBottomBorder().getY() - 15.0) {
+				indexToDelete.add(i);
+			} else if ((double) ((Projectile) this.projectiles.get(i)).getPositionX() <= this.ruangan.getLeftBorder().getX()) {
+			}
+		}
 	}
 }
