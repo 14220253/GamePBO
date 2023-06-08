@@ -36,9 +36,8 @@ public class GameMain extends Game {
 	Texture skeletonIdle;
 	Texture skeletonRun;
 	Texture skeletonDie;
-	boolean isAttacking = false;
-	int frameCount = 0;
-	int attackCooldown;
+	float attackStateTime;
+	float attackCooldown;
 	Sprite activePlayerProjectile;
 
 	float stateTime;
@@ -77,7 +76,7 @@ public class GameMain extends Game {
 		tiles = manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		weapons = manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 
-		player = makeMeleePlayer();
+		player = makeRangedPlayer();
 		player.setPosX(400);
 		player.setPosY(300);
 
@@ -114,38 +113,34 @@ public class GameMain extends Game {
 			}
 		player.update(Gdx.graphics.getDeltaTime(),stateTime);
 		player.draw(batch);
-		player.takeDamage(5);
 
-		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isAttacking && attackCooldown == 0 && !player.isDying()) {
-			isAttacking = true;
-			frameCount = 0;
+		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !player.isAttacking() && attackCooldown == 0 && !player.isDying()) {
+			player.setAttacking(true);
+			attackStateTime = 0;
 			attackCooldown = player.getWeapon().getCooldown();
 		}
-		attackCooldown--;
+		attackCooldown-= Gdx.graphics.getDeltaTime();
 		attackCooldown = Math.max(attackCooldown, 0);
-		if (isAttacking) {
-			player.drawAttack(frameCount, batch);
-			frameCount++;
+		if (player.isAttacking()) {
+			player.drawAttack(attackStateTime, batch);
+			attackStateTime+=Gdx.graphics.getDeltaTime();
+			System.out.println(attackStateTime);
 		}
-		if (frameCount == player.getWeapon().getMaxFrame()) {
-			isAttacking = false;
-			frameCount = 0;
+		if (attackStateTime >= player.getWeapon().getMaxFrame()) {
+			player.setAttacking(false);
+			attackStateTime = 0;
 		}
 		if (player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation){
 			if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && attackCooldown == 0){
-				frameCount = 0;
+				attackStateTime = 0;
 				attackCooldown = player.getWeapon().getCooldown();
 			}
 		}
-		if (player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() == frameCount){
+		if (player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= attackStateTime && ((CreateProjectile) player.getWeapon().getWeaponAnimation()).canCreateProjectile()){
 			Projectile p = ((CreateProjectile) player.getWeapon().getWeaponAnimation()).createProjectile(player,activePlayerProjectile);
 			projectiles.add(p);
 		}
-
-		for (Projectile projectile : projectiles) {
-			projectile.draw(batch);
-			// PERLU TAMBAHI IF CLUSTER UNTUK DELETE JIKA KENA MUSUH (HIT COLLOSION) ATAU NABRAK TEMBOK
-		}
+		updateAllProjectile();
 	}
 	
 	@Override
@@ -169,14 +164,14 @@ public class GameMain extends Game {
 	}
 	public Player makeMeleePlayer(){
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
-		Weapon weapon = new Weapon("Excalibur", "OP", 99, 1, 2.0f, 2.0f,30,meleeWeaponAnimation);
+		Weapon weapon = new Weapon("Excalibur", "OP", 99, 1, 2.0f, 2.0f,0.5f,meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(weapons,0, 0,16,46));
 		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
 	}
 	public Player makeRangedPlayer(){
 		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
-		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0f, 1.5f,60,rangeWeaponAnimation);
+		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0f, 1.5f,1.0f,rangeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(weapons,52,48,9,31));
 		weapon.addTextureRegion(new TextureRegion(weapons,67,50,12,27));
 		weapon.addTextureRegion(new TextureRegion(weapons,80,51,15,25));
@@ -187,7 +182,7 @@ public class GameMain extends Game {
 	}
 	public Player makeMagicPlayer(){
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
-		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0f, 1.5f,120,magicWeaponAnimation);
+		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0f, 1.5f,2.0f,magicWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(weapons,81,3,28,9));
 		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
@@ -195,5 +190,27 @@ public class GameMain extends Game {
 
 	public AssetManager getManager() {
 		return manager;
+	}
+	public void updateAllProjectile(){
+		ArrayList<Integer>indexToDelete = new ArrayList<>();
+		for (int i = 0; i < projectiles.size(); i++) {
+			projectiles.get(i).draw(batch);
+			projectiles.get(i).update();
+			if (projectiles.get(i).getPositionY() >= ruangan.getUpperborder().getY()) {
+				indexToDelete.add(i);
+			}else
+			if (projectiles.get(i).getPositionY() <= ruangan.getBottomBorder().getY() - 15) {
+				indexToDelete.add(i);
+			}else
+			if (projectiles.get(i).getPositionX() <= ruangan.getLeftBorder().getX()) {
+				indexToDelete.add(i);
+			}else
+			if (projectiles.get(i).getPositionX() >= ruangan.getRightBorder().getX() + 30) {
+				indexToDelete.add(i);
+			}
+		}
+		for (int i = 0; i < indexToDelete.size(); i++) {
+			projectiles.remove(indexToDelete.get(i)-i);
+		}
 	}
 }

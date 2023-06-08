@@ -15,13 +15,13 @@ public class Weapon extends Item{
     private int level;
     private float multiplier;
     private float sizeScaling;
-    private int cooldown;
+    private float cooldown;
     private ArrayList<TextureRegion>textureRegions = new ArrayList<>();
     private WeaponAnimation weaponAnimation;
 
     //methods
 
-    public Weapon(String itemName, String itemDescription, int atk, int level, float multiplier, float sizeScaling, int cooldown, WeaponAnimation weaponAnimation) {
+    public Weapon(String itemName, String itemDescription, int atk, int level, float multiplier, float sizeScaling, float cooldown, WeaponAnimation weaponAnimation) {
         super(itemName, itemDescription);
         this.atk = atk;
         this.level = level;
@@ -35,7 +35,7 @@ public class Weapon extends Item{
         level++;
     }
 
-    public int getCooldown() {
+    public float getCooldown() {
         return cooldown;
     }
 
@@ -47,8 +47,8 @@ public class Weapon extends Item{
         this.cooldown = cooldown;
     }
 
-    public int getMaxFrame()throws NullPointerException{
-        return weaponAnimation.getMaxFrame();
+    public float getMaxFrame()throws NullPointerException{
+        return weaponAnimation.getMaxFrameTime();
     }
 
     public float getSizeScaling() {
@@ -61,7 +61,7 @@ public class Weapon extends Item{
     public void addTextureRegion(TextureRegion textureRegion){
         this.textureRegions.add(textureRegion);
     }
-    public void attack(Player player, int frame, Batch batch){
-        weaponAnimation.attack(player,textureRegions,frame,batch,sizeScaling);
+    public void drawAttack(Player player, float frameTime, Batch batch){
+        weaponAnimation.attack(player,textureRegions,frameTime,batch,sizeScaling);
     }
 }

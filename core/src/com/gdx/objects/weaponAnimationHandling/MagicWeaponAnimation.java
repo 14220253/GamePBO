@@ -16,13 +16,13 @@ public class MagicWeaponAnimation implements WeaponAnimation{
     }
 
     @Override
-    public void attack(Player player, ArrayList<TextureRegion> weapon, int frame, Batch batch, float sizeScaling) {
+    public void attack(Player player, ArrayList<TextureRegion> weapon, float frameTime, Batch batch, float sizeScaling) {
         if (fixX < 0){
             fixX = Gdx.input.getX();
             fixY = Gdx.input.getY();
         }
         if (!player.isLookingLeft()) {
-            if (frame<60){
+            if (frameTime<60){
                 explotion.draw(fixX,fixY,batch);
                 batch.draw(weapon.get(0), (float) player.getHitBox().getCenterX(), (float) (player.getHitBox().getCenterY()), 0, weapon.get(0).getRegionHeight() / 2.0f, (float) weapon.get(0).getRegionWidth(),
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
@@ -31,7 +31,7 @@ public class MagicWeaponAnimation implements WeaponAnimation{
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
             }
         } else {
-            if (frame<60){
+            if (frameTime<60){
                 explotion.draw(fixX,fixY,batch);
                 batch.draw(weapon.get(0), (float) player.getHitBox().getCenterX()+7, (float) (player.getHitBox().getCenterY()), 0, weapon.get(0).getRegionHeight() / 2.0f, (float) weapon.get(0).getRegionWidth(),
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
@@ -40,12 +40,12 @@ public class MagicWeaponAnimation implements WeaponAnimation{
                         (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
             }
         }
-        if (fixX > 0 && frame > 60){
+        if (fixX > 0 && frameTime > 60){
             fixX = -1;
         }
     }
     @Override
-    public int getMaxFrame() {
+    public float getMaxFrameTime() {
         return 300;
     }
 }
