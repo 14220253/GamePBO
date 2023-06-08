@@ -1,5 +1,6 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -21,14 +22,25 @@ public class Projectile {
         velocityY = speed * (float) Math.sin(radians);
         this.sprite = sprite;
         sprite.setOriginCenter();
+        sprite.setRotation(angle);
     }
 
     public void draw(Batch batch){
+        sprite.draw(batch);
+    }
+    public void update(){
         sprite.setRotation(angle);
-        positionX+=velocityX;
-        positionY+=velocityY;
+        positionX+=velocityX * Gdx.graphics.getDeltaTime()*60;
+        positionY+=velocityY * Gdx.graphics.getDeltaTime()*60;
         sprite.setX(positionX);
         sprite.setY(positionY);
-        sprite.draw(batch);
+    }
+
+    public float getPositionX() {
+        return positionX;
+    }
+
+    public float getPositionY() {
+        return positionY;
     }
 }

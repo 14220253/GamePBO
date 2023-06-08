@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface WeaponAnimation {
 
-    void attack(Player player, ArrayList<TextureRegion>weapon, int frame, Batch batch, float sizeScaling);
+    void attack(Player player, ArrayList<TextureRegion>weapon, float stateTime, Batch batch, float sizeScaling);
 
-    int getMaxFrame();
+    float getMaxFrameTime();
 }

@@ -65,7 +65,6 @@ public class GameMain extends Game {
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png", Texture.class);
 		manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png", Texture.class);
-		manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
 		manager.finishLoading();
 
 		floors = new ArrayList<>();
@@ -115,7 +114,7 @@ public class GameMain extends Game {
 			}
 		player.update(Gdx.graphics.getDeltaTime(),stateTime);
 		player.draw(batch);
-//		player.takeDamage(5);
+		player.takeDamage(5);
 
 		if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isAttacking && attackCooldown == 0 && !player.isDying()) {
 			isAttacking = true;

@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import static com.gdx.game.GameMain.getAngleToMouse;
 
 public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
-    int frameToCreateProjectile = 27;
+    float frameToCreateProjectile = 0.416f;
     Sprite animation1, animation2, animation3;
     Sprite activeAnimation;
+    boolean canCreateProjectile;
 
     @Override
-    public void attack(Player player, ArrayList<TextureRegion>weapon, int frame, Batch batch, float sizeScaling) {
+    public void attack(Player player, ArrayList<TextureRegion>weapon, float frameTime, Batch batch, float sizeScaling) {
         if (animation1 == null || animation2 == null || animation3 == null){
             animation1 = new Sprite(weapon.get(0));
             animation1.setScale(sizeScaling);
@@ -30,9 +31,12 @@ public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
             animation3.setOrigin((animation3.getWidth()/2),(animation3.getHeight()/2));
         }
         float angle = getAngleToMouse(Gdx.input.getX(), Gdx.input.getY(), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (float) (player.getHitBox().getY() + (player.getHitBox().getHeight() / 2.0f)));
-        if (frame<10){
+        if (frameTime<0.166666666666){
 				activeAnimation = animation1;
-			} else if (frame < 20){
+                if (!canCreateProjectile){
+                    canCreateProjectile = true;
+                }
+			} else if (frameTime < 0.3333333333){
     			activeAnimation = animation2;
 			} else {
 				activeAnimation = animation3;
@@ -44,18 +48,24 @@ public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
     }
 
     @Override
-    public int getMaxFrame() {
-        return 30;
+    public float getMaxFrameTime() {
+        return 0.5f;
     }
 
     @Override
     public Projectile createProjectile(Player player, Sprite projectile) {
+        canCreateProjectile = false;
         float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (float) (player.getHitBox().getY() + (player.getHitBox().height / 3.0f)));
-        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)),(float) (player.getHitBox().getY() + (player.getHitBox().height / 3.0f)), 0-angleProjectile,20,projectile);
+        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)),(float) (player.getHitBox().getY() + (player.getHitBox().height / 2.0f)), 0-angleProjectile,20,projectile);
     }
 
     @Override
-    public int getframeToCreateProjectile() {
+    public float getframeToCreateProjectile() {
         return frameToCreateProjectile;
+    }
+
+    @Override
+    public boolean canCreateProjectile() {
+        return canCreateProjectile;
     }
 }

@@ -16,6 +16,10 @@ public class RangedPlayerAnimation implements PlayerAnimation{
     // rework attacks so it runs of stateTime
     // rework projectile creation on ranged player
     // rework magicWeaponAnimation + explotion
+    // package monsterBehaviour
+    // package monsterAnimation
+    // rework class monster jadi update() dan draw()
+    // buat breakable coin/hp/magic
     private GameMain app;
     private Texture textureIdle;
     private Texture textureRun;

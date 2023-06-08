@@ -7,5 +7,6 @@ import com.gdx.objects.Projectile;
 public interface CreateProjectile {
 
     Projectile createProjectile(Player player, Sprite projectile);
-    int getframeToCreateProjectile();
+    float getframeToCreateProjectile();
+    boolean canCreateProjectile();
 }
