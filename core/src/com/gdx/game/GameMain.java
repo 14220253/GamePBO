@@ -67,7 +67,7 @@ public class GameMain extends Game {
 		manager.finishLoading();
 
 		floors = new ArrayList<>();
-		ruangan = new Ruangan("shop");
+		ruangan = new Ruangan("dungeon");
 		ruangan.initialize(5, 1);
 
 		skeletonIdle = manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");

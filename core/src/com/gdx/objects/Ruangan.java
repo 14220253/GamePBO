@@ -18,6 +18,7 @@ public class Ruangan {
     private Texture texture;
     private String type;
     private ArrayList<Monster> monsters;
+    private ArrayList<Breakable> breakables;
     GameMain app;
 
     public Ruangan(String type) {
@@ -32,6 +33,9 @@ public class Ruangan {
     public void initialize(int template, int level) {
         app = (GameMain) Gdx.app.getApplicationListener();
         monsters = new ArrayList<>();
+        breakables = new ArrayList<>();
+
+
 
         if (template == 1) {
             Monster monster1, monster2, monster3;

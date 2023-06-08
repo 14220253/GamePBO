@@ -21,23 +21,23 @@ public class Monster extends Karakter implements Attackable{
     //lvl
 
     //multiplier untuk stats per naik level
-    private double hpMultiplier;
-    private double damageMultiplier;
-    private double defenceMultiplier;
-    private Texture idle;
-    private Texture run;
-    private Texture die;
-    private Animation<TextureRegion> animationIdleRight;
-    private Animation<TextureRegion> animationIdleLeft;
-    private Animation<TextureRegion> animationRunLeft;
-    private Animation<TextureRegion> animationRunRight;
-    private Animation<TextureRegion> animationDeathLeft;
-    private Animation<TextureRegion> animationDeathRight;
-    private TextureRegion sprite;
-    private TextureRegion currentFrame;
-    private Texture healthBar;
-    private double maxHealth;
-    private GameMain app;
+    protected double hpMultiplier;
+    protected double damageMultiplier;
+    protected double defenceMultiplier;
+    protected Texture idle;
+    protected Texture run;
+    protected Texture die;
+    protected Animation<TextureRegion> animationIdleRight;
+    protected Animation<TextureRegion> animationIdleLeft;
+    protected Animation<TextureRegion> animationRunLeft;
+    protected Animation<TextureRegion> animationRunRight;
+    protected Animation<TextureRegion> animationDeathLeft;
+    protected Animation<TextureRegion> animationDeathRight;
+    protected TextureRegion sprite;
+    protected TextureRegion currentFrame;
+    protected Texture healthBar;
+    protected double maxHealth;
+    protected GameMain app;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
         super(health, attack, defense, level, posX, posY, hitBox);
