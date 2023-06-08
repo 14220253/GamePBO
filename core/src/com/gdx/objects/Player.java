@@ -209,7 +209,6 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         if (health <= 0 && !isDying){
             isDying = true;
             deathStateTime = 0;
-            hitBox = null;
         }
         if (!isDying) {
             isRunning = false;
@@ -243,9 +242,9 @@ public class Player extends Karakter implements Attackable { //interface Skill b
             deathStateTime+=deltaTime;
             if (deathStateTime <= playerAnimation.getMaxDyingStateTime()) {
                 currentFrame = playerAnimation.getDyingFrame(deathStateTime, isLookingLeft);
-                System.out.println("wasd");
             } else if (deathStateTime+2.5f > playerAnimation.getMaxDyingStateTime()) {
                 isDead = true;
+                hitBox = null;
             }
         }
     }
