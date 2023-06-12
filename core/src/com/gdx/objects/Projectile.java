@@ -12,8 +12,9 @@ public class Projectile {
     private float positionY;
     private Sprite sprite;
     private float angle;
+    private boolean isplayerProjectile;
 
-    public Projectile(float positionX, float positionY, float angle, float speed, Sprite sprite) {
+    public Projectile(float positionX, float positionY, float angle, float speed, Sprite sprite, boolean isPlayerProjectile) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.angle = angle;
@@ -42,5 +43,9 @@ public class Projectile {
 
     public float getPositionY() {
         return positionY;
+    }
+
+    public boolean isIsplayerProjectile() {
+        return isplayerProjectile;
     }
 }
