@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.Floor;
@@ -21,10 +22,9 @@ import com.gdx.objects.Ruangan;
 import com.gdx.objects.Weapon;
 import com.gdx.objects.playerAnimationHandling.MeleePlayerAnimation;
 import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
-import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
-import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
-import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
-import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
+import com.gdx.objects.weaponAnimationHandling.*;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends Game {
@@ -44,7 +44,6 @@ public class GameMain extends Game {
 	float stateTime;
 	ArrayList<Floor> floors;
 	Ruangan ruangan;
-
 	public GameMain() {
 	}
 
@@ -78,7 +77,7 @@ public class GameMain extends Game {
 		this.skeletonDie = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
 		this.tiles = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeMagicPlayer();
+		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(300);
 		this.mainMenuUI.forCreate();
@@ -113,6 +112,7 @@ public class GameMain extends Game {
 
 		this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
 		this.player.draw(batch);
+
 		if (Gdx.input.isButtonJustPressed(0) && !this.player.isAttacking() && this.attackCooldown == 0.0F && !this.player.isDying()) {
 			this.player.setAttacking(true);
 			this.attackStateTime = 0.0F;
@@ -121,10 +121,10 @@ public class GameMain extends Game {
 
 		this.attackCooldown -= Gdx.graphics.getDeltaTime();
 		this.attackCooldown = Math.max(this.attackCooldown, 0.0F);
+
 		if (this.player.isAttacking()) {
 			this.player.drawAttack(this.attackStateTime, batch);
 			this.attackStateTime += Gdx.graphics.getDeltaTime();
-			System.out.println(this.attackStateTime);
 		}
 
 		if (this.attackStateTime >= this.player.getWeapon().getMaxFrame()) {
@@ -176,7 +176,7 @@ public class GameMain extends Game {
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
-		Texture tmp = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
 		Player player1 = new Player(weapon, new RangedPlayerAnimation());
 		return player1;
@@ -199,13 +199,21 @@ public class GameMain extends Game {
 
 		int i;
 		for (i = 0; i < this.projectiles.size(); ++i) {
-			((Projectile) this.projectiles.get(i)).draw(this.batch);
-			((Projectile) this.projectiles.get(i)).update();
-			if ((double) ((Projectile) this.projectiles.get(i)).getPositionY() >= this.ruangan.getUpperborder().getY()) {
-				indexToDelete.add(i);
-			} else if ((double) ((Projectile) this.projectiles.get(i)).getPositionY() <= this.ruangan.getBottomBorder().getY() - 15.0) {
-				indexToDelete.add(i);
-			} else if ((double) ((Projectile) this.projectiles.get(i)).getPositionX() <= this.ruangan.getLeftBorder().getX()) {
+			boolean deleteProjectile = false;
+			this.projectiles.get(i).draw(this.batch);
+			this.projectiles.get(i).update();
+			if ((double) this.projectiles.get(i).getPositionY() >= this.ruangan.getUpperborder().getY()) {
+				deleteProjectile = true;
+			} else if ((double) this.projectiles.get(i).getPositionY() <= this.ruangan.getBottomBorder().getY() - 15.0) {
+				deleteProjectile = true;
+			} else if ((double) this.projectiles.get(i).getPositionX() <= this.ruangan.getLeftBorder().getX()) {
+				deleteProjectile = true;
+			} else if ((double) this.projectiles.get(i).getPositionX() >= this.ruangan.getRightBorder().getX() + 25) {
+				deleteProjectile = true;
+			}
+			if (deleteProjectile){
+				projectiles.remove(projectiles.get(i));
+				i--;
 			}
 		}
 	}

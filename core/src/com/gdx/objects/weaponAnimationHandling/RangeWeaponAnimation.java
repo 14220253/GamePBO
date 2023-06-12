@@ -42,7 +42,7 @@ public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
 				activeAnimation = animation3;
 			}
         activeAnimation.setX((float) (player.getHitBox().getX() + (player.getHitBox().getWidth() /2.0f)));
-        activeAnimation.setY((float) (player.getHitBox().getY() + (player.getHitBox().getHeight() /3.0f)));
+        activeAnimation.setY((float) (player.getPosY() + (player.getHitBox().getHeight() /3.0f)));
         activeAnimation.setRotation(0-angle);
         activeAnimation.draw(batch);
     }
@@ -55,8 +55,8 @@ public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
     @Override
     public Projectile createProjectile(Player player, Sprite projectile) {
         canCreateProjectile = false;
-        float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (float) (player.getHitBox().getY() + (player.getHitBox().height / 3.0f)));
-        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)),(float) (player.getHitBox().getY() + (player.getHitBox().height / 2.0f)), 0-angleProjectile,20,projectile);
+        float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (player.getPosY() + (player.getHitBox().height / 2.0f)));
+        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), ((player.getPosY()) + (player.getHitBox().height / 2.0f)), 0-angleProjectile,15,projectile);
     }
 
     @Override

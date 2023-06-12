@@ -16,6 +16,8 @@ public abstract class Karakter {
     protected Rectangle hitBox;
     protected TextureRegion sprite;
     protected boolean lookingLeft;
+    protected int width;
+    protected int height;
 
     public Karakter() {
     }
@@ -43,7 +45,7 @@ public abstract class Karakter {
     }
 
     public void updateHitbox() {
-        hitBox.setLocation(getPosX(), getPosY());
+        hitBox.setLocation(getPosX(), getPosY()-getHeight());
     }
 
     public int getPosX() {
@@ -61,6 +63,23 @@ public abstract class Karakter {
     public void setPosY(int posY) {
         this.posY = posY;
     }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public TextureRegion getSprite() {
         return sprite;
     }

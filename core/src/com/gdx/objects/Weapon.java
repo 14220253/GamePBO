@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.objects.weaponAnimationHandling.WeaponAnimation;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Weapon extends Item{
@@ -53,6 +54,9 @@ public class Weapon extends Item{
 
     public float getSizeScaling() {
         return sizeScaling;
+    }
+    public Rectangle getHitBox(){
+        return null;
     }
 
     public void setSizeScaling(int sizeScaling) {

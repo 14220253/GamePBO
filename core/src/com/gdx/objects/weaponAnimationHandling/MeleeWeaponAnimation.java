@@ -10,22 +10,18 @@ import java.util.ArrayList;
 import static com.gdx.game.GameMain.getAngleToMouse;
 
 public class MeleeWeaponAnimation implements WeaponAnimation{
-    boolean isAttacking = false;
     int fixX;
     int fixY;
+    float angle = 0;
 
     @Override
     public void attack(Player player, ArrayList<TextureRegion>weapon, float frameTime, Batch batch, float sizeScaling) {
-        if (!isAttacking) {
-            isAttacking = true;
+        if (frameTime == 0f) {
             fixX = Gdx.input.getX();
             fixY = Gdx.input.getY();
+            angle = getAngleToMouse(fixX, fixY, (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (player.getPosY() + (player.getHitBox().height / 2.0f)));
         }
-        float angle = getAngleToMouse(fixX, fixY, (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (float) (player.getHitBox().getY() + (player.getHitBox().height / 2.0f)));
-        batch.draw(weapon.get(0), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (float) (player.getHitBox().getY() + (player.getHitBox().height / 2.0f)), 8, 0, 16, 46, sizeScaling, sizeScaling, (210 - angle) + (frameTime * 60 * 14));
-        if (frameTime >= getMaxFrameTime()-1){
-            isAttacking = false;
-        }
+        batch.draw(weapon.get(0), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (player.getPosY() + (player.getHitBox().height / 2.0f)), 8, 0, 16, 46, sizeScaling, sizeScaling, (175 - angle) + (frameTime * 60 * 19));
     }
 
     @Override

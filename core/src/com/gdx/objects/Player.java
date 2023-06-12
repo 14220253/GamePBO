@@ -52,7 +52,9 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         this.playerAnimation = playerAnimation;
         currentFrame = playerAnimation.getCurrentFrame(0,true,isAttacking,isLookingLeft,!isRunning);
         Rectangle rectangle = new Rectangle();
-        rectangle.setSize((int) (currentFrame.getRegionWidth()*playerAnimation.getScalingX()) - 5, (int) (currentFrame.getRegionHeight()*playerAnimation.getScalingY()) - 5);
+        setWidth((int) (currentFrame.getRegionWidth()*playerAnimation.getScalingX()) - 5);
+        setHeight((int) (currentFrame.getRegionHeight()*playerAnimation.getScalingY()) - 5);
+        rectangle.setSize(width, height);
         setHitBox(rectangle);
         moveUpKey = Input.Keys.W;
         moveDownKey = Input.Keys.S;
