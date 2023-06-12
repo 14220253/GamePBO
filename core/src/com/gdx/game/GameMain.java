@@ -82,7 +82,7 @@ public class GameMain extends Game {
 		this.skeletonDie = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
 		this.tiles = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeMagicPlayer();
+		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(300);
 		this.mainMenuUI.forCreate();

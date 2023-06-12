@@ -45,7 +45,7 @@ public abstract class Karakter {
     }
 
     public void updateHitbox() {
-        hitBox.setLocation(getPosX(), getPosY()-getHeight());
+        hitBox.setLocation(getPosX(), getPosY());
     }
 
     public int getPosX() {
