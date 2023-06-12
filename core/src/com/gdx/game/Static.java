@@ -4,11 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Circle;
-
 import java.awt.*;
-import java.awt.geom.Arc2D;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Static {

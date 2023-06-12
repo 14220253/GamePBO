@@ -39,6 +39,11 @@ public class Floor {
         rooms.add(ruangan5);
 
         Ruangan ruanganShop = new Ruangan("shop");
+        ruanganShop.initialize(0, this.level);
+        rooms.add(ruanganShop);
 
+        Ruangan ruanganBoss = new Ruangan("dungeon");
+        ruanganBoss.initialize(0, this.level);
+        rooms.add(ruanganBoss);
     }
 }

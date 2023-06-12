@@ -321,6 +321,11 @@ public class Ruangan {
         }
     }
 
+    public ArrayList<Monster> getMonsters() {
+        ArrayList<Monster> monsterArrayList = new ArrayList<>(monsters);
+        return monsterArrayList;
+    }
+
     public Rectangle getLeftBorder() {
         return leftBorder;
     }
