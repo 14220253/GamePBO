@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import static com.gdx.game.GameMain.getAngleToMouse;
@@ -53,10 +54,15 @@ public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
     }
 
     @Override
+    public Rectangle[] getHitboxes() {
+        return new Rectangle[0];
+    }
+
+    @Override
     public Projectile createProjectile(Player player, Sprite projectile) {
         canCreateProjectile = false;
         float angleProjectile = getAngleToMouse(Gdx.input.getX(),Gdx.input.getY(), (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (player.getPosY() + (player.getHitBox().height / 2.0f)));
-        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), ((player.getPosY()) + (player.getHitBox().height / 2.0f)), 0-angleProjectile,15,projectile);
+        return new Projectile( (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), ((player.getPosY()) + (player.getHitBox().height / 2.0f)), 0-angleProjectile,15,projectile,true);
     }
 
     @Override

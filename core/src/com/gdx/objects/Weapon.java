@@ -55,9 +55,6 @@ public class Weapon extends Item{
     public float getSizeScaling() {
         return sizeScaling;
     }
-    public Rectangle getHitBox(){
-        return null;
-    }
 
     public void setSizeScaling(int sizeScaling) {
         this.sizeScaling = sizeScaling;

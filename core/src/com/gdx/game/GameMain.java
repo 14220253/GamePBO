@@ -17,12 +17,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
 import com.gdx.objects.*;
+import com.gdx.objects.playerAnimationHandling.MagicPlayerAnimation;
 import com.gdx.objects.playerAnimationHandling.MeleePlayerAnimation;
 import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
 import com.gdx.objects.weaponAnimationHandling.CreateProjectile;
 import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GameMain extends Game {
@@ -59,6 +62,10 @@ public class GameMain extends Game {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Death/Death-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Idle/Idle-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Death/Death-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Wizzard/Idle/Idle-Sheet.png",Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Wizzard/Run/Run-Sheet.png",Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Wizzard/Death/Death-Sheet.png",Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
 		this.manager.load("healthbar/monsterHealthBar.png", Texture.class);
@@ -123,35 +130,7 @@ public class GameMain extends Game {
 
 		this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
 		this.player.draw(batch);
-		if (Gdx.input.isButtonJustPressed(0) && !this.player.isAttacking() && this.attackCooldown == 0.0F && !this.player.isDying()) {
-			this.player.setAttacking(true);
-			this.attackStateTime = 0.0F;
-			this.attackCooldown = this.player.getWeapon().getCooldown();
-		}
-
-		this.attackCooldown -= Gdx.graphics.getDeltaTime();
-		this.attackCooldown = Math.max(this.attackCooldown, 0.0F);
-		if (this.player.isAttacking()) {
-			this.player.drawAttack(this.attackStateTime, batch);
-			this.attackStateTime += Gdx.graphics.getDeltaTime();
-			System.out.println(this.attackStateTime);
-		}
-
-		if (this.attackStateTime >= this.player.getWeapon().getMaxFrame()) {
-			this.player.setAttacking(false);
-			this.attackStateTime = 0.0F;
-		}
-
-		if (this.player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation && Gdx.input.isButtonJustPressed(0) && this.attackCooldown == 0.0F) {
-			this.attackStateTime = 0.0F;
-			this.attackCooldown = this.player.getWeapon().getCooldown();
-		}
-
-		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
-			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
-			this.projectiles.add(p);
-		}
-
+		this.updatePlayerAttacks();
 		this.updateAllProjectile();
 	}
 
@@ -217,7 +196,7 @@ public class GameMain extends Game {
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
 		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0F, 1.5F, 2.0F, magicWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 81, 3, 28, 9));
-		Player player1 = new Player(weapon, new MeleePlayerAnimation());
+		Player player1 = new Player(weapon, new MagicPlayerAnimation());
 		return player1;
 	}
 
@@ -238,6 +217,48 @@ public class GameMain extends Game {
 				indexToDelete.add(i);
 			} else if ((double) ((Projectile) this.projectiles.get(i)).getPositionX() <= this.ruangan.getLeftBorder().getX()) {
 			}
+		}
+	}
+	public void updatePlayerAttacks(){
+		if (Gdx.input.isButtonJustPressed(0) && !this.player.isAttacking() && this.attackCooldown == 0.0F && !this.player.isDying()) {
+			this.player.setAttacking(true);
+			this.attackStateTime = 0.0F;
+			this.attackCooldown = this.player.getWeapon().getCooldown();
+		}
+
+		this.attackCooldown -= Gdx.graphics.getDeltaTime();
+		this.attackCooldown = Math.max(this.attackCooldown, 0.0F);
+		if (this.player.isAttacking()) {
+			this.player.drawAttack(this.attackStateTime, batch);
+			this.attackStateTime += Gdx.graphics.getDeltaTime();
+		}
+
+		if (this.player.isAttacking()) {
+			for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
+				//for (int j = 0; j < banyaknya monster ; j++) {
+				//	if (monster.getHitBox.intersects(player.getWeapon().getWeaponAnimation().getHitboxes()[i])){
+				//  code kena dmg untuk monster
+				//	}
+				//}
+				if (player.getWeapon().getWeaponAnimation().getHitboxes()[i].intersects(new Rectangle(60,400))){
+					System.out.println("test");
+				}
+			}
+		}
+
+		if (this.attackStateTime >= this.player.getWeapon().getMaxFrame()) {
+			this.player.setAttacking(false);
+			this.attackStateTime = 0.0F;
+		}
+
+		if (this.player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation && Gdx.input.isButtonJustPressed(0) && this.attackCooldown == 0.0F) {
+			this.attackStateTime = 0.0F;
+			this.attackCooldown = this.player.getWeapon().getCooldown();
+		}
+
+		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
+			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
+			this.projectiles.add(p);
 		}
 	}
 }
