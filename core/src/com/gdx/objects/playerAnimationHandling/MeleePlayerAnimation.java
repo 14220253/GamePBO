@@ -87,7 +87,7 @@ public class MeleePlayerAnimation implements PlayerAnimation{
         Static.flipImageX(temp6);
         playerDyingLeft = new Animation<>(0.6f, temp6);
 
-        maxDyingStateTime = 0.6f * (6-1);
+        maxDyingStateTime = 0.6f * (6);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class Monster extends Karakter implements Attackable{
         this.hpMultiplier = hpMultiplier;
         this.damageMultiplier = damageMultiplier;
         this.defenceMultiplier = defenceMultiplier;
-        this.hitBox.setLocation(this.posX, this.posY);
+        this.hitBox.setLocation(this.posX, (int) (this.posY - hitBox.getHeight()));
         maxHealth = this.health;
         healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
 

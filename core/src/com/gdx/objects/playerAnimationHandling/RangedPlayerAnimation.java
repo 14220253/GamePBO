@@ -23,6 +23,7 @@ public class RangedPlayerAnimation implements PlayerAnimation{
     private GameMain app;
     private Texture textureIdle;
     private Texture textureRun;
+    private Texture textureDying;
     private Animation<TextureRegion> playerIdleRight;
     private Animation<TextureRegion> playerIdleLeft;
     private Animation<TextureRegion> playerRunRight;
@@ -31,6 +32,7 @@ public class RangedPlayerAnimation implements PlayerAnimation{
     private Animation<TextureRegion> playerDyingLeft;
     private TextureRegion currentFrame;
     private float scalingX, scalingY;
+    private float maxDyingStateTime;
 
     public RangedPlayerAnimation() {
         scalingX = 1.5f;
@@ -41,6 +43,8 @@ public class RangedPlayerAnimation implements PlayerAnimation{
         TextureRegion[] temp2 = new TextureRegion[4];
         TextureRegion[] temp3 = new TextureRegion[6];
         TextureRegion[] temp4 = new TextureRegion[6];
+        TextureRegion[] temp5 = new TextureRegion[6];
+        TextureRegion[] temp6 = new TextureRegion[6];
 
         textureIdle = app.getManager().get("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Idle/Idle-Sheet.png");
         temp1[0] = (new TextureRegion(textureIdle,5,0,23,31));
@@ -73,6 +77,26 @@ public class RangedPlayerAnimation implements PlayerAnimation{
         temp4[5] = (new TextureRegion(textureRun,339,33,23,31));
         temp4 = Static.flipImageX(temp4);
         playerRunLeft= new Animation<>(0.2f, temp4);
+
+        textureDying = app.getManager().get("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Death/Death-Sheet.png");
+        temp5[0] = (new TextureRegion(textureDying,21,1,23,30));
+        temp5[1] = (new TextureRegion(textureDying,85,1,23,30));
+        temp5[2] = (new TextureRegion(textureDying,149,1,30,30));
+        temp5[3] = (new TextureRegion(textureDying,213,1,35,30));
+        temp5[4] = (new TextureRegion(textureDying,277,1,36,30));
+        temp5[5] = (new TextureRegion(textureDying,341,1,36,30));
+        playerDyingRight = new Animation<>(0.6f, temp5);
+
+        temp6[0] = (new TextureRegion(textureDying,21,1,23,30));
+        temp6[1] = (new TextureRegion(textureDying,85,1,23,30));
+        temp6[2] = (new TextureRegion(textureDying,149,1,30,30));
+        temp6[3] = (new TextureRegion(textureDying,213,1,35,30));
+        temp6[4] = (new TextureRegion(textureDying,277,1,36,30));
+        temp6[5] = (new TextureRegion(textureDying,341,1,36,30));
+        Static.flipImageX(temp6);
+        playerDyingLeft = new Animation<>(0.6f, temp6);
+
+        maxDyingStateTime = 0.6f * (6);
     }
 
     @Override
@@ -94,12 +118,16 @@ public class RangedPlayerAnimation implements PlayerAnimation{
 
     @Override
     public TextureRegion getDyingFrame(float stateTime, boolean isLookingLeft) {
-        return null;
+        if (isLookingLeft){
+            return playerDyingLeft.getKeyFrame(stateTime);
+        } else {
+            return playerDyingRight.getKeyFrame(stateTime);
+        }
     }
 
     @Override
     public float getMaxDyingStateTime() {
-        return 0;
+        return maxDyingStateTime;
     }
 
     @Override

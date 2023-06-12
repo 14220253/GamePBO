@@ -20,6 +20,7 @@ import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
 import com.gdx.objects.Ruangan;
 import com.gdx.objects.Weapon;
+import com.gdx.objects.playerAnimationHandling.MagicPlayerAnimation;
 import com.gdx.objects.playerAnimationHandling.MeleePlayerAnimation;
 import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
 import com.gdx.objects.weaponAnimationHandling.*;
@@ -57,6 +58,10 @@ public class GameMain extends Game {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Death/Death-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Idle/Idle-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Death/Death-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Wizzard/Idle/Idle-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Wizzard/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Wizzard/Death/Death-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png", Texture.class);
 		this.manager.load("healthbar/monsterHealthBar.png", Texture.class);
@@ -77,7 +82,7 @@ public class GameMain extends Game {
 		this.skeletonDie = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
 		this.tiles = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeMeleePlayer();
+		this.player = this.makeMagicPlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(300);
 		this.mainMenuUI.forCreate();
@@ -186,7 +191,7 @@ public class GameMain extends Game {
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
 		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0F, 1.5F, 2.0F, magicWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 81, 3, 28, 9));
-		Player player1 = new Player(weapon, new MeleePlayerAnimation());
+		Player player1 = new Player(weapon, new MagicPlayerAnimation());
 		return player1;
 	}
 

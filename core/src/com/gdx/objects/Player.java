@@ -216,6 +216,7 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     public void update(float deltaTime, float stateTime){
         if (health <= 0 && !isDying){
             isDying = true;
+            isAttacking = false;
             deathStateTime = 0;
         }
         if (!isDying) {
