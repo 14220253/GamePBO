@@ -45,7 +45,6 @@ public class Monster extends Karakter implements Attackable{
         this.hpMultiplier = hpMultiplier;
         this.damageMultiplier = damageMultiplier;
         this.defenceMultiplier = defenceMultiplier;
-        this.hitBox.setLocation(this.posX, (int) (this.posY - hitBox.getHeight()));
         maxHealth = this.health;
         healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
 
@@ -71,6 +70,8 @@ public class Monster extends Karakter implements Attackable{
             animationDeathRight = Static.animate(die, 6, 1, false, false);
             animationDeathLeft = Static.animate(die, 6, 1, true, false);
         }
+
+        this.hitBox.setLocation(this.posX, (int) (this.posY));
     }
 
     public TextureRegion getSprite() {

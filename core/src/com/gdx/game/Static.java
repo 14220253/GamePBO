@@ -87,16 +87,10 @@ public class Static {
 
         //upper walls + buff doors
         for (int i = 700; i >= 50 ; i -= 50) {
-            if (i == 200 || i == 300 || i == 400 || i == 500) {
-                if (i != 200) {
+            if (i == 400) {
                     batch.draw(wallBumpWithShadow, i - 25, 525, 100, 75);
+                batch.draw(wallBump, i - 40, 525, 100, 75);
                     batch.draw(closedDoor, i - 13, 525, 50, 75);
-                } else {
-                    batch.draw(wallBump, i - 25, 525, 100, 75);
-                }
-                if (i != 200) {
-                    i -= 50;
-                }
             }
             else {
                 batch.draw(walls, i, 525, 50, 75);
