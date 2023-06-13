@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
@@ -26,10 +23,12 @@ public class Ruangan {
     private final String type;
     private ArrayList<Monster> monsters;
     private ArrayList<Breakable> breakables;
+    private ArrayList<Coins> coins;
     private Rectangle doorHitbox;
     private Rectangle leftDoorHitbox;
     private Rectangle rightDoorHitbox;
     GameMain app;
+
 
     public Ruangan(String type) {
         this.type = type;
@@ -44,6 +43,7 @@ public class Ruangan {
         app = (GameMain) Gdx.app.getApplicationListener();
         monsters = new ArrayList<>();
         breakables = new ArrayList<>();
+        coins = new ArrayList<>();
         doorHitbox = new Rectangle(365, 475, 100, 150);
         leftDoorHitbox = new Rectangle(-25, 265, 150, 100);
         rightDoorHitbox = new Rectangle(675, 265, 150, 100);
@@ -89,16 +89,30 @@ public class Ruangan {
 
         //enemies
         if (!type.equalsIgnoreCase("Shop") && !type.equalsIgnoreCase("boss")) {
+            //PROPS
+            for (Breakable b: breakables) {
+                b.draw(batch);
+            }
+            //MONSTERS
             for (Monster monster : monsters) {
                 monster.draw(batch, stateTime);
             }
-            for (Breakable b: breakables) {
-                b.draw(batch);
+            //COINS
+            for (int i = 0; i < coins.size(); i++) {
+                if (Static.rectangleCollisionDetect(player.getHitBox(), coins.get(i).getHitbox())) {
+                    coins.get(i).setState(Coins.State.COLLECTED);
+                    player.getInventory().addCoin();
+                }
+                coins.get(i).draw(batch, stateTime);
+                if (coins.get(i).getState() == Coins.State.GONE) {
+                    coins.remove(i);
+                }
             }
         }
 
         for (int i = 0; i < monsters.size(); i++) {
             if (monsters.get(i).getState() == Monster.State.DEAD) {
+                coins.add(new Coins(monsters.get(i).getPosX(), monsters.get(i).getPosY()));
                 monsters.remove(i);
             }
         }

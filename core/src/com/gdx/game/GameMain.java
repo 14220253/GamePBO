@@ -80,6 +80,7 @@ public class GameMain extends Game {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
 		manager.load("healthbar/SleekBars.png", Texture.class);
 		manager.load("coins/MonedaD.png", Texture.class);
+		manager.load("coins/Collected.png", Texture.class);
 		this.manager.finishLoading();
 
 		font = new BitmapFont();
@@ -120,7 +121,7 @@ public class GameMain extends Game {
 		UI.draw(batch);
 
 		for (int i = 0; i < ruangan.getMonsters().size(); i++) {
-				ruangan.getMonsters().get(i).takeDamage(5);
+				ruangan.getMonsters().get(i).takeDamage(10);
 		}
 
 		if ((double) this.player.getPosY() >= this.ruangan.getUpperborder().getY() - 20.0) {

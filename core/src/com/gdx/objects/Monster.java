@@ -43,7 +43,7 @@ public class Monster extends Karakter implements Attackable{
     private State state = State.ALIVE;
     private Movement movement = Movement.IDLE;
     private String type;
-    int immunityFrames;
+    private int immunityFrames;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
         super(health, attack, defense, level, posX, posY, hitBox);
@@ -62,8 +62,8 @@ public class Monster extends Karakter implements Attackable{
             animationIdleLeft = Static.animate(idle,4, 1, true, false);
             animationRunRight = Static.animate(run, 6, 1, false, false);
             animationRunLeft = Static.animate(run,6, 1, true, false);
-            animationDeathRight = Static.animate(die, 6, 1, false, false, 1.1f);
-            animationDeathLeft = Static.animate(die, 6, 1, true, false, 1.1f);
+            animationDeathRight = Static.animate(die, 6, 1, false, false, 0.7f);
+            animationDeathLeft = Static.animate(die, 6, 1, true, false, 0.7f);
             this.type = type;
         }
         if (type.equalsIgnoreCase("skeleton")) {
@@ -74,8 +74,8 @@ public class Monster extends Karakter implements Attackable{
             animationIdleLeft = Static.animate(idle,4, 1, true, false);
             animationRunRight = Static.animate(run, 6, 1, false, false);
             animationRunLeft = Static.animate(run,6, 1, true, false);
-            animationDeathRight = Static.animate(die, 8, 1, false, false, 0.8f);
-            animationDeathLeft = Static.animate(die, 8, 1, true, false, 0.8f);
+            animationDeathRight = Static.animate(die, 8, 1, false, false, 0.5f);
+            animationDeathLeft = Static.animate(die, 8, 1, true, false, 0.5f);
             this.type = type;
         }
 
@@ -146,8 +146,6 @@ public class Monster extends Karakter implements Attackable{
         else
             currentFrame = animationRunRight.getKeyFrame(stateTime, false);
         setSprite(currentFrame);
-        System.out.println(currentFrame.getRegionWidth());
-        System.out.println(currentFrame.getRegionHeight());
         if (type.equalsIgnoreCase("orc")) {
             batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);
         } else {

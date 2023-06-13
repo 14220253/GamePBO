@@ -14,6 +14,9 @@ public class Inventory {
     public int getCoins() {
         return coins;
     }
+    public void addCoin() {
+        coins++;
+    }
 
     public void addItem(Item item) throws InventoryFullException {
         if (items.size() == CAPACITY) {
