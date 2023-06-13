@@ -6,5 +6,5 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public interface Attackable {
     void takeDamage(double dmg);
-    void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime);
+    void die(SpriteBatch batch, float stateTime);
 }

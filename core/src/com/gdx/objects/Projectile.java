@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Projectile {
-    private float velocityX;
-    private float velocityY;
+    private final float velocityX;
+    private final float velocityY;
     private float positionX;
     private float positionY;
-    private Sprite sprite;
-    private float angle;
+    private final Sprite sprite;
+    private final float angle;
     private boolean isplayerProjectile;
 
     public Projectile(float positionX, float positionY, float angle, float speed, Sprite sprite, boolean isPlayerProjectile) {

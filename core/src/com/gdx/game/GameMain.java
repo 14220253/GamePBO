@@ -10,9 +10,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
@@ -48,6 +47,8 @@ public class GameMain extends Game {
 	ShapeRenderer shapeRenderer;
 	ArrayList<Karakter> entities;
 	boolean isOnDebug;
+	BitmapFont font;
+	BitmapFontCache text;
 
 	public GameMain() {
 	}
@@ -71,12 +72,15 @@ public class GameMain extends Game {
 		this.manager.load("healthbar/monsterHealthBar.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png", Texture.class);
 		this.manager.load("Vortex/Effect_TheVortex_1_427x431.png", Texture.class);
-		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet-Resize.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png", Texture.class);
-		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png", Texture.class);
+		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet-Resize.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
 		this.manager.finishLoading();
+
+		font = new BitmapFont();
+		text = new BitmapFontCache(font);
 
 		this.floors = new ArrayList();
 		entities = new ArrayList<>();
@@ -84,11 +88,8 @@ public class GameMain extends Game {
 		isOnDebug = false;
 		this.ruangan = new Ruangan("dungeon");
 		this.ruangan.initialize(5, 1);
-		this.skeletonIdle = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
-		this.skeletonRun = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png");
-		this.skeletonDie = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
-		this.tiles = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-		this.weapons = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
+		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(300);
@@ -109,9 +110,15 @@ public class GameMain extends Game {
 	}
 
 	public void mainGame(SpriteBatch batch) {
-		this.ruangan.draw(batch, this.stateTime);
+		this.ruangan.draw(batch, this.stateTime, text, player);
 		this.stateTime += Gdx.graphics.getDeltaTime();
 		this.player.canMoveFree();
+
+
+		for (int i = 0; i < ruangan.getMonsters().size(); i++) {
+			ruangan.getMonsters().get(i).takeDamage(0);
+		}
+
 		if ((double) this.player.getPosY() >= this.ruangan.getUpperborder().getY() - 20.0) {
 			this.player.setCanMoveUp(false);
 		}
@@ -137,6 +144,7 @@ public class GameMain extends Game {
 	public void dispose() {
 		this.batch.dispose();
 		this.manager.dispose();
+		font.dispose();
 	}
 
 	public void enableDebug() {
@@ -164,8 +172,8 @@ public class GameMain extends Game {
 		mouseY = (float) Gdx.graphics.getHeight() - mouseY;
 		float deltaX = mouseX - charX;
 		float deltaY = charY - mouseY;
-		float angleRad = (float) Math.atan2((double) deltaY, (double) deltaX);
-		float angleDeg = (float) Math.toDegrees((double) angleRad);
+		float angleRad = (float) Math.atan2(deltaY, deltaX);
+		float angleDeg = (float) Math.toDegrees(angleRad);
 		return angleDeg;
 	}
 
@@ -186,7 +194,7 @@ public class GameMain extends Game {
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
-		Texture tmp = (Texture) this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
 		Player player1 = new Player(weapon, new RangedPlayerAnimation());
 		return player1;
@@ -209,13 +217,13 @@ public class GameMain extends Game {
 
 		int i;
 		for (i = 0; i < this.projectiles.size(); ++i) {
-			((Projectile) this.projectiles.get(i)).draw(this.batch);
-			((Projectile) this.projectiles.get(i)).update();
-			if ((double) ((Projectile) this.projectiles.get(i)).getPositionY() >= this.ruangan.getUpperborder().getY()) {
+			this.projectiles.get(i).draw(this.batch);
+			this.projectiles.get(i).update();
+			if ((double) this.projectiles.get(i).getPositionY() >= this.ruangan.getUpperborder().getY()) {
 				indexToDelete.add(i);
-			} else if ((double) ((Projectile) this.projectiles.get(i)).getPositionY() <= this.ruangan.getBottomBorder().getY() - 15.0) {
+			} else if ((double) this.projectiles.get(i).getPositionY() <= this.ruangan.getBottomBorder().getY() - 15.0) {
 				indexToDelete.add(i);
-			} else if ((double) ((Projectile) this.projectiles.get(i)).getPositionX() <= this.ruangan.getLeftBorder().getX()) {
+			} else if ((double) this.projectiles.get(i).getPositionX() <= this.ruangan.getLeftBorder().getX()) {
 			}
 		}
 	}

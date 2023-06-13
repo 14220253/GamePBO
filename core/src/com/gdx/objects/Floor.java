@@ -9,8 +9,8 @@ public class Floor {
     //ruangan
     private ArrayList<Ruangan> rooms;
 
-    private int level;
-    private String type;
+    private final int level;
+    private final String type;
 
     public Floor(int level, String type) {
         this.level = level;

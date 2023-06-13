@@ -11,19 +11,20 @@ import com.gdx.game.Static;
 import java.util.ArrayList;
 
 public class MagicPlayerAnimation implements PlayerAnimation{
-    private GameMain app;
-    private Texture textureIdle;
-    private Texture textureRun;
-    private Texture textureDying;
-    private Animation<TextureRegion> playerIdleRight;
-    private Animation<TextureRegion> playerIdleLeft;
-    private Animation<TextureRegion> playerRunRight;
-    private Animation<TextureRegion> playerRunLeft;
-    private Animation<TextureRegion> playerDyingRight;
-    private Animation<TextureRegion> playerDyingLeft;
+    private final GameMain app;
+    private final Texture textureIdle;
+    private final Texture textureRun;
+    private final Texture textureDying;
+    private final Animation<TextureRegion> playerIdleRight;
+    private final Animation<TextureRegion> playerIdleLeft;
+    private final Animation<TextureRegion> playerRunRight;
+    private final Animation<TextureRegion> playerRunLeft;
+    private final Animation<TextureRegion> playerDyingRight;
+    private final Animation<TextureRegion> playerDyingLeft;
     private TextureRegion currentFrame;
-    private float scalingX, scalingY;
-    private float maxDyingStateTime;
+    private final float scalingX;
+    private final float scalingY;
+    private final float maxDyingStateTime;
 
     public MagicPlayerAnimation() {
         scalingX = 1.5f;

@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
+
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Static {
@@ -15,32 +18,17 @@ public class Static {
      * @return boolean
      */
     public static boolean rectangleCollisionDetect(Rectangle rect1, Rectangle rect2) {
-        boolean result = false;
-        if (rect1.getX() < rect2.getX()+ rect2.getWidth() && //rect 2 di kiri 1 di kanan
-                rect1.getY() < rect2.getY() + rect2.getHeight() &&//cek tingginya kalo rect2 di bawah
-                rect1.getY() + rect1.getHeight() > rect2.getY() //kalo rect1 di bawah
-         ) {
-            result = true;
-        }
-        if (rect1.getX()+ rect1.getWidth() > rect2.getX() && //rect 2 di kanan 1 di kiri
-                rect1.getY() < rect2.getY() + rect2.getHeight() &&
-                rect1.getY() + rect1.getHeight() > rect2.getY()
-        ) {
-            result = true;
-        }
-        if (rect1.getY() + rect1.getHeight() > rect2.getY() && //rect 2 di atas 1 di bawah
-                rect1.getX() < rect2.getX() + rect2.getWidth() &&
-                rect1.getX() + rect1.getWidth() > rect2.getX()
-        ) {
-            result = true;
-        }
-        if (rect1.getY() < rect2.getY() + rect2.getHeight() && //rect 2 di bawah 1 di atas
-                rect1.getX() < rect2.getX() + rect2.getWidth() &&
-                rect1.getX() + rect1.getWidth() > rect2.getX()
-        ) {
-            result = true;
-        }
-        return result;
+        com.badlogic.gdx.math.Rectangle rectangle1 = new com.badlogic.gdx.math.Rectangle();
+        com.badlogic.gdx.math.Rectangle rectangle2 = new com.badlogic.gdx.math.Rectangle();
+        rectangle1.setX(rect1.x);
+        rectangle1.setY(rect1.y);
+        rectangle1.setWidth(rect1.width);
+        rectangle1.setHeight(rect1.height);
+        rectangle2.setX(rect2.x);
+        rectangle2.setY(rect2.y);
+        rectangle2.setWidth(rect2.width);
+        rectangle2.setHeight(rect2.height);
+        return Intersector.overlaps(rectangle1, rectangle2);
     }
     /**
      * coin flip 0/1
@@ -88,9 +76,10 @@ public class Static {
         //upper walls + buff doors
         for (int i = 700; i >= 50 ; i -= 50) {
             if (i == 400) {
-                    batch.draw(wallBumpWithShadow, i - 25, 525, 100, 75);
-                batch.draw(wallBump, i - 40, 525, 100, 75);
-                    batch.draw(closedDoor, i - 13, 525, 50, 75);
+                batch.draw(wallBumpWithShadow, i - 25, 525, 100, 75);
+                batch.draw(closedDoor, i - 13, 525, 50, 75);
+                batch.draw(wallBump, i - 125, 525, 100, 75);
+                i -= 100;
             }
             else {
                 batch.draw(walls, i, 525, 50, 75);
@@ -182,6 +171,7 @@ public class Static {
      */
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY) {
         TextureRegion[] array = textureSplitter(texture, column, row);
+        System.out.println(column);
         if (flipX || flipY) {
             for (TextureRegion t : array) {
                 t.flip(flipX, flipY);

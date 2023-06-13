@@ -12,5 +12,5 @@ public interface WeaponAnimation {
     void attack(Player player, ArrayList<TextureRegion>weapon, float stateTime, Batch batch, float sizeScaling);
 
     float getMaxFrameTime();
-    public Rectangle[] getHitboxes();
+    Rectangle[] getHitboxes();
 }

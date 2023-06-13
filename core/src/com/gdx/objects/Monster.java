@@ -1,6 +1,7 @@
 package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -38,6 +39,9 @@ public class Monster extends Karakter implements Attackable{
     protected Texture healthBar;
     protected double maxHealth;
     protected GameMain app;
+    private State state = State.ALIVE;
+    private Movement movement = Movement.IDLE;
+    private String type;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
         super(health, attack, defense, level, posX, posY, hitBox);
@@ -50,7 +54,7 @@ public class Monster extends Karakter implements Attackable{
 
         if (type.equalsIgnoreCase("orc")) {
             idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
-            run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet.png");
+            run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet-Resize.png");
             die = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
             animationIdleRight = Static.animate(idle,4, 1, false, false);
             animationIdleLeft = Static.animate(idle,4, 1, true, false);
@@ -58,20 +62,32 @@ public class Monster extends Karakter implements Attackable{
             animationRunLeft = Static.animate(run,6, 1, true, false);
             animationDeathRight = Static.animate(die, 6, 1, false, false);
             animationDeathLeft = Static.animate(die, 6, 1, true, false);
+            this.type = type;
         }
         if (type.equalsIgnoreCase("skeleton")) {
             idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
-            run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet.png");
+            run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet-Resize.png");
             die = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
             animationIdleRight = Static.animate(idle,4, 1, false, false);
             animationIdleLeft = Static.animate(idle,4, 1, true, false);
             animationRunRight = Static.animate(run, 6, 1, false, false);
             animationRunLeft = Static.animate(run,6, 1, true, false);
-            animationDeathRight = Static.animate(die, 6, 1, false, false);
-            animationDeathLeft = Static.animate(die, 6, 1, true, false);
+            animationDeathRight = Static.animate(die, 8, 1, false, false);
+            animationDeathLeft = Static.animate(die, 8, 1, true, false);
+            this.type = type;
         }
 
-        this.hitBox.setLocation(this.posX, (int) (this.posY));
+        this.hitBox.setLocation(this.posX, this.posY);
+    }
+
+    enum State {
+        ALIVE,
+        DYING,
+        DEAD
+    }
+    enum Movement{
+        IDLE,
+        RUNNING
     }
 
     public TextureRegion getSprite() {
@@ -89,9 +105,45 @@ public class Monster extends Karakter implements Attackable{
     }
 
     public void draw(SpriteBatch batch, float stateTime) {
-        currentFrame = animationIdleRight.getKeyFrame(stateTime, true);
+        if (state == State.ALIVE && movement == Movement.IDLE) {
+            currentFrame = animationIdleRight.getKeyFrame(stateTime, true);
+            setSprite(currentFrame);
+            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+            batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
+            if (getHealth() == 0) {
+                state = State.DYING;
+            }
+        }
+        if (state == State.DYING) {
+            die(batch, stateTime);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            movement = Movement.RUNNING;
+            setPosX(getPosX() - 1);
+            run(stateTime, batch);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            movement = Movement.RUNNING;
+            setPosX(getPosX() + 1);
+            run(stateTime, batch);
+        }
+        else {
+            movement = Movement.IDLE;
+        }
+    }
+    private void run(float stateTime, SpriteBatch batch) {
+        if (lookingLeft)
+            currentFrame = animationRunLeft.getKeyFrame(stateTime, false);
+        else
+            currentFrame = animationRunRight.getKeyFrame(stateTime, false);
         setSprite(currentFrame);
-        batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+        System.out.println(currentFrame.getRegionWidth());
+        System.out.println(currentFrame.getRegionHeight());
+        if (type.equalsIgnoreCase("orc")) {
+            batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);
+        } else {
+            batch.draw(currentFrame, getPosX() - 40, getPosY(), 130, 100);
+        }
         batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
     }
 
@@ -103,11 +155,28 @@ public class Monster extends Karakter implements Attackable{
     }
 
     @Override
-    public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
+    public void die(SpriteBatch batch, float stateTime) {
         getHitBox().setSize(0, 0);
-        currentFrame = animation.getKeyFrame(stateTime, true);
+        if (isLookingLeft()) {
+            currentFrame = animationDeathLeft.getKeyFrame(stateTime, false);
+        }
+        else {
+            currentFrame = animationDeathRight.getKeyFrame(stateTime, false);
+        }
+
         setSprite(currentFrame);
-        batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);
+        if (type.equalsIgnoreCase("orc")) {
+            batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);
+        } else {
+            batch.draw(currentFrame, getPosX() - 40, getPosY(), 130, 100);
+        }
+        if (animationDeathLeft.isAnimationFinished(stateTime) || animationDeathRight.isAnimationFinished(stateTime)) {
+            state = State.DEAD;
+        }
+    }
+
+    public State getState() {
+        return state;
     }
 
     public void checkHealth() {

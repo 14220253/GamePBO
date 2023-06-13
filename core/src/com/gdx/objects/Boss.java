@@ -20,7 +20,7 @@ public class Boss extends Karakter implements Skill, Attackable{
     }
 
     @Override
-    public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
+    public void die(SpriteBatch batch, float stateTime) {
 
     }
 

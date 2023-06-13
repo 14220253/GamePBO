@@ -22,9 +22,9 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     //def
     //lvl
     private int mana;
-    private int maxHealth = 100; //default max hp 100, nanti bisa ditambah
-    private int evasion = 0;
-    private double healMultiplier = 1; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
+    private final int maxHealth = 100; //default max hp 100, nanti bisa ditambah
+    private final int evasion = 0;
+    private final double healMultiplier = 1; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
     private double exp;
     private Inventory inventory;
     private final int maxEvasion = 60;
@@ -84,8 +84,9 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     }
 
     @Override
-    public void die(SpriteBatch batch, Animation<TextureRegion> animation, float stateTime) {
+    public void die(SpriteBatch batch, float stateTime) {
         //TODO rian what is this, i already make death animation in playerAnimationHandling that runs on player(update)
+        //kan pake interface attackable, jadi entity yang bisa diattack perlu implement takedamage() dgn die()
     }
 
     public void revive(int health){

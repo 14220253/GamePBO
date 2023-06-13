@@ -1,7 +1,11 @@
 package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
@@ -17,9 +21,10 @@ public class Ruangan {
     private Rectangle bottomBorder;
     private Rectangle upperborder;
     private Texture texture;
-    private String type;
+    private final String type;
     private ArrayList<Monster> monsters;
     private ArrayList<Breakable> breakables;
+    private Rectangle doorHitbox;
     GameMain app;
 
     public Ruangan(String type) {
@@ -35,6 +40,7 @@ public class Ruangan {
         app = (GameMain) Gdx.app.getApplicationListener();
         monsters = new ArrayList<>();
         breakables = new ArrayList<>();
+        doorHitbox = new Rectangle(365, 475, 100, 150);
 
         initializeBreakable();
         initializeTemplate(template, level);
@@ -49,6 +55,51 @@ public class Ruangan {
 
             Breakable breakable = new Breakable(posX, posY);
             breakables.add(breakable);
+        }
+    }
+
+
+    public void draw(SpriteBatch batch, float stateTime, BitmapFontCache font, Player player) {
+        //map
+        if (type.equalsIgnoreCase("Dungeon")) {
+            texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
+            Static.drawDungeon(batch, texture);
+            leftBorder = new Rectangle(48, 40, 5, 500);
+            rightBorder = new Rectangle(710, 40, 5, 500);
+            bottomBorder = new Rectangle(48, 55, 705, 8);
+            upperborder = new Rectangle(48, 525, 705, 8);
+        }
+        else if (type.equalsIgnoreCase("Forest")) {
+            //TODO
+        }
+        else if (type.equalsIgnoreCase("Shop")) {
+            texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
+            Static.drawDungeonShop(batch, texture);
+            rightBorder = new Rectangle(510, 203, 5, 300);
+            leftBorder = new Rectangle(205, 203, 5, 300);
+            bottomBorder = new Rectangle(205, 213, 347, 8);
+            upperborder = new Rectangle(205, 362, 347, 8);
+        }
+
+        //enemies
+        if (!type.equalsIgnoreCase("Shop") && !type.equalsIgnoreCase("boss")) {
+            for (Monster monster : monsters) {
+                monster.draw(batch, stateTime);
+            }
+            for (Breakable b: breakables) {
+                b.draw(batch);
+            }
+        }
+
+        for (int i = 0; i < monsters.size(); i++) {
+            if (monsters.get(i).getState() == Monster.State.DEAD) {
+                monsters.remove(i);
+            }
+        }
+
+        if (Static.rectangleCollisionDetect(player.hitBox, doorHitbox) && monsters.size() == 0) {
+            font.setText("Press Enter",player.getPosX() + 45, player.getPosY() + (player.getHeight() / 2 ));
+            font.draw(batch);
         }
     }
     private void initializeTemplate(int template, int level) {
@@ -286,38 +337,17 @@ public class Ruangan {
             monsters.add(monster4);
             monsters.add(monster5);
         }
-    }
-
-    public void draw(SpriteBatch batch, float stateTime) {
-        //map
-        if (type.equalsIgnoreCase("Dungeon")) {
-            texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-            Static.drawDungeon(batch, texture);
-            leftBorder = new Rectangle(48, 40, 5, 500);
-            rightBorder = new Rectangle(710, 40, 5, 500);
-            bottomBorder = new Rectangle(48, 55, 705, 8);
-            upperborder = new Rectangle(48, 525, 705, 8);
-        }
-        else if (type.equalsIgnoreCase("Forest")) {
-            //TODO
-        }
-        else if (type.equalsIgnoreCase("Shop")) {
-            texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-            Static.drawDungeonShop(batch, texture);
-            rightBorder = new Rectangle(510, 203, 5, 300);
-            leftBorder = new Rectangle(205, 203, 5, 300);
-            bottomBorder = new Rectangle(205, 213, 347, 8);
-            upperborder = new Rectangle(205, 362, 347, 8);
-        }
-
-        //enemies
-        if (!type.equalsIgnoreCase("Shop") && !type.equalsIgnoreCase("boss")) {
-            for (Monster monster : monsters) {
-                monster.draw(batch, stateTime);
+        if (template == 101) {
+            Monster monster1;
+            if (Static.coinFlip() == 0) {
+                monster1= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
+            } else {
+                monster1= new Monster(50, 10, 0, level, 400, 450,
+                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
             }
-            for (Breakable b: breakables) {
-                b.draw(batch);
-            }
+
+            monsters.add(monster1);
         }
     }
 
@@ -340,5 +370,9 @@ public class Ruangan {
 
     public Rectangle getUpperborder() {
         return upperborder;
+    }
+
+    public Rectangle getDoorHitbox() {
+        return doorHitbox;
     }
 }

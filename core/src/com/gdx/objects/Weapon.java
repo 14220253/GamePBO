@@ -12,13 +12,13 @@ public class Weapon extends Item{
     //weapon yang diequip player
 
     //stats
-    private int atk;
+    private final int atk;
     private int level;
-    private float multiplier;
+    private final float multiplier;
     private float sizeScaling;
     private float cooldown;
-    private ArrayList<TextureRegion>textureRegions = new ArrayList<>();
-    private WeaponAnimation weaponAnimation;
+    private final ArrayList<TextureRegion>textureRegions = new ArrayList<>();
+    private final WeaponAnimation weaponAnimation;
 
     //methods
 

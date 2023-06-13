@@ -9,7 +9,7 @@ public class Inventory {
     //backpack
     private final int CAPACITY = 6;
     private int coins = 0;
-    private ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Item> items = new ArrayList<>();
 
     public void addItem(Item item) throws InventoryFullException {
         if (items.size() == CAPACITY) {
