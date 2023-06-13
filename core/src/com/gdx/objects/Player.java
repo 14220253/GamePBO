@@ -258,11 +258,4 @@ public class Player extends Karakter implements Attackable { //interface Skill b
             }
         }
     }
-    enum state {
-        IDLE,
-        RUN
-    }
-    enum move {
-        //w, s, a, d
-    }
 }

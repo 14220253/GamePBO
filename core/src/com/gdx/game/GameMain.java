@@ -158,6 +158,8 @@ public class GameMain extends Game {
 					(float) entity.getHitBox().getHeight()
 			);
 		}
+		shapeRenderer.rect(-25, 265, 150, 100);
+		shapeRenderer.rect(675, 265, 150, 100);
 		shapeRenderer.end();
 	}
 	public void getEnities() {

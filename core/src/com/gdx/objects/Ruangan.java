@@ -1,12 +1,14 @@
 package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
 
@@ -25,6 +27,8 @@ public class Ruangan {
     private ArrayList<Monster> monsters;
     private ArrayList<Breakable> breakables;
     private Rectangle doorHitbox;
+    private Rectangle leftDoorHitbox;
+    private Rectangle rightDoorHitbox;
     GameMain app;
 
     public Ruangan(String type) {
@@ -41,6 +45,8 @@ public class Ruangan {
         monsters = new ArrayList<>();
         breakables = new ArrayList<>();
         doorHitbox = new Rectangle(365, 475, 100, 150);
+        leftDoorHitbox = new Rectangle(-25, 265, 150, 100);
+        rightDoorHitbox = new Rectangle(675, 265, 150, 100);
 
         initializeBreakable();
         initializeTemplate(template, level);
@@ -97,11 +103,33 @@ public class Ruangan {
             }
         }
 
-        if (Static.rectangleCollisionDetect(player.hitBox, doorHitbox) && monsters.size() == 0) {
-            font.setText("Press Enter",player.getPosX() + 45, player.getPosY() + (player.getHeight() / 2 ));
+        if ((Static.rectangleCollisionDetect(player.hitBox, doorHitbox) ||
+                Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox) ||
+                        Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) && monsters.size() == 0) {
+
+            if (player.isLookingLeft()) {
+                font.setText("Press Enter", player.getPosX() + 45, player.getPosY() + (player.getHeight() / 2));
+            } else {
+                font.setText("Press Enter", player.getPosX() - 90, player.getPosY() + (player.getHeight() / 2));
+            }
             font.draw(batch);
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+
+            }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
     private void initializeTemplate(int template, int level) {
         if (template == 1) {
             Monster monster1, monster2, monster3;
