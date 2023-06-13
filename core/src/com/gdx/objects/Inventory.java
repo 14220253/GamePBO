@@ -11,6 +11,10 @@ public class Inventory {
     private int coins = 0;
     private final ArrayList<Item> items = new ArrayList<>();
 
+    public int getCoins() {
+        return coins;
+    }
+
     public void addItem(Item item) throws InventoryFullException {
         if (items.size() == CAPACITY) {
             throw new InventoryFullException();

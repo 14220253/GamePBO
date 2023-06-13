@@ -67,6 +67,8 @@ public class Player extends Karakter implements Attackable { //interface Skill b
         isDying = false;
         health = 100;
         speed = 300f; // 300 pixels a second
+        mana = 100;
+        inventory = new Inventory();
     }
 
 
@@ -257,5 +259,13 @@ public class Player extends Karakter implements Attackable { //interface Skill b
                 hitBox = null;
             }
         }
+    }
+    public double getHpPercent() {return health / maxHealth;}
+    public double getManaPercent() {return (double) mana / 100;}
+
+    public int getMana() {return mana;}
+
+    public Inventory getInventory() {
+        return inventory;
     }
 }

@@ -49,6 +49,7 @@ public class GameMain extends Game {
 	boolean isOnDebug;
 	BitmapFont font;
 	BitmapFontCache text;
+	PlayerUI UI;
 
 	public GameMain() {
 	}
@@ -77,6 +78,8 @@ public class GameMain extends Game {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet-Resize.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
+		manager.load("healthbar/SleekBars.png", Texture.class);
+		manager.load("coins/MonedaD.png", Texture.class);
 		this.manager.finishLoading();
 
 		font = new BitmapFont();
@@ -93,6 +96,7 @@ public class GameMain extends Game {
 		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(300);
+		UI = new PlayerUI(player);
 		this.mainMenuUI.forCreate();
 	}
 
@@ -113,7 +117,7 @@ public class GameMain extends Game {
 		this.ruangan.draw(batch, this.stateTime, text, player);
 		this.stateTime += Gdx.graphics.getDeltaTime();
 		this.player.canMoveFree();
-
+		UI.draw(batch);
 
 		for (int i = 0; i < ruangan.getMonsters().size(); i++) {
 			ruangan.getMonsters().get(i).takeDamage(0);

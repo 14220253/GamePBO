@@ -7,7 +7,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("Dungeons");
-		config.setWindowedMode(800, 600);
+		config.setWindowedMode(800, 700);
 		new Lwjgl3Application(new GameMain(), config);
 	}
 }
