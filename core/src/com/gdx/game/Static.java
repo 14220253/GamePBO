@@ -170,6 +170,9 @@ public class Static {
      * @return Animation<TextureRegion>
      */
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY) {
+        return animate(texture, column, row, flipX, flipY, 0.2f);
+    }
+    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration) {
         TextureRegion[] array = textureSplitter(texture, column, row);
         System.out.println(column);
         if (flipX || flipY) {
@@ -177,7 +180,7 @@ public class Static {
                 t.flip(flipX, flipY);
             }
         }
-        return new Animation<>(0.2f, array);
+        return new Animation<>(duration, array);
     }
     public static TextureRegion[] flipImageX(TextureRegion[] textureRegion){
         for (TextureRegion i: textureRegion) {

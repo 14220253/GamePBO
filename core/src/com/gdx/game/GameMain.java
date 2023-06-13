@@ -93,7 +93,7 @@ public class GameMain extends Game {
 		this.ruangan.initialize(5, 1);
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeMeleePlayer();
+		this.player = this.makeMagicPlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(300);
 		UI = new PlayerUI(player);
@@ -114,13 +114,13 @@ public class GameMain extends Game {
 	}
 
 	public void mainGame(SpriteBatch batch) {
-		this.ruangan.draw(batch, this.stateTime, text, player);
+		this.ruangan.draw(batch, this.stateTime, player);
 		this.stateTime += Gdx.graphics.getDeltaTime();
 		this.player.canMoveFree();
 		UI.draw(batch);
 
 		for (int i = 0; i < ruangan.getMonsters().size(); i++) {
-			ruangan.getMonsters().get(i).takeDamage(0);
+				ruangan.getMonsters().get(i).takeDamage(5);
 		}
 
 		if ((double) this.player.getPosY() >= this.ruangan.getUpperborder().getY() - 20.0) {
@@ -162,8 +162,6 @@ public class GameMain extends Game {
 					(float) entity.getHitBox().getHeight()
 			);
 		}
-		shapeRenderer.rect(-25, 265, 150, 100);
-		shapeRenderer.rect(675, 265, 150, 100);
 		shapeRenderer.end();
 	}
 	public void getEnities() {

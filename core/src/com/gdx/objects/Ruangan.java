@@ -65,7 +65,7 @@ public class Ruangan {
     }
 
 
-    public void draw(SpriteBatch batch, float stateTime, BitmapFontCache font, Player player) {
+    public void draw(SpriteBatch batch, float stateTime, Player player) {
         //map
         if (type.equalsIgnoreCase("Dungeon")) {
             texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
@@ -107,12 +107,11 @@ public class Ruangan {
                 Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox) ||
                         Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) && monsters.size() == 0) {
 
-            if (player.isLookingLeft()) {
-                font.setText("Press Enter", player.getPosX() + 45, player.getPosY() + (player.getHeight() / 2));
-            } else {
-                font.setText("Press Enter", player.getPosX() - 90, player.getPosY() + (player.getHeight() / 2));
-            }
-            font.draw(batch);
+            BitmapFont font = new BitmapFont();
+            font.getData().setScale(1.5f);
+            BitmapFontCache text = new BitmapFontCache(font);
+            text.setText("Press Enter", player.getPosX() - 40, player.getPosY() + player.getHeight() * 2);
+            text.draw(batch);
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 

@@ -2,6 +2,7 @@ package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -42,6 +43,7 @@ public class Monster extends Karakter implements Attackable{
     private State state = State.ALIVE;
     private Movement movement = Movement.IDLE;
     private String type;
+    int immunityFrames;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
         super(health, attack, defense, level, posX, posY, hitBox);
@@ -60,8 +62,8 @@ public class Monster extends Karakter implements Attackable{
             animationIdleLeft = Static.animate(idle,4, 1, true, false);
             animationRunRight = Static.animate(run, 6, 1, false, false);
             animationRunLeft = Static.animate(run,6, 1, true, false);
-            animationDeathRight = Static.animate(die, 6, 1, false, false);
-            animationDeathLeft = Static.animate(die, 6, 1, true, false);
+            animationDeathRight = Static.animate(die, 6, 1, false, false, 1.1f);
+            animationDeathLeft = Static.animate(die, 6, 1, true, false, 1.1f);
             this.type = type;
         }
         if (type.equalsIgnoreCase("skeleton")) {
@@ -72,8 +74,8 @@ public class Monster extends Karakter implements Attackable{
             animationIdleLeft = Static.animate(idle,4, 1, true, false);
             animationRunRight = Static.animate(run, 6, 1, false, false);
             animationRunLeft = Static.animate(run,6, 1, true, false);
-            animationDeathRight = Static.animate(die, 8, 1, false, false);
-            animationDeathLeft = Static.animate(die, 8, 1, true, false);
+            animationDeathRight = Static.animate(die, 8, 1, false, false, 0.8f);
+            animationDeathLeft = Static.animate(die, 8, 1, true, false, 0.8f);
             this.type = type;
         }
 
@@ -106,13 +108,20 @@ public class Monster extends Karakter implements Attackable{
 
     public void draw(SpriteBatch batch, float stateTime) {
         if (state == State.ALIVE && movement == Movement.IDLE) {
-            currentFrame = animationIdleRight.getKeyFrame(stateTime, true);
-            setSprite(currentFrame);
-            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
-            batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
             if (getHealth() == 0) {
                 state = State.DYING;
             }
+            currentFrame = animationIdleRight.getKeyFrame(stateTime, true);
+            setSprite(currentFrame);
+            if (immunityFrames != 0) {
+                batch.setColor(Color.RED);
+                batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+                immunityFrames--;
+                batch.setColor(1, 1, 1, 1);
+            } else {
+                batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+            }
+            batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
         }
         if (state == State.DYING) {
             die(batch, stateTime);
@@ -150,8 +159,11 @@ public class Monster extends Karakter implements Attackable{
 
     @Override
     public void takeDamage(double dmg) {
-        health -= checkNegativeDmg(dmg-defense);
-        checkHealth();
+        if (immunityFrames == 0) {
+            health -= checkNegativeDmg(dmg - defense);
+            checkHealth();
+            immunityFrames = 30;
+        }
     }
 
     @Override
