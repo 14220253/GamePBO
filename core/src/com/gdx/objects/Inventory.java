@@ -14,8 +14,8 @@ public class Inventory {
     public int getCoins() {
         return coins;
     }
-    public void addCoin() {
-        coins++;
+    public void addCoin(int amount) {
+        coins += amount;
     }
 
     public void addItem(Item item) throws InventoryFullException {

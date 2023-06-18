@@ -90,7 +90,7 @@ public class GameMain extends Game {
 		entities = new ArrayList<>();
 		shapeRenderer = new ShapeRenderer();
 		isOnDebug = false;
-		this.ruangan = new Ruangan("dungeon");
+		this.ruangan = new Ruangan("dungeon", 100);
 		this.ruangan.initialize(5, 1);
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");

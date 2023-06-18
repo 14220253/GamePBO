@@ -27,11 +27,13 @@ public class Ruangan {
     private Rectangle doorHitbox;
     private Rectangle leftDoorHitbox;
     private Rectangle rightDoorHitbox;
-    GameMain app;
+    private GameMain app;
+    private int floor;
 
 
-    public Ruangan(String type) {
+    public Ruangan(String type, int floor) {
         this.type = type;
+        this.floor = floor;
     }
 
     /**
@@ -101,7 +103,7 @@ public class Ruangan {
             for (int i = 0; i < coins.size(); i++) {
                 if (Static.rectangleCollisionDetect(player.getHitBox(), coins.get(i).getHitbox())) {
                     coins.get(i).setState(Coins.State.COLLECTED);
-                    player.getInventory().addCoin();
+                    player.getInventory().addCoin(coins.get(i).getAmount());
                 }
                 coins.get(i).draw(batch, stateTime);
                 if (coins.get(i).getState() == Coins.State.GONE) {
@@ -112,7 +114,7 @@ public class Ruangan {
 
         for (int i = 0; i < monsters.size(); i++) {
             if (monsters.get(i).getState() == Monster.State.DEAD) {
-                coins.add(new Coins(monsters.get(i).getPosX(), monsters.get(i).getPosY()));
+                coins.add(new Coins(monsters.get(i).getPosX(), monsters.get(i).getPosY(), floor));
                 monsters.remove(i);
             }
         }

@@ -5,42 +5,41 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.gdx.game.GameMain;
 import com.gdx.game.Static;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Coins {
     //koin di lantai yang didrop musuh
-
-    private Texture coins;
-    private Texture collected;
     private TextureRegion currentFrame;
-    private Animation<TextureRegion> coinAnimation;
-    private Animation<TextureRegion> collectAnimation;
-    private GameMain app;
+    private final Animation<TextureRegion> coinAnimation;
+    private final Animation<TextureRegion> collectAnimation;
     private State state;
-    private int posX;
-    private int posY;
-    private Rectangle hitbox;
-    public Coins(int posX, int posY) {
-        app = (GameMain) Gdx.app.getApplicationListener();
+    private final int posX;
+    private final int posY;
+    private final Rectangle hitbox;
+    private final int amount;
+    public Coins(int posX, int posY, int floor) {
+        GameMain app = (GameMain) Gdx.app.getApplicationListener();
         currentFrame = new TextureRegion();
-        coins = app.getManager().get("coins/MonedaD.png");
+        Texture coins = app.getManager().get("coins/MonedaD.png");
         coinAnimation = Static.animate(coins, 5, 1, false, false);
-        collected = app.getManager().get("coins/Collected.png");
+        Texture collected = app.getManager().get("coins/Collected.png");
         collectAnimation = Static.animate(collected, 6, 1, false, false, 0.5f);
         state = State.AVALABLE;
         this.posX = posX;
         this.posY = posY;
         hitbox = new Rectangle(posX, posY, 32, 32);
+        amount = Math.round(new Random().nextFloat(0.5f, 5.49f)) * floor;
     }
+
+    public int getAmount() {
+        return amount;
+    }
+
     public void draw(SpriteBatch batch, float stateTime) {
-        ShapeRenderer render = new ShapeRenderer();
-//        render.begin(ShapeRenderer.ShapeType.Line);
-//        render.rect(posX, posY, hitbox.width, hitbox.height);
-//        render.end();
         if (state == State.AVALABLE) {
             currentFrame = coinAnimation.getKeyFrame(stateTime, true);
             batch.draw(currentFrame, posX, posY, 32, 32);

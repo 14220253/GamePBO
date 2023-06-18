@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.game.GameMain;
+import com.gdx.game.Static;
 
 public class PlayerUI {
     Player player;
@@ -42,7 +43,8 @@ public class PlayerUI {
         manaBar.setRegion(0, 65, (int) (128 * player.getManaPercent()), 32);
         batch.draw(manaBar, 50, 600, (float) (256 * player.getManaPercent()), 32);
         batch.draw(coinIcon, 700, 616, 64, 64);
-        text.setText(String.valueOf(player.getInventory().getCoins()), 660, 660);
+        text.setText(String.valueOf(player.getInventory().getCoins()),
+                670 - (16 * (Static.getDigits(player.getInventory().getCoins()))), 660);
         text.draw(batch);
     }
 }

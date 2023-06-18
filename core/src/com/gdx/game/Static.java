@@ -188,4 +188,12 @@ public class Static {
         }
         return textureRegion;
     }
+    public static int getDigits(int num) {
+        int result = 0;
+        while (num > 0) {
+            num /= 10;
+            result++;
+        }
+        return result;
+    }
 }
