@@ -23,17 +23,16 @@ public class Ruangan {
     private final String type;
     private ArrayList<Monster> monsters;
     private ArrayList<Breakable> breakables;
-    private ArrayList<Coins> coins;
+    private ArrayList<Drops> drops;
     private Rectangle doorHitbox;
     private Rectangle leftDoorHitbox;
     private Rectangle rightDoorHitbox;
     private GameMain app;
-    private int floor;
+    private int level;
 
 
-    public Ruangan(String type, int floor) {
+    public Ruangan(String type) {
         this.type = type;
-        this.floor = floor;
     }
 
     /**
@@ -42,10 +41,11 @@ public class Ruangan {
      * @param level level scaling (belum diimplement)
      */
     public void initialize(int template, int level) {
+        this.level = level;
         app = (GameMain) Gdx.app.getApplicationListener();
         monsters = new ArrayList<>();
         breakables = new ArrayList<>();
-        coins = new ArrayList<>();
+        drops = new ArrayList<>();
         doorHitbox = new Rectangle(365, 475, 100, 150);
         leftDoorHitbox = new Rectangle(-25, 265, 150, 100);
         rightDoorHitbox = new Rectangle(675, 265, 150, 100);
@@ -92,33 +92,56 @@ public class Ruangan {
         //enemies
         if (!type.equalsIgnoreCase("Shop") && !type.equalsIgnoreCase("boss")) {
             //PROPS
-            for (Breakable b: breakables) {
-                b.draw(batch);
+            for (int i = 0; i < breakables.size(); i++) {
+                breakables.get(i).draw(batch);
+                if (breakables.get(i).getState() == Breakable.State.BROKEN) {
+                    drops.add(new Drops(breakables.get(i).getPosX(), breakables.get(i).getPosY(), level, breakables.get(i).getType()));
+                    breakables.remove(i);
+                }
             }
             //MONSTERS
             for (Monster monster : monsters) {
                 monster.draw(batch, stateTime);
             }
             //COINS
-            for (int i = 0; i < coins.size(); i++) {
-                if (Static.rectangleCollisionDetect(player.getHitBox(), coins.get(i).getHitbox())) {
-                    coins.get(i).setState(Coins.State.COLLECTED);
-                    player.getInventory().addCoin(coins.get(i).getAmount());
+            for (int i = 0; i < drops.size(); i++) {
+                if (Static.rectangleCollisionDetect(player.getHitBox(), drops.get(i).getHitbox())) {
+                    if (drops.get(i).getType() == Drops.Type.COIN) {
+                        player.getInventory().addCoin(drops.get(i).getAmount());
+                    }
+                    if (drops.get(i).getType() == Drops.Type.HEALTH) {
+                        player.addHealth(drops.get(i).getAmount());
+                    }
+                    if (drops.get(i).getType() == Drops.Type.MANA) {
+                        player.addMana(drops.get(i).getAmount());
+                    }
+                    drops.get(i).setState(Drops.State.COLLECTED);
                 }
-                coins.get(i).draw(batch, stateTime);
-                if (coins.get(i).getState() == Coins.State.GONE) {
-                    coins.remove(i);
+                drops.get(i).draw(batch, stateTime);
+                if (drops.get(i).getState() == Drops.State.GONE) {
+                    drops.remove(i);
                 }
             }
         }
 
         for (int i = 0; i < monsters.size(); i++) {
             if (monsters.get(i).getState() == Monster.State.DEAD) {
-                coins.add(new Coins(monsters.get(i).getPosX(), monsters.get(i).getPosY(), floor));
+                drops.add(new Drops(monsters.get(i).getPosX(), monsters.get(i).getPosY(), level, Drops.Type.COIN));
                 monsters.remove(i);
             }
         }
+        if (player.isAttacking()) {
+            for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
+                for (Breakable breakable : breakables) {
+                    if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
+                            breakable.getHitbox())) {
+                        breakable.setState(Breakable.State.HALFBROKEN);
+                    }
+                }
+            }
+        }
 
+        //PINTU
         if ((Static.rectangleCollisionDetect(player.hitBox, doorHitbox) ||
                 Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox) ||
                         Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) && monsters.size() == 0) {
@@ -130,7 +153,7 @@ public class Ruangan {
             text.draw(batch);
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-
+                //TODO
             }
         }
     }
@@ -417,5 +440,13 @@ public class Ruangan {
 
     public Rectangle getDoorHitbox() {
         return doorHitbox;
+    }
+
+    public ArrayList<Breakable> getBreakables() {
+        return breakables;
+    }
+
+    public ArrayList<Drops> getDrops() {
+        return drops;
     }
 }

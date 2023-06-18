@@ -149,14 +149,16 @@ public class Static {
      * @param row row dalam sheet
      * @return frames dalam array
      */
-    public static TextureRegion[] textureSplitter(Texture texture, int column, int row) {
+    public static TextureRegion[] textureSplitter(Texture texture, int column, int row, int redundantFrames) {
         TextureRegion[] frames;
         TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / column, texture.getHeight() / row);
-        frames = new TextureRegion[column * row];
+        frames = new TextureRegion[(column * row) - redundantFrames];
         int index = 0;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
-                frames[index++] = temp[i][j];
+                if (index < (column * row) - redundantFrames) {
+                    frames[index++] = temp[i][j];
+                }
             }
         }
         return frames;
@@ -172,8 +174,14 @@ public class Static {
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY) {
         return animate(texture, column, row, flipX, flipY, 0.2f);
     }
+    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, int redundantFrames) {
+        return animate(texture, column, row, flipX, flipY, 0.2f, redundantFrames);
+    }
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration) {
-        TextureRegion[] array = textureSplitter(texture, column, row);
+        return animate(texture, column, row, flipX, flipY, duration, 0);
+    }
+    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration, int redundantFrames) {
+        TextureRegion[] array = textureSplitter(texture, column, row, redundantFrames);
         System.out.println(column);
         if (flipX || flipY) {
             for (TextureRegion t : array) {

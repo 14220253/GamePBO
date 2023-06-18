@@ -268,4 +268,10 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     public Inventory getInventory() {
         return inventory;
     }
+    public void addHealth(int amount) {
+        health = Math.min(maxHealth, health + amount);
+    }
+    public void addMana(int amount) {
+        mana = Math.min(100, mana + amount);
+    }
 }

@@ -78,6 +78,8 @@ public class GameMain extends Game {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet-Resize.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
+		this.manager.load("heart.png", Texture.class);
+		this.manager.load("star.png", Texture.class);
 		manager.load("healthbar/SleekBars.png", Texture.class);
 		manager.load("coins/MonedaD.png", Texture.class);
 		manager.load("coins/Collected.png", Texture.class);
@@ -90,7 +92,7 @@ public class GameMain extends Game {
 		entities = new ArrayList<>();
 		shapeRenderer = new ShapeRenderer();
 		isOnDebug = false;
-		this.ruangan = new Ruangan("dungeon", 100);
+		this.ruangan = new Ruangan("dungeon");
 		this.ruangan.initialize(5, 1);
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
@@ -162,6 +164,18 @@ public class GameMain extends Game {
 					(float) entity.getHitBox().getWidth(),
 					(float) entity.getHitBox().getHeight()
 			);
+		}
+		for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
+			shapeRenderer.rect(player.getWeapon().getWeaponAnimation().getHitboxes()[i].x,
+					player.getWeapon().getWeaponAnimation().getHitboxes()[i].y,
+					player.getWeapon().getWeaponAnimation().getHitboxes()[i].width,
+					player.getWeapon().getWeaponAnimation().getHitboxes()[i].height);
+		}
+		for (Breakable b: ruangan.getBreakables()) {
+			shapeRenderer.rect(b.getHitbox().x, b.getHitbox().y, b.getHitbox().width, b.getHitbox().height);
+		}
+		for (Drops d: ruangan.getDrops()) {
+			shapeRenderer.rect(d.getHitbox().x, d.getHitbox().y, d.getHitbox().width, d.getHitbox().height);
 		}
 		shapeRenderer.end();
 	}
@@ -267,6 +281,7 @@ public class GameMain extends Game {
 		if (this.player.getWeapon().getWeaponAnimation() instanceof MagicWeaponAnimation && Gdx.input.isButtonJustPressed(0) && this.attackCooldown == 0.0F) {
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
+			player.addMana(-5);
 		}
 
 		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
