@@ -11,10 +11,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.MainMenuUI;
+import com.gdx.UI.PlayerUI;
 import com.gdx.objects.*;
 import com.gdx.objects.playerAnimationHandling.MagicPlayerAnimation;
 import com.gdx.objects.playerAnimationHandling.MeleePlayerAnimation;
@@ -88,15 +88,15 @@ public class GameMain extends Game {
 		font = new BitmapFont();
 		text = new BitmapFontCache(font);
 
-		this.floors = new ArrayList();
+		this.floors = new ArrayList<>();
 		entities = new ArrayList<>();
 		shapeRenderer = new ShapeRenderer();
 		isOnDebug = false;
 		this.ruangan = new Ruangan("dungeon");
-		this.ruangan.initialize(5, 1);
+		this.ruangan.initialize(101, 1);
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeMagicPlayer();
+		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(300);
 		UI = new PlayerUI(player);
@@ -121,10 +121,6 @@ public class GameMain extends Game {
 		this.stateTime += Gdx.graphics.getDeltaTime();
 		this.player.canMoveFree();
 		UI.draw(batch);
-
-		for (int i = 0; i < ruangan.getMonsters().size(); i++) {
-				ruangan.getMonsters().get(i).takeDamage(10);
-		}
 
 		if ((double) this.player.getPosY() >= this.ruangan.getUpperborder().getY() - 20.0) {
 			this.player.setCanMoveUp(false);
@@ -201,7 +197,7 @@ public class GameMain extends Game {
 
 	public Player makeMeleePlayer() {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
-		Weapon weapon = new Weapon("Excalibur", "OP", 99, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
+		Weapon weapon = new Weapon("Excalibur", "OP", 30, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
 		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;

@@ -1,5 +1,6 @@
 package com.gdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,10 +41,11 @@ public class Static {
     /**
      * menggambar floor untuk level dungeon
      * @param batch spriteBatch untuk fungsi draw
-     * @param tiles png dari asset tiles.png
      */
-    public static void drawDungeon(SpriteBatch batch, Texture tiles){
+    public static void drawDungeon(SpriteBatch batch){
         //textures
+        GameMain app = (GameMain) Gdx.app.getApplicationListener();
+        Texture tiles = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
         TextureRegion wallBump = new TextureRegion(tiles, 8, 0, 55, 50);
         TextureRegion wallBumpWithShadow = new TextureRegion(tiles, 0, 0, 63, 50);
         TextureRegion walls = new TextureRegion(tiles, 8, 0, 32, 50);
@@ -100,7 +102,9 @@ public class Static {
     /**
      * dungeon shop room
      */
-    public static void drawDungeonShop(SpriteBatch batch, Texture tiles) {
+    public static void drawDungeonShop(SpriteBatch batch) {
+        GameMain app = (GameMain) Gdx.app.getApplicationListener();
+        Texture tiles = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
         TextureRegion walls = new TextureRegion(tiles, 8, 0, 32, 50);
         TextureRegion closedDoor = new TextureRegion(tiles, 0, 112, 32, 50);
         TextureRegion sideWall = new TextureRegion(tiles, 0, 50, 3, 24);

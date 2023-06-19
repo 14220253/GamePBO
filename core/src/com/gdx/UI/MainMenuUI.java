@@ -57,7 +57,7 @@ public class MainMenuUI {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //code buat pindah scene
-                System.out.println("HIIIIIIII");
+//                System.out.println("HIIIIIIII");
             }
         });
         startButton.setX(240);

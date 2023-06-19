@@ -70,8 +70,7 @@ public class Ruangan {
     public void draw(SpriteBatch batch, float stateTime, Player player) {
         //map
         if (type.equalsIgnoreCase("Dungeon")) {
-            texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-            Static.drawDungeon(batch, texture);
+            Static.drawDungeon(batch);
             leftBorder = new Rectangle(48, 40, 5, 500);
             rightBorder = new Rectangle(710, 40, 5, 500);
             bottomBorder = new Rectangle(48, 55, 705, 8);
@@ -82,7 +81,7 @@ public class Ruangan {
         }
         else if (type.equalsIgnoreCase("Shop")) {
             texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-            Static.drawDungeonShop(batch, texture);
+            Static.drawDungeonShop(batch);
             rightBorder = new Rectangle(510, 203, 5, 300);
             leftBorder = new Rectangle(205, 203, 5, 300);
             bottomBorder = new Rectangle(205, 213, 347, 8);
@@ -103,7 +102,7 @@ public class Ruangan {
             for (Monster monster : monsters) {
                 monster.draw(batch, stateTime);
             }
-            //COINS
+            //COLLECT FLOOR ITEMS
             for (int i = 0; i < drops.size(); i++) {
                 if (Static.rectangleCollisionDetect(player.getHitBox(), drops.get(i).getHitbox())) {
                     if (drops.get(i).getType() == Drops.Type.COIN) {
@@ -124,12 +123,7 @@ public class Ruangan {
             }
         }
 
-        for (int i = 0; i < monsters.size(); i++) {
-            if (monsters.get(i).getState() == Monster.State.DEAD) {
-                drops.add(new Drops(monsters.get(i).getPosX(), monsters.get(i).getPosY(), level, Drops.Type.COIN));
-                monsters.remove(i);
-            }
-        }
+        //PLAYER ATTACKING
         if (player.isAttacking()) {
             for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
                 for (Breakable breakable : breakables) {
@@ -138,6 +132,20 @@ public class Ruangan {
                         breakable.setState(Breakable.State.HALFBROKEN);
                     }
                 }
+                for (Monster monster:monsters) {
+                    if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
+                            monster.getHitBox())) {
+                        monster.takeDamage(player.getAttack());
+                    }
+                }
+            }
+        }
+
+        //MONSTER DIES
+        for (int i = 0; i < monsters.size(); i++) {
+            if (monsters.get(i).getState() == Monster.State.DEAD) {
+                drops.add(new Drops(monsters.get(i).getPosX(), monsters.get(i).getPosY(), level, Drops.Type.COIN));
+                monsters.remove(i);
             }
         }
 

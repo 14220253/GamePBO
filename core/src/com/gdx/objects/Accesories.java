@@ -11,4 +11,9 @@ public class Accesories extends Item{
     public Accesories(String itemName, String itemDescription) {
         super(itemName, itemDescription);
     }
+
+    @Override
+    void itemDetails() {
+
+    }
 }

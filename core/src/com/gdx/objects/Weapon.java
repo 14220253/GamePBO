@@ -65,4 +65,13 @@ public class Weapon extends Item{
     public void drawAttack(Player player, float frameTime, Batch batch){
         weaponAnimation.attack(player,textureRegions,frameTime,batch,sizeScaling);
     }
+
+    @Override
+    void itemDetails() {
+
+    }
+
+    public int getAtk() {
+        return atk;
+    }
 }

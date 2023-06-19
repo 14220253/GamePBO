@@ -12,7 +12,7 @@ import com.gdx.game.Static;
 
 import java.awt.*;
 
-public class Monster extends Karakter implements Attackable{
+public class Monster extends Karakter {
     //musuh
 
     //stats
@@ -23,23 +23,23 @@ public class Monster extends Karakter implements Attackable{
     //lvl
 
     //multiplier untuk stats per naik level
-    protected double hpMultiplier;
-    protected double damageMultiplier;
-    protected double defenceMultiplier;
-    protected Texture idle;
-    protected Texture run;
-    protected Texture die;
-    protected Animation<TextureRegion> animationIdleRight;
-    protected Animation<TextureRegion> animationIdleLeft;
-    protected Animation<TextureRegion> animationRunLeft;
-    protected Animation<TextureRegion> animationRunRight;
-    protected Animation<TextureRegion> animationDeathLeft;
-    protected Animation<TextureRegion> animationDeathRight;
-    protected TextureRegion sprite;
-    protected TextureRegion currentFrame;
-    protected Texture healthBar;
-    protected double maxHealth;
-    protected GameMain app;
+    private double hpMultiplier;
+    private double damageMultiplier;
+    private double defenceMultiplier;
+    private Texture idle;
+    private Texture run;
+    private Texture die;
+    private Animation<TextureRegion> animationIdleRight;
+    private Animation<TextureRegion> animationIdleLeft;
+    private Animation<TextureRegion> animationRunLeft;
+    private Animation<TextureRegion> animationRunRight;
+    private Animation<TextureRegion> animationDeathLeft;
+    private Animation<TextureRegion> animationDeathRight;
+    private TextureRegion sprite;
+    private TextureRegion currentFrame;
+    private Texture healthBar;
+    private double maxHealth;
+    private GameMain app;
     private State state = State.ALIVE;
     private Movement movement = Movement.IDLE;
     private String type;
@@ -164,7 +164,6 @@ public class Monster extends Karakter implements Attackable{
         }
     }
 
-    @Override
     public void die(SpriteBatch batch, float stateTime) {
         getHitBox().setSize(0, 0);
         if (isLookingLeft()) {

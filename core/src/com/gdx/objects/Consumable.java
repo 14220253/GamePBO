@@ -10,4 +10,9 @@ public class Consumable extends Item{
     public Consumable(String itemName, String itemDescription) {
         super(itemName, itemDescription);
     }
+
+    @Override
+    void itemDetails() {
+
+    }
 }

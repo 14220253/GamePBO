@@ -32,7 +32,7 @@ public class MeleeWeaponAnimation implements WeaponAnimation{
             angle = getAngleToMouse(fixX, fixY, (float) (player.getHitBox().getX() + (player.getHitBox().width / 2.0f)), (player.getPosY() + (player.getHitBox().height / 2.0f)));
         }
         angleTime = (angle+45f) + getMaxFrameTime() - (540 * frameTime);
-        System.out.println(angleTime);
+//        System.out.println(angleTime);
         vector2 = getOffsetFromAngle(angleTime, sizeScaling,12f);
         vector3 = getOffsetFromAngle(angleTime, sizeScaling,24f);
         vector4 = getOffsetFromAngle(angleTime, sizeScaling,36f);
@@ -45,16 +45,16 @@ public class MeleeWeaponAnimation implements WeaponAnimation{
         float x = (player.getPosX()+player.getWidth()/2) - (width/2) + 5 +  offsetX;
         float y = (player.getPosY()+player.getHeight()/2) - (height/2) + offsetY;
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line); // ini di comment kalau nggak mau liat hitbox
-        shapeRenderer.rect(x, y, width, height); // ini di comment kalau nggak mau liat hitbox
-        shapeRenderer.end(); // ini di comment kalau nggak mau liat hitbox
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line); // ini di comment kalau nggak mau liat hitbox
+//        shapeRenderer.rect(x, y, width, height); // ini di comment kalau nggak mau liat hitbox
+//        shapeRenderer.end(); // ini di comment kalau nggak mau liat hitbox
 
         return new Rectangle((int) x, (int) y, (int) width, (int) height);
     }
     public Vector2 getOffsetFromAngle(float angle, float sizeScaling, float length) {
         length *= sizeScaling;
         float radians = MathUtils.degreesToRadians * angle;
-        System.out.println(angle);
+//        System.out.println(angle);
         float x = length * MathUtils.cos(radians);
         float y = length * MathUtils.sin(radians);
         return new Vector2(x, y);

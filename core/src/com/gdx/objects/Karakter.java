@@ -1,5 +1,6 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.awt.*;
@@ -94,5 +95,10 @@ public abstract class Karakter {
 
     public void setLookingLeft(boolean lookingLeft) {
         this.lookingLeft = lookingLeft;
+    }
+    abstract void takeDamage(double dmg);
+
+    public int getAttack() {
+        return attack;
     }
 }

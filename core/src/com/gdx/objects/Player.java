@@ -2,7 +2,6 @@ package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,9 +9,8 @@ import com.gdx.Exceptions.InventoryFullException;
 import com.gdx.objects.playerAnimationHandling.PlayerAnimation;
 
 import java.awt.*;
-import java.awt.geom.Arc2D;
 
-public class Player extends Karakter implements Attackable { //interface Skill belum tau
+public class Player extends Karakter { //interface Skill belum tau
     //karakter yang dikendalikan
 
     //stats
@@ -48,6 +46,10 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     Weapon weapon;
 
     public Player(Weapon weapon, PlayerAnimation playerAnimation) {
+        super.health = maxHealth;
+        super.attack = 1;
+        super.defense = 0;
+        super.level = 1;
         this.weapon = weapon;
         this.playerAnimation = playerAnimation;
         currentFrame = playerAnimation.getCurrentFrame(0,true,isAttacking,isLookingLeft,!isRunning);
@@ -83,12 +85,6 @@ public class Player extends Karakter implements Attackable { //interface Skill b
             this.health -= checkNegativeDmg((dmg-defense));
             checkHealth();
         }
-    }
-
-    @Override
-    public void die(SpriteBatch batch, float stateTime) {
-        //TODO rian what is this, i already make death animation in playerAnimationHandling that runs on player(update)
-        //kan pake interface attackable, jadi entity yang bisa diattack perlu implement takedamage() dgn die()
     }
 
     public void revive(int health){
@@ -274,4 +270,9 @@ public class Player extends Karakter implements Attackable { //interface Skill b
     public void addMana(int amount) {
         mana = Math.min(100, mana + amount);
     }
+    @Override
+    public int getAttack() {
+        return super.getAttack() * weapon.getAtk();
+    }
+
 }

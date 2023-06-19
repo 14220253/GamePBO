@@ -13,4 +13,5 @@ public abstract class Item {
         this.itemName = itemName;
         this.itemDescription = itemDescription;
     }
+    abstract void itemDetails();
 }

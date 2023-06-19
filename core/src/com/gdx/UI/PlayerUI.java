@@ -1,4 +1,4 @@
-package com.gdx.objects;
+package com.gdx.UI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.game.GameMain;
 import com.gdx.game.Static;
+import com.gdx.objects.Player;
 
 public class PlayerUI {
     Player player;

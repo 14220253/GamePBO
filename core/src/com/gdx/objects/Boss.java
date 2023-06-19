@@ -1,10 +1,8 @@
 package com.gdx.objects;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Boss extends Karakter implements Skill, Attackable{
+public class Boss extends Karakter implements Skill {
     //musuh boss
 
     //stats
@@ -19,7 +17,6 @@ public class Boss extends Karakter implements Skill, Attackable{
         checkHealth();
     }
 
-    @Override
     public void die(SpriteBatch batch, float stateTime) {
 
     }
