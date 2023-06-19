@@ -36,13 +36,15 @@ public class PlayerUI {
         text = new BitmapFontCache(font);
     }
     public void draw(SpriteBatch batch) {
-        double hpPercent = player.getHpPercent();
+        //HEALTH
+        hpBar.setRegion(0, 33, (int) (128 *  player.getHpPercent()), 32);
         batch.draw(emptyBar, 50, 650, 384, 32);
-        hpBar.setRegion(0, 33, 128 * (int) hpPercent, 32);
-        batch.draw(hpBar, 50, 650, (float) (384 * hpPercent), 32);
-        batch.draw(emptyBar, 50, 600, 256, 32);
+        batch.draw(hpBar, 50, 650, (float) (384 * player.getHpPercent()), 32);
+        //MANA
         manaBar.setRegion(0, 65, (int) (128 * player.getManaPercent()), 32);
+        batch.draw(emptyBar, 50, 600, 256, 32);
         batch.draw(manaBar, 50, 600, (float) (256 * player.getManaPercent()), 32);
+        //COIN
         batch.draw(coinIcon, 700, 616, 64, 64);
         text.setText(String.valueOf(player.getInventory().getCoins()),
                 670 - (16 * (Static.getDigits(player.getInventory().getCoins()))), 660);

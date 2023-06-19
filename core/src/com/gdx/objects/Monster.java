@@ -160,7 +160,7 @@ public class Monster extends Karakter {
         if (immunityFrames == 0) {
             health -= checkNegativeDmg(dmg - defense);
             checkHealth();
-            immunityFrames = 30;
+            immunityFrames = 50;
         }
     }
 

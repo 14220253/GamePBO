@@ -2,6 +2,7 @@ package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -43,6 +44,7 @@ public class Player extends Karakter { //interface Skill belum tau
     private int moveLeftKey;
     private float speed; //speed in units per frame
     private float deathStateTime;
+    private int immunityFrames;
     Weapon weapon;
 
     public Player(Weapon weapon, PlayerAnimation playerAnimation) {
@@ -80,10 +82,13 @@ public class Player extends Karakter { //interface Skill belum tau
 
     @Override
     public void takeDamage(double dmg) {
-        int roll = (int)(Math.random()*101); // random 0-100
-        if (roll > getEvasion()){ // kena dmg jika random roll melebihi evasion
-            this.health -= checkNegativeDmg((dmg-defense));
-            checkHealth();
+        if (immunityFrames == 0) {
+            int roll = (int)(Math.random()*101); // random 0-100
+            if (roll > getEvasion()){ // kena dmg jika random roll melebihi evasion
+                this.health -= checkNegativeDmg((dmg-defense));
+                checkHealth();
+                immunityFrames = 100;
+            }
         }
     }
 
@@ -210,7 +215,18 @@ public class Player extends Karakter { //interface Skill belum tau
         return sprite.getRegionHeight();
     }
     public void draw(Batch batch){
-        batch.draw(currentFrame,getPosX(),getPosY(),0,0,currentFrame.getRegionWidth(),currentFrame.getRegionHeight(),playerAnimation.getScalingX(),playerAnimation.getScalingY(),0);
+        if (immunityFrames != 0) {
+            batch.setColor(Color.RED);
+            batch.draw(currentFrame,getPosX(),getPosY(),0,0,
+                    currentFrame.getRegionWidth(),currentFrame.getRegionHeight(),
+                    playerAnimation.getScalingX(),playerAnimation.getScalingY(),0);
+            immunityFrames--;
+            batch.setColor(1, 1, 1, 1);
+        } else {
+            batch.draw(currentFrame,getPosX(),getPosY(),0,0,
+                    currentFrame.getRegionWidth(),currentFrame.getRegionHeight(),
+                    playerAnimation.getScalingX(),playerAnimation.getScalingY(),0);
+        }
     }
     public void update(float deltaTime, float stateTime){
         if (health <= 0 && !isDying){

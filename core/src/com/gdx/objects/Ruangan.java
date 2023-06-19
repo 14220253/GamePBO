@@ -123,6 +123,14 @@ public class Ruangan {
             }
         }
 
+        //MONSTER HIT PLAYER
+        for(Monster monster: monsters) {
+            if (Static.rectangleCollisionDetect(monster.getHitBox(), player.getHitBox())) {
+                monster.takeDamage(player.getAttack());
+                player.takeDamage(monster.getAttack());
+            }
+        }
+
         //PLAYER ATTACKING
         if (player.isAttacking()) {
             for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
