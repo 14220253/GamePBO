@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
 
@@ -24,11 +25,15 @@ public class Ruangan {
     private ArrayList<Monster> monsters;
     private ArrayList<Breakable> breakables;
     private ArrayList<Drops> drops;
-    private Rectangle doorHitbox;
+    private ArrayList<Buffs> buffs;
+    private Rectangle centerDoorHitbox;
     private Rectangle leftDoorHitbox;
     private Rectangle rightDoorHitbox;
     private GameMain app;
+    private boolean showingCard;
     private int level;
+    private int roomNumber;
+    boolean cooldown;
 
 
     public Ruangan(String type) {
@@ -40,18 +45,23 @@ public class Ruangan {
      * @param template 1-6 monster location template
      * @param level level scaling (belum diimplement)
      */
-    public void initialize(int template, int level) {
+    public void initialize(int template, int level, int roomNumber) {
         this.level = level;
         app = (GameMain) Gdx.app.getApplicationListener();
         monsters = new ArrayList<>();
         breakables = new ArrayList<>();
         drops = new ArrayList<>();
-        doorHitbox = new Rectangle(365, 475, 100, 150);
+        buffs = new ArrayList<>();
+        centerDoorHitbox = new Rectangle(365, 475, 100, 150);
         leftDoorHitbox = new Rectangle(-25, 265, 150, 100);
         rightDoorHitbox = new Rectangle(675, 265, 150, 100);
+        this.roomNumber = roomNumber;
+        showingCard = false;
+        cooldown = false;
 
         initializeBreakable();
         initializeTemplate(template, level);
+        initializeBuffs(roomNumber);
     }
     private void initializeBreakable() {
         Random randomizer = new Random();
@@ -66,11 +76,31 @@ public class Ruangan {
         }
     }
 
+    private void initializeBuffs(int roomNumber) {
+        while (buffs.size() < 3) {
+            Buffs buff;
+            if (roomNumber == 1 || roomNumber == 2 || roomNumber == 3){ //tier1
+                buff = new Buffs(level, 1);
+                buffs.add(buff);
+            }
+            if (roomNumber == 4 || roomNumber == 5){ //tier2
+                buff = new Buffs(level, 2);
+                buffs.add(buff);
+            }
+            if (roomNumber == 6) { //shop
+                break;
+            }
+            if (roomNumber == 7) {
+                buff = new Buffs(level, 3); //boss
+                buffs.add(buff);
+            }
+        }
+    }
 
     public void draw(SpriteBatch batch, float stateTime, Player player) {
         //map
         if (type.equalsIgnoreCase("Dungeon")) {
-            Static.drawDungeon(batch);
+            Drawer.drawDungeon(batch);
             leftBorder = new Rectangle(48, 40, 5, 500);
             rightBorder = new Rectangle(710, 40, 5, 500);
             bottomBorder = new Rectangle(48, 55, 705, 8);
@@ -81,7 +111,7 @@ public class Ruangan {
         }
         else if (type.equalsIgnoreCase("Shop")) {
             texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
-            Static.drawDungeonShop(batch);
+            Drawer.drawDungeonShop(batch);
             rightBorder = new Rectangle(510, 203, 5, 300);
             leftBorder = new Rectangle(205, 203, 5, 300);
             bottomBorder = new Rectangle(205, 213, 347, 8);
@@ -158,7 +188,7 @@ public class Ruangan {
         }
 
         //PINTU
-        if ((Static.rectangleCollisionDetect(player.hitBox, doorHitbox) ||
+        if ((Static.rectangleCollisionDetect(player.hitBox, centerDoorHitbox) ||
                 Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox) ||
                         Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) && monsters.size() == 0) {
 
@@ -169,7 +199,31 @@ public class Ruangan {
             text.draw(batch);
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                //TODO
+                if (!showingCard) {
+                    showingCard = true;
+                    cooldown = true;
+                }
+            }
+
+            if (showingCard) {
+                player.cannotMove();
+                if (Static.rectangleCollisionDetect(player.hitBox, centerDoorHitbox)) {
+                    Drawer.drawCard(batch, buffs.get(0));
+                }
+                if (Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox)) {
+                    Drawer.drawCard(batch, buffs.get(1));
+                }
+                if (Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) {
+                    Drawer.drawCard(batch, buffs.get(2));
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                    if (!cooldown) {
+                        showingCard = false;
+                        player.canMoveFree();
+                    }
+                    else
+                        cooldown = false;
+                }
             }
         }
     }
@@ -419,18 +473,6 @@ public class Ruangan {
             monsters.add(monster4);
             monsters.add(monster5);
         }
-        if (template == 101) {
-            Monster monster1;
-            if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster1= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            monsters.add(monster1);
-        }
     }
 
     public ArrayList<Monster> getMonsters() {
@@ -454,10 +496,6 @@ public class Ruangan {
         return upperborder;
     }
 
-    public Rectangle getDoorHitbox() {
-        return doorHitbox;
-    }
-
     public ArrayList<Breakable> getBreakables() {
         return breakables;
     }
@@ -465,4 +503,6 @@ public class Ruangan {
     public ArrayList<Drops> getDrops() {
         return drops;
     }
+
+    public boolean isShowingCard() {return showingCard;}
 }

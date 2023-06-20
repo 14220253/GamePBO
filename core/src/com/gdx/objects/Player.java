@@ -21,7 +21,7 @@ public class Player extends Karakter { //interface Skill belum tau
     //def
     //lvl
     private int mana;
-    private final int maxHealth = 100; //default max hp 100, nanti bisa ditambah
+    private int maxHealth = 100; //default max hp 100, nanti bisa ditambah
     private final int evasion = 0;
     private final double healMultiplier = 1; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
     private double exp;
@@ -290,5 +290,4 @@ public class Player extends Karakter { //interface Skill belum tau
     public int getAttack() {
         return super.getAttack() * weapon.getAtk();
     }
-
 }

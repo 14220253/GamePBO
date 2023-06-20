@@ -83,6 +83,7 @@ public class GameMain extends Game {
 		manager.load("healthbar/SleekBars.png", Texture.class);
 		manager.load("coins/MonedaD.png", Texture.class);
 		manager.load("coins/Collected.png", Texture.class);
+		manager.load("pixelCardAssest_V01.png", Texture.class);
 		this.manager.finishLoading();
 
 		font = new BitmapFont();
@@ -93,7 +94,7 @@ public class GameMain extends Game {
 		shapeRenderer = new ShapeRenderer();
 		isOnDebug = false;
 		this.ruangan = new Ruangan("dungeon");
-		this.ruangan.initialize(101, 1);
+		this.ruangan.initialize(1, 1, 1);
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		this.player = this.makeMeleePlayer();
@@ -101,26 +102,37 @@ public class GameMain extends Game {
 		this.player.setPosY(300);
 		UI = new PlayerUI(player);
 		this.mainMenuUI.forCreate();
+		this.player.canMoveFree();
 	}
 
 	public void render() {
 		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
 		this.batch.begin();
 		this.mainGame(this.batch);
-		if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
-			isOnDebug = !isOnDebug;
-		}
-		if(isOnDebug) {
-			enableDebug();
-		}
 		this.batch.end();
+	}
+
+	@Override
+	public void pause() {
+		super.pause();
 	}
 
 	public void mainGame(SpriteBatch batch) {
 		this.ruangan.draw(batch, this.stateTime, player);
 		this.stateTime += Gdx.graphics.getDeltaTime();
-		this.player.canMoveFree();
 		UI.draw(batch);
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
+			isOnDebug = !isOnDebug;
+		}
+		if(isOnDebug) {
+			try {
+				enableDebug();
+			} catch (NullPointerException e) {
+				System.out.println(e.getMessage());
+			}
+			catch (IllegalStateException ignored){}
+		}
 
 		if ((double) this.player.getPosY() >= this.ruangan.getUpperborder().getY() - 20.0) {
 			this.player.setCanMoveUp(false);
@@ -139,7 +151,9 @@ public class GameMain extends Game {
 		}
 
 		this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
-		this.player.draw(batch);
+		if (!ruangan.isShowingCard()) {
+			this.player.draw(batch);
+		}
 		this.updatePlayerAttacks();
 		this.updateAllProjectile();
 	}
@@ -150,7 +164,7 @@ public class GameMain extends Game {
 		font.dispose();
 	}
 
-	public void enableDebug() {
+	public void enableDebug() throws NullPointerException, IllegalStateException{
 		getEnities();
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		for (Karakter entity : entities) {

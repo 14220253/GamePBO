@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
 import com.gdx.game.Static;
 
@@ -49,7 +50,7 @@ public class MeleePlayerAnimation implements PlayerAnimation{
         temp2[1] = (new TextureRegion(textureIdle,36,1,23,30));
         temp2[2] = (new TextureRegion(textureIdle,68,1,23,30));
         temp2[3] = (new TextureRegion(textureIdle,100,1,23,30));
-        Static.flipImageX(temp2);
+        Animator.flipImageX(temp2);
         playerIdleLeft = new Animation<>(0.2f, temp2);
 
         textureRun = app.getManager().get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png");
@@ -67,7 +68,7 @@ public class MeleePlayerAnimation implements PlayerAnimation{
         temp4[3] = (new TextureRegion(textureRun,213,33,23,30));
         temp4[4] = (new TextureRegion(textureRun,277,33,23,30));
         temp4[5] = (new TextureRegion(textureRun,341,33,23,30));
-        Static.flipImageX(temp4);
+        Animator.flipImageX(temp4);
         playerRunLeft = new Animation<>(0.2f, temp4);
 
         textureDying = app.getManager().get("Pixel Crawler - FREE - 1.8/Heroes/Knight/Death/Death-Sheet.png");
@@ -85,7 +86,7 @@ public class MeleePlayerAnimation implements PlayerAnimation{
         temp6[3] = (new TextureRegion(textureDying,147,1,35,30));
         temp6[4] = (new TextureRegion(textureDying,196,1,34,30));
         temp6[5] = (new TextureRegion(textureDying,244,1,34,30));
-        Static.flipImageX(temp6);
+        Animator.flipImageX(temp6);
         playerDyingLeft = new Animation<>(0.6f, temp6);
 
         maxDyingStateTime = 0.6f * (6);

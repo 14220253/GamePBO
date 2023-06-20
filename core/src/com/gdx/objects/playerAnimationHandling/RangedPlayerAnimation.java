@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
 import com.gdx.game.Static;
 
@@ -58,7 +59,7 @@ public class RangedPlayerAnimation implements PlayerAnimation{
         temp2[1] = (new TextureRegion(textureIdle,37,0,23,31));
         temp2[2] = (new TextureRegion(textureIdle,69,0,23,31));
         temp2[3] = (new TextureRegion(textureIdle,101,0,23,31));
-        temp2 = Static.flipImageX(temp2);
+        temp2 = Animator.flipImageX(temp2);
         playerIdleLeft = new Animation<>(0.2f, temp2);
 
         textureRun = app.getManager().get("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Run/Run-Sheet.png");
@@ -76,7 +77,7 @@ public class RangedPlayerAnimation implements PlayerAnimation{
         temp4[3] = (new TextureRegion(textureRun,212,33,23,31));
         temp4[4] = (new TextureRegion(textureRun,275,33,23,31));
         temp4[5] = (new TextureRegion(textureRun,339,33,23,31));
-        temp4 = Static.flipImageX(temp4);
+        temp4 = Animator.flipImageX(temp4);
         playerRunLeft= new Animation<>(0.2f, temp4);
 
         textureDying = app.getManager().get("Pixel Crawler - FREE - 1.8/Heroes/Rogue/Death/Death-Sheet.png");
@@ -94,7 +95,7 @@ public class RangedPlayerAnimation implements PlayerAnimation{
         temp6[3] = (new TextureRegion(textureDying,213,1,35,30));
         temp6[4] = (new TextureRegion(textureDying,277,1,36,30));
         temp6[5] = (new TextureRegion(textureDying,341,1,36,30));
-        Static.flipImageX(temp6);
+        Animator.flipImageX(temp6);
         playerDyingLeft = new Animation<>(0.6f, temp6);
 
         maxDyingStateTime = 0.6f * (6);

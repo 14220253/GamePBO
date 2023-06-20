@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
 import com.gdx.game.Static;
 
@@ -58,24 +59,24 @@ public class Monster extends Karakter {
             idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
             run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet-Resize.png");
             die = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
-            animationIdleRight = Static.animate(idle,4, 1, false, false);
-            animationIdleLeft = Static.animate(idle,4, 1, true, false);
-            animationRunRight = Static.animate(run, 6, 1, false, false);
-            animationRunLeft = Static.animate(run,6, 1, true, false);
-            animationDeathRight = Static.animate(die, 6, 1, false, false, 0.7f);
-            animationDeathLeft = Static.animate(die, 6, 1, true, false, 0.7f);
+            animationIdleRight = Animator.animate(idle,4, 1, false, false);
+            animationIdleLeft = Animator.animate(idle,4, 1, true, false);
+            animationRunRight = Animator.animate(run, 6, 1, false, false);
+            animationRunLeft = Animator.animate(run,6, 1, true, false);
+            animationDeathRight = Animator.animate(die, 6, 1, false, false, 0.7f);
+            animationDeathLeft = Animator.animate(die, 6, 1, true, false, 0.7f);
             this.type = type;
         }
         if (type.equalsIgnoreCase("skeleton")) {
             idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
             run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet-Resize.png");
             die = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
-            animationIdleRight = Static.animate(idle,4, 1, false, false);
-            animationIdleLeft = Static.animate(idle,4, 1, true, false);
-            animationRunRight = Static.animate(run, 6, 1, false, false);
-            animationRunLeft = Static.animate(run,6, 1, true, false);
-            animationDeathRight = Static.animate(die, 8, 1, false, false, 0.5f);
-            animationDeathLeft = Static.animate(die, 8, 1, true, false, 0.5f);
+            animationIdleRight = Animator.animate(idle,4, 1, false, false);
+            animationIdleLeft = Animator.animate(idle,4, 1, true, false);
+            animationRunRight = Animator.animate(run, 6, 1, false, false);
+            animationRunLeft = Animator.animate(run,6, 1, true, false);
+            animationDeathRight = Animator.animate(die, 8, 1, false, false, 0.5f);
+            animationDeathLeft = Animator.animate(die, 8, 1, true, false, 0.5f);
             this.type = type;
         }
 
@@ -166,6 +167,7 @@ public class Monster extends Karakter {
 
     public void die(SpriteBatch batch, float stateTime) {
         getHitBox().setSize(0, 0);
+        getHitBox().setLocation(0, 0);
         if (isLookingLeft()) {
             currentFrame = animationDeathLeft.getKeyFrame(stateTime, false);
         }

@@ -18,32 +18,23 @@ public class Floor {
     }
 
     public void initialize() {
-        Ruangan ruangan1 = new Ruangan("dungeon");
-        ruangan1.initialize(new Random().nextInt(1, 7), this.level);
-        rooms.add(ruangan1);
-
-        Ruangan ruangan2= new Ruangan("dungeon");
-        ruangan2.initialize(new Random().nextInt(1, 7), this.level);
-        rooms.add(ruangan2);
-
-        Ruangan ruangan3= new Ruangan("dungeon");
-        ruangan3.initialize(new Random().nextInt(1, 7), this.level);
-        rooms.add(ruangan3);
-
-        Ruangan ruangan4= new Ruangan("dungeon");
-        ruangan4.initialize(new Random().nextInt(1, 7), this.level);
-        rooms.add(ruangan4);
-
-        Ruangan ruangan5= new Ruangan("dungeon");
-        ruangan5.initialize(new Random().nextInt(1, 7), this.level);
-        rooms.add(ruangan5);
-
-        Ruangan ruanganShop = new Ruangan("shop");
-        ruanganShop.initialize(0, this.level);
-        rooms.add(ruanganShop);
-
-        Ruangan ruanganBoss = new Ruangan("dungeon");
-        ruanganBoss.initialize(0, this.level);
-        rooms.add(ruanganBoss);
+        for (int i = 0; i < 7; i++) {
+            Ruangan ruangan;
+            if (i < 5) {
+                 ruangan = new Ruangan("dungeon");
+                ruangan.initialize(new Random().nextInt(1, 7), this.level, (i + 1));
+                rooms.add(ruangan);
+            }
+            if (i == 5) {
+                Ruangan ruanganShop = new Ruangan("shop");
+                ruanganShop.initialize(100, this.level, (i + 1));
+                rooms.add(ruanganShop);
+            }
+            if (i == 6) {
+                Ruangan ruanganBoss = new Ruangan("dungeon");
+                ruanganBoss.initialize(0, this.level, (i + 1));
+                rooms.add(ruanganBoss);
+            }
+        }
     }
 }

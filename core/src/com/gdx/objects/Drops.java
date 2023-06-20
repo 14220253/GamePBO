@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
 import com.gdx.game.Static;
 
@@ -42,23 +43,23 @@ public class Drops {
         switch (type) {
             case COIN:
                 texture = app.getManager().get("coins/MonedaD.png");
-                animation = Static.animate(texture, 5, 1, false, false);
+                animation = Animator.animate(texture, 5, 1, false, false);
                 amount = Math.round(new Random().nextFloat(0.5f, 5.49f)) * floor;
                 break;
             case HEALTH:
                 texture = app.getManager().get("heart.png");
-                animation = Static.animate(texture, 3, 3, false, false, 2);
+                animation = Animator.animate(texture, 3, 3, false, false, 2);
                 amount = 10;
                 break;
             case MANA:
                 texture = app.getManager().get("star.png");
-                animation = Static.animate(texture, 4, 1, false, false);
+                animation = Animator.animate(texture, 4, 1, false, false);
                 amount = 10;
                 break;
         }
 
         Texture collected = app.getManager().get("coins/Collected.png");
-        collectAnimation = Static.animate(collected, 6, 1, false, false, 0.5f);
+        collectAnimation = Animator.animate(collected, 6, 1, false, false, 0.5f);
         state = State.AVALABLE;
         this.posX = posX;
         this.posY = posY;
