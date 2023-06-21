@@ -12,6 +12,7 @@ public class Buffs {
     private BuffType type;
     private int amount;
     private int level;
+    int tier;
 
     public enum BuffType{
         ATTACK,
@@ -20,12 +21,12 @@ public class Buffs {
         RESTORE_MANA,
         EVASION,
         MAX_HEALTH,
-        HEALTH_MULTIPLIER,
         WEAPON_SIZE
     }
 
     public Buffs(int level, int tier) {
         this.level = level;
+        this.tier = tier;
         switch (tier) {
             case 1:
                 generateTier1(tier);
@@ -57,7 +58,6 @@ public class Buffs {
         tier2Buffs.add(BuffType.RESTORE_HP);
         tier2Buffs.add(BuffType.RESTORE_MANA);
         tier2Buffs.add(BuffType.EVASION);
-        tier2Buffs.add(BuffType.HEALTH_MULTIPLIER);
         BuffType selected = tier2Buffs.get(new Random().nextInt(0, tier2Buffs.size()));
         type = selected;
 
@@ -69,7 +69,6 @@ public class Buffs {
         tier3Buffs.add(BuffType.ATTACK);
         tier3Buffs.add(BuffType.DEFENSE);
         tier3Buffs.add(BuffType.EVASION);
-        tier3Buffs.add(BuffType.HEALTH_MULTIPLIER);
         tier3Buffs.add(BuffType.MAX_HEALTH);
         tier3Buffs.add(BuffType.WEAPON_SIZE);
         BuffType selected = tier3Buffs.get(new Random().nextInt(0, tier3Buffs.size()));
@@ -115,10 +114,31 @@ public class Buffs {
                 amount = 10;
                 buffDescription = "Increases Max HP by " + amount;
                 break;
-            case HEALTH_MULTIPLIER:
-                buffName = "Healing Multiplier";
-                amount = 10;
-                buffDescription = "Increases Potion Healing Multiplier by" + amount + "%";
+        }
+    }
+
+    public void activate(Player player) {
+        switch (type) {
+            case ATTACK:
+                player.addAttack((double) player.getAttack() * ((double) amount / 100));
+                break;
+            case DEFENSE:
+                player.addDefense((double) player.getDefense() * ((double) amount / 100));
+                break;
+            case RESTORE_MANA:
+                player.addMana(amount);
+                break;
+            case RESTORE_HP:
+                player.addHealth(amount);
+                break;
+            case MAX_HEALTH:
+                player.addMaxHealth(amount);
+                break;
+            case EVASION:
+                player.addEvasion(amount);
+                break;
+            case WEAPON_SIZE:
+                player.addWeaponSize((double) player.getWeapon().getSizeScaling() * ((double) amount / 100));
                 break;
         }
     }
@@ -138,4 +158,6 @@ public class Buffs {
     public int getAmount() {
         return amount;
     }
+
+    public int getTier() {return tier;}
 }

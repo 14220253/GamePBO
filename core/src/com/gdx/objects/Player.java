@@ -22,7 +22,7 @@ public class Player extends Karakter { //interface Skill belum tau
     //lvl
     private int mana;
     private int maxHealth = 100; //default max hp 100, nanti bisa ditambah
-    private final int evasion = 0;
+    private int evasion = 0;
     private final double healMultiplier = 1; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
     private double exp;
     private Inventory inventory;
@@ -87,7 +87,7 @@ public class Player extends Karakter { //interface Skill belum tau
             if (roll > getEvasion()){ // kena dmg jika random roll melebihi evasion
                 this.health -= checkNegativeDmg((dmg-defense));
                 checkHealth();
-                immunityFrames = 100;
+                immunityFrames = 40;
             }
         }
     }
@@ -220,7 +220,7 @@ public class Player extends Karakter { //interface Skill belum tau
             batch.draw(currentFrame,getPosX(),getPosY(),0,0,
                     currentFrame.getRegionWidth(),currentFrame.getRegionHeight(),
                     playerAnimation.getScalingX(),playerAnimation.getScalingY(),0);
-            immunityFrames--;
+            immunityFrames -= 1 * Gdx.graphics.getDeltaTime();
             batch.setColor(1, 1, 1, 1);
         } else {
             batch.draw(currentFrame,getPosX(),getPosY(),0,0,
@@ -289,5 +289,24 @@ public class Player extends Karakter { //interface Skill belum tau
     @Override
     public int getAttack() {
         return super.getAttack() * weapon.getAtk();
+    }
+    public void addAttack(double amount){attack += amount;}
+    public void addDefense(double amount){defense += amount;}
+    public void addMaxHealth(int amount) {maxHealth += amount;}
+    public void addEvasion(int amount) {amount = Math.min(maxEvasion, evasion + amount);}
+    public void addWeaponSize(double amount) {
+        getWeapon().setSizeScaling(getWeapon().getSizeScaling() + amount);
+    }
+
+    public void printStats() {
+        System.out.println("attack: " + attack);
+        System.out.println("health: " + health);
+        System.out.println("defense: " + defense);
+        System.out.println("level: " + level);
+        System.out.println("mana: " + mana);
+        System.out.println("max health: " + maxHealth);
+        System.out.println("evasion: " + evasion);
+        System.out.println("max evasion: " + maxEvasion);
+        System.out.println();
     }
 }

@@ -98,7 +98,9 @@ public abstract class Karakter {
     }
     abstract void takeDamage(double dmg);
 
-    public int getAttack() {
-        return attack;
-    }
+    public int getAttack() {return attack;}
+
+    public int getDefense() {return defense;}
+
+    public int getLevel() {return level;}
 }

@@ -45,7 +45,6 @@ public class Animator {
     }
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration, int redundantFrames) {
         TextureRegion[] array = textureSplitter(texture, column, row, redundantFrames);
-        System.out.println(column);
         if (flipX || flipY) {
             for (TextureRegion t : array) {
                 t.flip(flipX, flipY);

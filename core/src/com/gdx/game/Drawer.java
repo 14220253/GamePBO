@@ -1,11 +1,18 @@
 package com.gdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.gdx.objects.Buffs;
 
 public class Drawer {
@@ -121,50 +128,96 @@ public class Drawer {
         GameMain app = (GameMain) Gdx.app.getApplicationListener();
         Texture cards = app.getManager().get("pixelCardAssest_V01.png");
 
-        BitmapFont font = new BitmapFont();
-        font.getData().setScale(2f);
-        BitmapFontCache text = new BitmapFontCache(font);
-
-
+        //CARD
         switch (buff.getType()) {
             case RESTORE_HP:
-            case HEALTH_MULTIPLIER:
-                drawRedCard(batch, buff, cards, text);
+                drawRedCard(batch, cards);
                 break;
             case DEFENSE:
             case RESTORE_MANA:
-                drawBlueCard(batch, buff, cards, text);
+                drawBlueCard(batch, cards);
                 break;
             case ATTACK:
-                drawGreyCard(batch, buff, cards, text);
+                drawGreyCard(batch, cards);
                 break;
             case EVASION:
-                drawGreenCard(batch, buff, cards, text);
+                drawGreenCard(batch, cards);
             case WEAPON_SIZE:
             case MAX_HEALTH:
-                drawYellowCard(batch, buff, cards, text);
+                drawYellowCard(batch, cards);
         }
+
+        //BASE TEXT
+        switch (buff.getTier()) {
+            case 1:
+                drawBronzeBase(batch, cards);
+                break;
+            case 2:
+                drawStoneBase(batch, cards);
+                break;
+            case 3:
+                drawGoldBase(batch, cards);
+                break;
+        }
+
+        //LOGO BASE
+        drawLogoBase(batch, cards);
+
+        //LOGO
+
+        //TEXT
+        BitmapFont font = new BitmapFont();
+        font.getData().setScale(2f);
+        BitmapFontCache text = new BitmapFontCache(font);
+        text.setColor(Color.BLACK);
+        text.setText(buff.getBuffName(), 320,265);
+        text.draw(batch);
+        text.setColor(Color.WHITE);
+        text.setText(buff.getBuffName(), 320, 263);
+        text.draw(batch);
+        font.getData().setScale(1.5f);
+        text = new BitmapFontCache(font);
+        text.setColor(Color.BLACK);
+        text.setText(buff.getBuffDescription(), 310,232);
+        text.draw(batch);
+        text.setColor(Color.WHITE);
+        text.setText(buff.getBuffDescription(), 310, 230);
+        text.draw(batch);
     }
-    private static void drawRedCard(SpriteBatch batch, Buffs buff, Texture texture, BitmapFontCache text) {
-        TextureRegion base = new TextureRegion(texture, 121, 0, 120, 135);
-        batch.draw(base, 200, 150, 400, 450);
-//        text.setText("Press Enter");
-//        text.draw(batch);
+    private static void drawLogoBase(SpriteBatch batch, Texture texture) {
+        TextureRegion wall = new TextureRegion(texture, 601, 150, 120, 135);
+        batch.draw(wall, 255, 300, 355, 270);
     }
-    private static void drawBlueCard(SpriteBatch batch, Buffs buff, Texture texture, BitmapFontCache text) {
-        TextureRegion base = new TextureRegion(texture, 0, 0, 120, 135);
-        batch.draw(base, 200, 150, 400, 450);
+    private static void drawBronzeBase(SpriteBatch batch, Texture texture) {
+        TextureRegion base = new TextureRegion(texture, 0, 220, 120, 40);
+        batch.draw(base, 220, 160, 390, 130);
     }
-    private static void drawGreyCard(SpriteBatch batch, Buffs buff, Texture texture, BitmapFontCache text) {
-        TextureRegion base = new TextureRegion(texture, 241, 0, 120, 135);
-        batch.draw(base, 200, 150, 400, 450);
+    private static void drawStoneBase(SpriteBatch batch, Texture texture) {
+        TextureRegion base = new TextureRegion(texture, 121, 220, 120, 40);
+        batch.draw(base, 220, 160, 390, 150);
     }
-    private static void drawGreenCard(SpriteBatch batch, Buffs buff, Texture texture, BitmapFontCache text) {
-        TextureRegion base = new TextureRegion(texture, 361, 0, 120, 135);
-        batch.draw(base, 200, 150, 400, 450);
+    private static void drawGoldBase(SpriteBatch batch, Texture texture) {
+        TextureRegion base = new TextureRegion(texture, 241, 220, 120, 40);
+        batch.draw(base, 220, 160, 390, 150);
     }
-    private static void drawYellowCard(SpriteBatch batch, Buffs buff, Texture texture, BitmapFontCache text) {
-        TextureRegion base = new TextureRegion(texture, 481, 0, 120, 135);
-        batch.draw(base, 200, 150, 400, 450);
+    private static void drawRedCard(SpriteBatch batch, Texture texture) {
+        TextureRegion card = new TextureRegion(texture, 121, 0, 120, 135);
+        batch.draw(card, 205, 150, 430, 450);
+    }
+    private static void drawBlueCard(SpriteBatch batch, Texture texture) {
+        TextureRegion card = new TextureRegion(texture, 0, 0, 120, 135);
+        batch.draw(card, 200, 150, 430, 450);
+    }
+    private static void drawGreyCard(SpriteBatch batch, Texture texture) {
+        TextureRegion card = new TextureRegion(texture, 241, 0, 120, 135);
+        batch.draw(card, 215, 150, 430, 450);
+    }
+    private static void drawGreenCard(SpriteBatch batch, Texture texture) {
+        TextureRegion card = new TextureRegion(texture, 361, 0, 120, 135);
+        batch.draw(card, 200, 150, 430, 450);
+    }
+    private static void drawYellowCard(SpriteBatch batch, Texture texture) {
+        TextureRegion card = new TextureRegion(texture, 481, 0, 120, 135);
+        batch.draw(card, 240, 150, 430, 450);
     }
 }

@@ -45,6 +45,7 @@ public class Monster extends Karakter {
     private Movement movement = Movement.IDLE;
     private String type;
     private int immunityFrames;
+    private float deathTimer;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
         super(health, attack, defense, level, posX, posY, hitBox);
@@ -63,8 +64,8 @@ public class Monster extends Karakter {
             animationIdleLeft = Animator.animate(idle,4, 1, true, false);
             animationRunRight = Animator.animate(run, 6, 1, false, false);
             animationRunLeft = Animator.animate(run,6, 1, true, false);
-            animationDeathRight = Animator.animate(die, 6, 1, false, false, 0.7f);
-            animationDeathLeft = Animator.animate(die, 6, 1, true, false, 0.7f);
+            animationDeathRight = Animator.animate(die, 6, 1, false, false, 0.08f);
+            animationDeathLeft = Animator.animate(die, 6, 1, true, false, 0.08f);
             this.type = type;
         }
         if (type.equalsIgnoreCase("skeleton")) {
@@ -75,8 +76,8 @@ public class Monster extends Karakter {
             animationIdleLeft = Animator.animate(idle,4, 1, true, false);
             animationRunRight = Animator.animate(run, 6, 1, false, false);
             animationRunLeft = Animator.animate(run,6, 1, true, false);
-            animationDeathRight = Animator.animate(die, 8, 1, false, false, 0.5f);
-            animationDeathLeft = Animator.animate(die, 8, 1, true, false, 0.5f);
+            animationDeathRight = Animator.animate(die, 8, 1, false, false, 0.08f);
+            animationDeathLeft = Animator.animate(die, 8, 1, true, false, 0.08f);
             this.type = type;
         }
 
@@ -117,7 +118,7 @@ public class Monster extends Karakter {
             if (immunityFrames != 0) {
                 batch.setColor(Color.RED);
                 batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
-                immunityFrames--;
+                immunityFrames -= 1 * Gdx.graphics.getDeltaTime();
                 batch.setColor(1, 1, 1, 1);
             } else {
                 batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
@@ -125,20 +126,8 @@ public class Monster extends Karakter {
             batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
         }
         if (state == State.DYING) {
-            die(batch, stateTime);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            movement = Movement.RUNNING;
-            setPosX(getPosX() - 1);
-            run(stateTime, batch);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            movement = Movement.RUNNING;
-            setPosX(getPosX() + 1);
-            run(stateTime, batch);
-        }
-        else {
-            movement = Movement.IDLE;
+            die(batch, deathTimer);
+            deathTimer += 1 * Gdx.graphics.getDeltaTime();
         }
     }
     private void run(float stateTime, SpriteBatch batch) {
@@ -161,7 +150,7 @@ public class Monster extends Karakter {
         if (immunityFrames == 0) {
             health -= checkNegativeDmg(dmg - defense);
             checkHealth();
-            immunityFrames = 50;
+            immunityFrames = 30;
         }
     }
 

@@ -56,8 +56,8 @@ public class Weapon extends Item{
         return sizeScaling;
     }
 
-    public void setSizeScaling(int sizeScaling) {
-        this.sizeScaling = sizeScaling;
+    public void setSizeScaling(double sizeScaling) {
+        this.sizeScaling = (float) sizeScaling;
     }
     public void addTextureRegion(TextureRegion textureRegion){
         this.textureRegions.add(textureRegion);
