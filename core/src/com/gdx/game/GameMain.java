@@ -30,26 +30,23 @@ import java.util.ArrayList;
 public class GameMain extends Game {
 	AssetManager manager;
 	MainMenuUI mainMenuUI = new MainMenuUI();
-	ArrayList<Projectile> projectiles = new ArrayList();
+	ArrayList<Projectile> projectiles = new ArrayList<>();
 	SpriteBatch batch;
 	Texture tiles;
 	Texture weapons;
 	Player player;
-	Texture skeletonIdle;
-	Texture skeletonRun;
-	Texture skeletonDie;
 	float attackStateTime;
 	float attackCooldown;
 	Sprite activePlayerProjectile;
 	float stateTime;
 	ArrayList<Floor> floors;
-	Ruangan ruangan;
 	ShapeRenderer shapeRenderer;
 	ArrayList<Karakter> entities;
 	boolean isOnDebug;
 	BitmapFont font;
 	BitmapFontCache text;
 	PlayerUI UI;
+	int floorCount;
 
 	public GameMain() {
 	}
@@ -80,6 +77,7 @@ public class GameMain extends Game {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
 		this.manager.load("heart.png", Texture.class);
 		this.manager.load("star.png", Texture.class);
+		manager.load("GUI.png", Texture.class);
 		manager.load("healthbar/SleekBars.png", Texture.class);
 		manager.load("coins/MonedaD.png", Texture.class);
 		manager.load("coins/Collected.png", Texture.class);
@@ -90,19 +88,21 @@ public class GameMain extends Game {
 		text = new BitmapFontCache(font);
 
 		this.floors = new ArrayList<>();
+		Floor floor = new Floor(1);
+		floor.initialize();
+		floors.add(floor);
 		entities = new ArrayList<>();
 		shapeRenderer = new ShapeRenderer();
 		isOnDebug = false;
-		this.ruangan = new Ruangan("dungeon");
-		this.ruangan.initialize(1, 1, 1);
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
-		this.player.setPosY(300);
+		this.player.setPosY(100);
 		UI = new PlayerUI(player);
 		this.mainMenuUI.forCreate();
 		this.player.canMoveFree();
+		floorCount = 0;
 	}
 
 	public void render() {
@@ -118,7 +118,12 @@ public class GameMain extends Game {
 	}
 
 	public void mainGame(SpriteBatch batch) {
-		this.ruangan.draw(batch, this.stateTime, player);
+		if (!floors.get(floorCount).isDone()) {
+			floors.get(floorCount).draw(batch, stateTime, player);
+		} else {
+			floors.add(new Floor(player.getLevel()));
+			floorCount++;
+		}
 		this.stateTime += Gdx.graphics.getDeltaTime();
 		UI.draw(batch);
 
@@ -133,25 +138,28 @@ public class GameMain extends Game {
 			}
 			catch (IllegalStateException ignored){}
 		}
+		try {
+			if ((double) this.player.getPosY() >= floors.get(floorCount).getCurrentRoom().getUpperborder().getY() - 20.0) {
+				this.player.setCanMoveUp(false);
+			}
 
-		if ((double) this.player.getPosY() >= this.ruangan.getUpperborder().getY() - 20.0) {
-			this.player.setCanMoveUp(false);
-		}
+			if ((double) this.player.getPosY() <= floors.get(floorCount).getCurrentRoom().getBottomBorder().getY()) {
+				this.player.setCanMoveDown(false);
+			}
 
-		if ((double) this.player.getPosY() <= this.ruangan.getBottomBorder().getY()) {
-			this.player.setCanMoveDown(false);
-		}
+			if ((double) this.player.getPosX() <= floors.get(floorCount).getCurrentRoom().getLeftBorder().getX() + 10.0) {
+				this.player.setCanMoveLeft(false);
+			}
 
-		if ((double) this.player.getPosX() <= this.ruangan.getLeftBorder().getX() + 10.0) {
-			this.player.setCanMoveLeft(false);
-		}
-
-		if ((double) this.player.getPosX() >= this.ruangan.getRightBorder().getX()) {
-			this.player.setCanMoveRight(false);
+			if ((double) this.player.getPosX() >= floors.get(floorCount).getCurrentRoom().getRightBorder().getX()) {
+				this.player.setCanMoveRight(false);
+			}
+		} catch (Exception ignored){
+			//TODO :)
 		}
 
 		this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
-		if (!ruangan.isShowingCard()) {
+		if (!floors.get(floorCount).getCurrentRoom().isShowingCard()) {
 			this.player.draw(batch);
 		}
 		this.updatePlayerAttacks();
@@ -167,6 +175,7 @@ public class GameMain extends Game {
 	public void enableDebug() throws NullPointerException, IllegalStateException{
 		getEnities();
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+		shapeRenderer.rect(170, 70, 220, 80);
 		for (Karakter entity : entities) {
 			shapeRenderer.rect(
 					(float) entity.getHitBox().getX(),
@@ -181,10 +190,10 @@ public class GameMain extends Game {
 					player.getWeapon().getWeaponAnimation().getHitboxes()[i].width,
 					player.getWeapon().getWeaponAnimation().getHitboxes()[i].height);
 		}
-		for (Breakable b: ruangan.getBreakables()) {
+		for (Breakable b: floors.get(floorCount).getCurrentRoom().getBreakables()) {
 			shapeRenderer.rect(b.getHitbox().x, b.getHitbox().y, b.getHitbox().width, b.getHitbox().height);
 		}
-		for (Drops d: ruangan.getDrops()) {
+		for (Drops d: floors.get(floorCount).getCurrentRoom().getDrops()) {
 			shapeRenderer.rect(d.getHitbox().x, d.getHitbox().y, d.getHitbox().width, d.getHitbox().height);
 		}
 		shapeRenderer.end();
@@ -194,7 +203,7 @@ public class GameMain extends Game {
 			entities.add(player);
 		}
 		if (entities.size() <= 1) {
-			entities.addAll(ruangan.getMonsters());
+			entities.addAll(floors.get(floorCount).getCurrentRoom().getMonsters());
 		}
 	}
 	public static float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {
@@ -211,7 +220,7 @@ public class GameMain extends Game {
 
 	public Player makeMeleePlayer() {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
-		Weapon weapon = new Weapon("Excalibur", "OP", 30, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
+		Weapon weapon = new Weapon("Excalibur", "OP", 100, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
 		Player player1 = new Player(weapon, new MeleePlayerAnimation());
 		return player1;
@@ -248,11 +257,11 @@ public class GameMain extends Game {
 		for (i = 0; i < this.projectiles.size(); ++i) {
 			this.projectiles.get(i).draw(this.batch);
 			this.projectiles.get(i).update();
-			if ((double) this.projectiles.get(i).getPositionY() >= this.ruangan.getUpperborder().getY()) {
+			if ((double) this.projectiles.get(i).getPositionY() >= this.floors.get(floorCount).getCurrentRoom().getUpperborder().getY()) {
 				indexToDelete.add(i);
-			} else if ((double) this.projectiles.get(i).getPositionY() <= this.ruangan.getBottomBorder().getY() - 15.0) {
+			} else if ((double) this.projectiles.get(i).getPositionY() <= this.floors.get(floorCount).getCurrentRoom().getBottomBorder().getY() - 15.0) {
 				indexToDelete.add(i);
-			} else if ((double) this.projectiles.get(i).getPositionX() <= this.ruangan.getLeftBorder().getX()) {
+			} else if ((double) this.projectiles.get(i).getPositionX() <= this.floors.get(floorCount).getCurrentRoom().getLeftBorder().getX()) {
 			}
 		}
 	}
@@ -278,7 +287,7 @@ public class GameMain extends Game {
 				//	}
 				//}
 				if (player.getWeapon().getWeaponAnimation().getHitboxes()[i].intersects(new Rectangle(60,400))){
-					System.out.println("test");
+//					System.out.println("test");
 				}
 			}
 		}

@@ -54,6 +54,8 @@ public class Breakable {
             batch.draw(normal, posX, posY, 32, normal.getRegionHeight() == 16 ? 32 : 64);
         }
         else if (state == State.HALFBROKEN) {
+            hitbox.setLocation(0, 0);
+            hitbox.setSize(0, 0);
             batch.draw(halfBroken, posX, posY, 32, halfBroken.getRegionHeight() == 16 ? 32 : 64);
             state = State.BROKEN;
         }

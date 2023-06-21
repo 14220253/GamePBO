@@ -24,6 +24,7 @@ public class Drops {
     private int amount;
     private Texture texture;
     private Type type;
+    private float startCollect = 0f;
     enum Type {
         COIN,
         HEALTH,
@@ -59,7 +60,7 @@ public class Drops {
         }
 
         Texture collected = app.getManager().get("coins/Collected.png");
-        collectAnimation = Animator.animate(collected, 6, 1, false, false, 0.5f);
+        collectAnimation = Animator.animate(collected, 6, 1, false, false, 0.05f);
         state = State.AVALABLE;
         this.posX = posX;
         this.posY = posY;
@@ -78,7 +79,8 @@ public class Drops {
         }
         else if (state == State.COLLECTED) {
             hitbox.setSize(0, 0);
-            collect(batch, stateTime);
+            collect(batch, startCollect);
+            startCollect += 1 * Gdx.graphics.getDeltaTime();
         }
     }
 

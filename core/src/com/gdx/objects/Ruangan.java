@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
@@ -33,8 +32,13 @@ public class Ruangan {
     private boolean showingCard;
     private int level;
     private int roomNumber;
-    boolean cooldown;
-
+    private boolean cooldown;
+    private Texture buttons;
+    private TextureRegion button;
+    private Rectangle leftButtonHitbox;
+    private Rectangle rightButtonHitbox;
+    private Buffs selectedBuff;
+    private boolean done;
 
     public Ruangan(String type) {
         this.type = type;
@@ -58,6 +62,10 @@ public class Ruangan {
         this.roomNumber = roomNumber;
         showingCard = false;
         cooldown = false;
+        buttons = app.getManager().get("GUI.png");
+        button = new TextureRegion(buttons, 144, 80, 48, 16);
+        leftButtonHitbox = new Rectangle(170, 550, 220, 80);
+        rightButtonHitbox = new Rectangle(450, 550, 220, 80);
 
         initializeBreakable();
         initializeTemplate(template, level);
@@ -106,9 +114,6 @@ public class Ruangan {
             bottomBorder = new Rectangle(48, 55, 705, 8);
             upperborder = new Rectangle(48, 525, 705, 8);
         }
-        else if (type.equalsIgnoreCase("Forest")) {
-            //TODO
-        }
         else if (type.equalsIgnoreCase("Shop")) {
             texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
             Drawer.drawDungeonShop(batch);
@@ -121,12 +126,11 @@ public class Ruangan {
         //enemies
         if (!type.equalsIgnoreCase("Shop") && !type.equalsIgnoreCase("boss")) {
             //PROPS
-            for (int i = 0; i < breakables.size(); i++) {
-                breakables.get(i).draw(batch);
-                if (breakables.get(i).getState() == Breakable.State.BROKEN) {
-                    drops.add(new Drops(breakables.get(i).getPosX(), breakables.get(i).getPosY(), level, breakables.get(i).getType()));
-                    breakables.remove(i);
+            for (Breakable breakable : breakables) {
+                if (breakable.getState() == Breakable.State.HALFBROKEN) {
+                    drops.add(new Drops(breakable.getPosX(), breakable.getPosY(), level, breakable.getType()));
                 }
+                breakable.draw(batch);
             }
             //MONSTERS
             for (Monster monster : monsters) {
@@ -195,10 +199,10 @@ public class Ruangan {
             BitmapFont font = new BitmapFont();
             font.getData().setScale(1.5f);
             BitmapFontCache text = new BitmapFontCache(font);
-            text.setText("Press Enter", player.getPosX() - 40, player.getPosY() + player.getHeight() * 2);
+            text.setText("Press Spacebar", player.getPosX() - 40, player.getPosY() + player.getHeight() * 2);
             text.draw(batch);
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 if (!showingCard) {
                     showingCard = true;
                     cooldown = true;
@@ -209,14 +213,17 @@ public class Ruangan {
                 player.cannotMove();
                 if (Static.rectangleCollisionDetect(player.hitBox, centerDoorHitbox)) {
                     Drawer.drawCard(batch, buffs.get(0));
+                    selectedBuff = buffs.get(0);
                 }
                 if (Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox)) {
                     Drawer.drawCard(batch, buffs.get(1));
+                    selectedBuff = buffs.get(1);
                 }
                 if (Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) {
                     Drawer.drawCard(batch, buffs.get(2));
+                    selectedBuff = buffs.get(2);
                 }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     if (!cooldown) {
                         showingCard = false;
                         player.canMoveFree();
@@ -224,17 +231,41 @@ public class Ruangan {
                     else
                         cooldown = false;
                 }
+                //BUTTONS
+                batch.draw(button, (float) leftButtonHitbox.getX(), 700 - (float) leftButtonHitbox.getY() - (float) leftButtonHitbox.getHeight(),
+                        (float) leftButtonHitbox.getWidth(), (float) leftButtonHitbox.getHeight());
+                batch.draw(button, (float) rightButtonHitbox.getX(), 700 - (float) rightButtonHitbox.getY() - (float) rightButtonHitbox.getHeight(),
+                        (float) rightButtonHitbox.getWidth(), (float) rightButtonHitbox.getHeight());
+                font.getData().setScale(2f);
+                text = new BitmapFontCache(font);
+                text.setColor(Color.BLACK);
+                text.setText("Exit", 255,128);
+                text.draw(batch);
+                text.setColor(Color.WHITE);
+                text.setText("Exit", 255, 123);
+                text.draw(batch);
+
+                text.setColor(Color.BLACK);
+                text.setText("Select", 520,128);
+                text.draw(batch);
+                text.setColor(Color.WHITE);
+                text.setText("Select", 520, 123);
+                text.draw(batch);
+
+                //mouse
+                if (Gdx.input.isButtonJustPressed(0)) {
+                    if (Static.rectangleCollisionDetect(leftButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
+                        showingCard = false;
+                        player.canMoveFree();
+                    }
+                    if (Static.rectangleCollisionDetect(rightButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
+                        done = true;
+                        selectedBuff.activate(player);
+                    }
+                }
             }
         }
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -474,35 +505,13 @@ public class Ruangan {
             monsters.add(monster5);
         }
     }
-
-    public ArrayList<Monster> getMonsters() {
-        ArrayList<Monster> monsterArrayList = new ArrayList<>(monsters);
-        return monsterArrayList;
-    }
-
-    public Rectangle getLeftBorder() {
-        return leftBorder;
-    }
-
-    public Rectangle getRightBorder() {
-        return rightBorder;
-    }
-
-    public Rectangle getBottomBorder() {
-        return bottomBorder;
-    }
-
-    public Rectangle getUpperborder() {
-        return upperborder;
-    }
-
-    public ArrayList<Breakable> getBreakables() {
-        return breakables;
-    }
-
-    public ArrayList<Drops> getDrops() {
-        return drops;
-    }
-
+    public ArrayList<Monster> getMonsters() {return new ArrayList<>(monsters);}
+    public Rectangle getLeftBorder() {return leftBorder;}
+    public Rectangle getRightBorder() {return rightBorder;}
+    public Rectangle getBottomBorder() {return bottomBorder;}
+    public Rectangle getUpperborder() {return upperborder;}
+    public ArrayList<Breakable> getBreakables() {return breakables;}
+    public ArrayList<Drops> getDrops() {return drops;}
     public boolean isShowingCard() {return showingCard;}
+    public boolean isDone() {return done;}
 }
