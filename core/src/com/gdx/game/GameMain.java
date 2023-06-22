@@ -95,6 +95,7 @@ public class GameMain extends Game implements Screen {
 		bigfontParameter.fontParameters.borderWidth = 2;
 		bigfontParameter.fontParameters.flip = false;
 		manager.load("VT323-Regular.ttf", BitmapFont.class, bigfontParameter);
+		manager.load("Idle Working.png", Texture.class);
 
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("2dpixelskin.atlas");
 		manager.load("2dpixelskin.json", Skin.class, skinParam);
