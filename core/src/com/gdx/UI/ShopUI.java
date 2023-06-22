@@ -79,7 +79,7 @@ public class ShopUI implements Screen, InputProcessor {
         //set judul shop ui
         titleLabel = new Label("SHOP", mySkin);
         Label.LabelStyle style = new Label.LabelStyle(titleLabel.getStyle());
-        style.font = assetManager.get("VT323-Regular.ttf", BitmapFont.class);
+        style.font = assetManager.get("font.ttf", BitmapFont.class);
         titleLabel.setStyle(style);
         titleLabel.setHeight(75);
         titleLabel.setX(113.5f);

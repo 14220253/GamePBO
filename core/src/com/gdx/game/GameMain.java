@@ -10,10 +10,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -87,9 +91,9 @@ public class GameMain extends Game implements Screen {
 		manager.load("coins/Collected.png", Texture.class);
 		manager.load("pixelCardAssest_V01.png", Texture.class);
 
-		///shop
-		manager.load("Idle Working.png", Texture.class);
+		//shop
 
+		manager.load("Idle Working.png", Texture.class);
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
 
