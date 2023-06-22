@@ -72,7 +72,7 @@ public class ShopUI implements Screen, InputProcessor {
         multiInput.addProcessor(stage);
 
         //load skin yang digunakan
-        Skin mySkin = assetManager.get("fix.json", Skin.class);
+        Skin mySkin = assetManager.get("fix1.json", Skin.class);
 
 
 
