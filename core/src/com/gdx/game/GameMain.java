@@ -8,12 +8,13 @@ package com.gdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.gdx.UI.MainMenuUI;
+import com.gdx.screen.MainMenuScreen;
 import com.gdx.UI.PlayerUI;
 import com.gdx.objects.*;
 import com.gdx.objects.playerAnimationHandling.MagicPlayerAnimation;
@@ -27,9 +28,8 @@ import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GameMain extends Game {
+public class GameMain extends Game implements Screen {
 	AssetManager manager;
-	MainMenuUI mainMenuUI = new MainMenuUI();
 	ArrayList<Projectile> projectiles = new ArrayList<>();
 	SpriteBatch batch;
 	Texture tiles;
@@ -96,13 +96,13 @@ public class GameMain extends Game {
 		this.player.setPosX(400);
 		this.player.setPosY(100);
 		UI = new PlayerUI(player);
-		this.mainMenuUI.forCreate();
 		this.player.canMoveFree();
 		floorCount = 0;
 		this.floors = new ArrayList<>();
 		Floor floor = new Floor(1, this.player);
 		floor.initialize();
 		floors.add(floor);
+		this.setScreen(new MainMenuScreen());
 	}
 
 	public void render() {
@@ -115,6 +115,11 @@ public class GameMain extends Game {
 	@Override
 	public void pause() {
 		super.pause();
+	}
+
+	@Override
+	public void hide() {
+
 	}
 
 	public void mainGame(SpriteBatch batch) {
@@ -214,6 +219,16 @@ public class GameMain extends Game {
 		float angleRad = (float) Math.atan2(deltaY, deltaX);
 		float angleDeg = (float) Math.toDegrees(angleRad);
 		return angleDeg;
+	}
+
+	@Override
+	public void show() {
+
+	}
+
+	@Override
+	public void render(float delta) {
+
 	}
 
 	public void resize(int width, int height) {
