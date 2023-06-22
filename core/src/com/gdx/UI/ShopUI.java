@@ -45,9 +45,6 @@ public class ShopUI implements Screen, InputProcessor {
     Item currentItem;
     String clickedButton;
     int coin = 300;
-
-
-
     InputMultiplexer multiInput;
     public ShopUI(){
         //deklarasi parentgame
