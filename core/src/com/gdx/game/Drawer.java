@@ -36,6 +36,17 @@ public class Drawer {
         TextureRegion topShadowFloor = new TextureRegion(tiles, 71, 0, 31, 25);
         TextureRegion rightDoor = new TextureRegion(tiles, 248, 95, 7, 90);
         TextureRegion leftDoor = new TextureRegion(tiles, 255, 95, 10, 90);
+        //NPC
+        Texture NPC = app.getManager().get("Idle Working.png");
+        Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
+        TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
+        batch.draw(currentFrame, 20,50);
+        float dx = app.getPlayer().getPosX() - 20;
+        float dy = app.getPlayer().getPosY() - 50;
+        float d = dx*dx + dy*dy;
+        if(d <= 256){
+            app.setScreen(new ShopUI());
+        }
 
         //bottom wall
         batch.draw(bottomRightWall, 713, 40, 40, 40);
