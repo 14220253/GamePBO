@@ -11,8 +11,8 @@ public class Buffs {
     private String buffDescription;
     private BuffType type;
     private int amount;
-    private int level;
-    int tier;
+    private final int LEVEL;
+    private final int TIER;
 
     public enum BuffType{
         ATTACK,
@@ -25,8 +25,8 @@ public class Buffs {
     }
 
     public Buffs(int level, int tier) {
-        this.level = level;
-        this.tier = tier;
+        this.LEVEL = level;
+        this.TIER = tier;
         switch (tier) {
             case 1:
                 generateTier1(tier);
@@ -81,12 +81,12 @@ public class Buffs {
         switch (type) {
             case ATTACK:
                 buffName = "Increase Attack";
-                amount = level * ((tier * 2) - 1);
+                amount = LEVEL * ((tier * 2) - 1);
                 buffDescription = "Increases Attack by " + amount + "%";
                 break;
             case DEFENSE:
                 buffName = "Increase Defense";
-                amount = level * ((tier * 2) - 1);
+                amount = LEVEL * ((tier * 2) - 1);
                 buffDescription = "Increases Defense by " + amount + "%";
                 break;
             case RESTORE_HP:
@@ -155,9 +155,5 @@ public class Buffs {
         return buffDescription;
     }
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public int getTier() {return tier;}
+    public int getTier() {return TIER;}
 }
