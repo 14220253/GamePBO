@@ -87,6 +87,7 @@ public class GameMain extends Game implements Screen {
 		manager.load("pixelCardAssest_V01.png", Texture.class);
 
 		///shop
+		FileHandleResolver resolver = new InternalFileHandleResolver();
 		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
 		manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 		FreetypeFontLoader.FreeTypeFontLoaderParameter bigfontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
