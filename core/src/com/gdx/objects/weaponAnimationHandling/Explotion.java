@@ -2,6 +2,7 @@ package com.gdx.objects.weaponAnimationHandling;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -11,9 +12,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Explotion {
-    int frame = 0;
     Texture texture = new Texture("Vortex/Effect_TheVortex_1_429x429.png");
     ArrayList<TextureRegion> frames = new ArrayList<>();
+    Animation<TextureRegion>animation;
     Rectangle[]hitBoxes = new Rectangle[12];
     ShapeRenderer shapeRenderer;
 
@@ -29,16 +30,14 @@ public class Explotion {
                 Y += 429;
             }
         }
+        TextureRegion[]tmp = frames.toArray(new TextureRegion[0]);
+        animation = new Animation<>(0.01667f,tmp);
     }
 
-    public void draw(int X, int Y, Batch batch){
+    public void draw(int X, int Y, Batch batch, float frameTime){
         float centerX = X - (429 * 0.2f) / 2;
         float centerY = Gdx.graphics.getHeight() - Y - (429 * 0.2f) / 2;
-        batch.draw(frames.get(frame), centerX,centerY,0,0,429,429,0.2f,0.2f,0); // ini di comment untuk lihat hitbox
-        frame++;
-        if (frame == 60){
-            frame = 0;
-        }
+        batch.draw(animation.getKeyFrame(frameTime), centerX,centerY,0,0,429,429,0.2f,0.2f,0); // ini di comment untuk lihat hitbox
         setHitBoxes(X,Gdx.graphics.getHeight() - Y, 429 * 0.2f / 4,30,30,12,shapeRenderer);
     }
     public void setHitBoxes(float cursorX, float cursorY, float radius, float rectangleWidth, float rectangleHeight, int numRectangles, ShapeRenderer shapeRenderer) {

@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
 import com.gdx.game.Static;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Monster extends Karakter {
     //musuh
@@ -45,6 +48,7 @@ public class Monster extends Karakter {
     private Movement movement = Movement.IDLE;
     private String type;
     private int immunityFrames;
+    private float speed;
     private float deathTimer;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
@@ -54,6 +58,7 @@ public class Monster extends Karakter {
         this.damageMultiplier = damageMultiplier;
         this.defenceMultiplier = defenceMultiplier;
         maxHealth = this.health;
+        speed = (float) ((Math.random() * 90) + 40);
         healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
 
         if (type.equalsIgnoreCase("orc")) {
@@ -187,5 +192,17 @@ public class Monster extends Karakter {
             return 1;
         }
         else return dmg;
+    }
+    public void runToCoordinates(int x, int y, float deltaTime){
+        float angle = MathUtils.atan2(y - posY, x - posX);
+        float distance = Vector2.dst(posX, posY, x, y);
+        float distanceToMove = speed * deltaTime;
+        if (distanceToMove >= distance) {
+            posX = x;
+            posY = y;
+        } else {
+            posX += distanceToMove * MathUtils.cos(angle);
+            posY += distanceToMove * MathUtils.sin(angle);
+        }
     }
 }

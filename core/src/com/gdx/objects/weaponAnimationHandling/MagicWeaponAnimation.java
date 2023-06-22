@@ -25,7 +25,7 @@ public class MagicWeaponAnimation implements WeaponAnimation{
         }
         this.frameTime = frameTime;
         if (frameTime<1f){
-            explotion.draw(fixX,fixY,batch);
+            explotion.draw(fixX,fixY,batch,frameTime);
             batch.draw(weapon.get(0), (float) player.getHitBox().getCenterX(), (float) (player.getPosY()+7), 0, weapon.get(0).getRegionHeight() / 2.0f, (float) weapon.get(0).getRegionWidth(),
                     (float) weapon.get(0).getRegionHeight(), 1.5f, 1.5f, 90.0f);
         }else {
