@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.gdx.UI.ShopUI;
 import com.gdx.game.Animator;
 import com.gdx.game.Drawer;
@@ -136,13 +137,16 @@ public class Ruangan {
             TextureRegion currentFrame = NPCAnimation.getKeyFrame(stateTime,true);
             batch.draw(currentFrame, 400,300, 64, 64);
             //test
-            float dx = app.getPlayer().getPosX() - 250;
-            float dy = app.getPlayer().getPosY() - 450;
-            float d = dx*dx + dy*dy;
-            if(d <= 256){
+            if (Static.rectangleCollisionDetect(player.getHitBox(),
+                    new Rectangle(400, 300, 64, 64))) {
                 app.setScreen(new ShopUI());
-                System.out.println("d <= 256");
             }
+//            float dx = app.getPlayer().getPosX() - 250;
+//            float dy = app.getPlayer().getPosY() - 450;
+//            float d = dx*dx + dy*dy;
+//            if(d <= 256){
+//                app.setScreen(new ShopUI());
+//            }
         }
 
         //enemies
