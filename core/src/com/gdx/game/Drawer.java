@@ -91,10 +91,6 @@ public class Drawer {
         TextureRegion floor = new TextureRegion(tiles, 71, 16, 31, 25);
         TextureRegion topShadowFloor = new TextureRegion(tiles, 71, 0, 31, 25);
 
-
-
-
-
         //bottom wall
         batch.draw(bottomRightWall, 514, 200, 40, 40);
         batch.draw(bottomLeftWall, 210, 200, 40, 40);
@@ -131,8 +127,8 @@ public class Drawer {
         TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
         batch.draw(currentFrame, 250,400);
         //test
-        float dx = app.getPlayer().getPosX() - 20;
-        float dy = app.getPlayer().getPosY() - 50;
+        float dx = app.getPlayer().getPosX() - 250;
+        float dy = app.getPlayer().getPosY() - 400;
         float d = dx*dx + dy*dy;
         if(d <= 256){
             app.setScreen(new ShopUI());
