@@ -92,9 +92,6 @@ public class Drawer {
         TextureRegion topShadowFloor = new TextureRegion(tiles, 71, 0, 31, 25);
 
 
-
-
-
         //bottom wall
         batch.draw(bottomRightWall, 514, 200, 40, 40);
         batch.draw(bottomLeftWall, 210, 200, 40, 40);
@@ -125,23 +122,13 @@ public class Drawer {
             batch.draw(sideWall, 546, i, 5, 40);
             batch.draw(sideWall, 210, i, 5, 40);
         }
-        //NPC
-        Texture NPC = app.getManager().get("Idle Working.png");
-        Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
-        TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
-        batch.draw(currentFrame, 250,400);
-        //test
-        float dx = app.getPlayer().getPosX() - 20;
-        float dy = app.getPlayer().getPosY() - 50;
-        float d = dx*dx + dy*dy;
-        if(d <= 256){
-            app.setScreen(new ShopUI());
-        }
     }
 
     public static void drawCard(SpriteBatch batch, Buffs buff) {
         GameMain app = (GameMain) Gdx.app.getApplicationListener();
         Texture cards = app.getManager().get("pixelCardAssest_V01.png");
+        Texture logos = app.getManager().get("BuffLogos.png");
+        TextureRegion logo;
 
         //CARD
         switch (buff.getType()) {
@@ -177,6 +164,12 @@ public class Drawer {
 
         //LOGO BASE
         drawLogoBase(batch, cards);
+
+        switch (buff.getType()) {
+            case RESTORE_HP:
+                logo = new TextureRegion(logos, 129, 0, 64, 64);
+                batch.draw(logo, 300, 300, 256, 256);
+        }
 
         //LOGO
 

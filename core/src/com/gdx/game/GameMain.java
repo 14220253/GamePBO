@@ -80,6 +80,7 @@ public class GameMain extends Game implements Screen {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
 		this.manager.load("heart.png", Texture.class);
 		this.manager.load("star.png", Texture.class);
+		manager.load("BuffLogos.png", Texture.class);
 		manager.load("GUI.png", Texture.class);
 		manager.load("healthbar/SleekBars.png", Texture.class);
 		manager.load("coins/MonedaD.png", Texture.class);

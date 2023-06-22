@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.gdx.UI.ShopUI;
+import com.gdx.game.Animator;
 import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
@@ -117,12 +119,28 @@ public class Ruangan {
             upperborder = new Rectangle(48, 525, 705, 8);
         }
         else if (TYPE.equalsIgnoreCase("Shop")) {
+            player.canMoveFree();
+
             texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
             Drawer.drawDungeonShop(batch);
             rightBorder = new Rectangle(510, 203, 5, 300);
             leftBorder = new Rectangle(205, 203, 5, 300);
             bottomBorder = new Rectangle(205, 213, 347, 8);
             upperborder = new Rectangle(205, 362, 347, 8);
+
+            //NPC
+            Texture NPC = app.getManager().get("Idle Working.png");
+            Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
+            TextureRegion currentFrame = NPCAnimation.getKeyFrame(stateTime,true);
+            batch.draw(currentFrame, 400,300, 64, 64);
+            //test
+            float dx = app.getPlayer().getPosX() - 250;
+            float dy = app.getPlayer().getPosY() - 450;
+            float d = dx*dx + dy*dy;
+            if(d <= 256){
+                app.setScreen(new ShopUI());
+                System.out.println("d <= 256");
+            }
         }
 
         //enemies
