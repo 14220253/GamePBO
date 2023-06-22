@@ -1,0 +1,227 @@
+
+fix.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Icon16
+  rotate: false
+  xy: 265, 333
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Icon19
+  rotate: false
+  xy: 331, 367
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Icon20
+  rotate: false
+  xy: 397, 401
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Icon21
+  rotate: false
+  xy: 1, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Icon25
+  rotate: false
+  xy: 35, 3
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Icon29
+  rotate: false
+  xy: 299, 333
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Icon44
+  rotate: false
+  xy: 365, 367
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Banner_01_Upward
+  rotate: false
+  xy: 1, 401
+  size: 96, 32
+  split: 14, 14, 7, 7
+  pad: 0, 0, 0, 0
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Banner_02(1)_Downward.9
+  rotate: false
+  xy: 1, 367
+  size: 96, 32
+  split: 0, 0, 0, 0
+  pad: 20, 15, 10, 11
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Button_Large_Lock_02a4
+  rotate: false
+  xy: 197, 401
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Button_Large_Press_02a4
+  rotate: false
+  xy: 1, 137
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Button_Large_Release_02a4
+  rotate: false
+  xy: 99, 269
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Button_Medium_Lock_02a4
+  rotate: false
+  xy: 197, 367
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Button_Medium_Press_02a4
+  rotate: false
+  xy: 263, 401
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Button_Medium_Release_02a4
+  rotate: false
+  xy: 1, 103
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Frame_01_Standard
+  rotate: false
+  xy: 1, 269
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+UI_Flat_Frame_02_Horizontal
+  rotate: false
+  xy: 99, 401
+  size: 96, 32
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Frame_02_Inward
+  rotate: false
+  xy: 1, 171
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+UI_Flat_Frame_02_Standard
+  rotate: false
+  xy: 99, 303
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+UI_Flat_Frame_02_Vertical
+  rotate: false
+  xy: 99, 171
+  size: 32, 96
+  orig: 32, 96
+  offset: 0, 0
+  index: -1
+UI_Flat_Scrollbar_01
+  rotate: false
+  xy: 67, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Scrollbar_Handle_01
+  rotate: false
+  xy: 197, 333
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Scrollbar_Handle_04
+  rotate: false
+  xy: 263, 367
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Select_02a3
+  rotate: false
+  xy: 329, 401
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Slider
+  rotate: false
+  xy: 1, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Slider_Filler
+  rotate: false
+  xy: 67, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Slot_02_Available
+  rotate: false
+  xy: 231, 333
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Slot_02_Selected
+  rotate: false
+  xy: 297, 367
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Slot_02_Unavailable
+  rotate: false
+  xy: 363, 401
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Textfield_01
+  rotate: false
+  xy: 1, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+UI_Flat_Textfield_02
+  rotate: false
+  xy: 35, 37
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1

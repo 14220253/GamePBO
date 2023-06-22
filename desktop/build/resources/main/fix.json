@@ -1,0 +1,121 @@
+{
+"com.badlogic.gdx.graphics.g2d.BitmapFont": {
+	"dpixelskin": {
+		"file": "2dpixelskin.fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
+	}
+},
+"com.badlogic.gdx.graphics.Color": {
+	"RGBA_104_102_102_255": {
+		"r": 0.40784314,
+		"g": 0.4,
+		"b": 0.4,
+		"a": 1
+	},
+	"RGBA_10_10_10_255": {
+		"r": 0.039215688,
+		"g": 0.039215688,
+		"b": 0.039215688,
+		"a": 1
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+	"default": {
+		"up": "UI_Flat_Button_Medium_Release_02a4",
+		"down": "UI_Flat_Button_Medium_Lock_02a4",
+		"over": "UI_Flat_Button_Medium_Press_02a4"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+	"default": {
+		"imageUp": "Icon16",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	},
+	"shoes": {
+		"imageUp": "Icon16",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	},
+	"ring": {
+		"imageUp": "Icon19",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	},
+	"crown": {
+		"imageUp": "Icon20",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	},
+	"book": {
+		"imageUp": "Icon25",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	},
+	"helmet": {
+		"imageUp": "Icon44",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	},
+	"potion": {
+		"imageUp": "Icon21",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	},
+	"diamond": {
+		"imageUp": "Icon29",
+		"imageDown": "Icon29",
+		"up": "UI_Flat_Slot_02_Available",
+		"down": "UI_Flat_Slot_02_Selected",
+		"over": "UI_Flat_Slot_02_Selected",
+		"disabled": "UI_Flat_Slot_02_Unavailable"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
+	"default-horizontal": {
+		"backgroundOver": "UI_Flat_Scrollbar_01",
+		"backgroundDown": "UI_Flat_Slider",
+		"knobOver": "UI_Flat_Scrollbar_Handle_01",
+		"background": "UI_Flat_Scrollbar_01"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+	"default": {
+		"font": "dpixelskin",
+		"overFontColor": "RGBA_104_102_102_255",
+		"up": "UI_Flat_Button_Medium_Release_02a4",
+		"down": "UI_Flat_Button_Medium_Lock_02a4",
+		"over": "UI_Flat_Button_Medium_Press_02a4"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+	"default": {
+		"font": "dpixelskin",
+		"fontColor": "RGBA_10_10_10_255",
+		"background": "UI_Flat_Frame_01_Standard"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+	"default": {
+		"background": "UI_Flat_Frame_02_Standard",
+		"titleFont": "dpixelskin",
+		"stageBackground": "UI_Flat_Frame_01_Standard"
+	}
+}
+}
