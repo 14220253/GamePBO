@@ -95,7 +95,7 @@ public class Drawer {
         Texture NPC = app.getManager().get("Idle Working.png");
         Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
         TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
-        batch.draw(currentFrame, 300,400);
+        batch.draw(currentFrame, 250,400);
         //test
         float dx = app.getPlayer().getPosX() - 20;
         float dy = app.getPlayer().getPosY() - 50;
