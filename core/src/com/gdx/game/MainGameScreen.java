@@ -10,7 +10,8 @@ import com.gdx.objects.*;
 
 import java.util.ArrayList;
 
-public class MainGameScreen {
+public class
+MainGameScreen {
     private ArrayList<Floor> floors;
     private int floorCount;
     private float stateTime;
