@@ -139,6 +139,9 @@ public class GameMain extends Game implements Screen {
 		float angleDeg = (float) Math.toDegrees(angleRad);
 		return angleDeg;
 	}
+	public Player getPlayer(){
+		return this.player;
+	}
 
 	@Override
 	public void show() {
