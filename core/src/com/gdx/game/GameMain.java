@@ -10,9 +10,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.screen.MainMenuScreen;
 import com.gdx.UI.PlayerUI;
@@ -81,6 +85,20 @@ public class GameMain extends Game implements Screen {
 		manager.load("coins/MonedaD.png", Texture.class);
 		manager.load("coins/Collected.png", Texture.class);
 		manager.load("pixelCardAssest_V01.png", Texture.class);
+
+		///shop
+		FreetypeFontLoader.FreeTypeFontLoaderParameter bigfontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+		bigfontParameter.fontFileName = "VT323-Regular.ttf";
+		bigfontParameter.fontParameters.size = 48;
+		bigfontParameter.fontParameters.color = com.badlogic.gdx.graphics.Color.WHITE;
+		bigfontParameter.fontParameters.borderColor = Color.BLACK;
+		bigfontParameter.fontParameters.borderWidth = 2;
+		bigfontParameter.fontParameters.flip = false;
+		manager.load("VT323-Regular.ttf", BitmapFont.class, bigfontParameter);
+
+		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("2dpixelskin.atlas");
+		manager.load("2dpixelskin.json", Skin.class, skinParam);
+
 		this.manager.finishLoading();
 
 		font = new BitmapFont();

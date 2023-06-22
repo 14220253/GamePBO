@@ -91,6 +91,7 @@ public class Drawer {
         TextureRegion bottomWall = new TextureRegion(tiles, 3, 75, 40, 5);
         TextureRegion floor = new TextureRegion(tiles, 71, 16, 31, 25);
         TextureRegion topShadowFloor = new TextureRegion(tiles, 71, 0, 31, 25);
+        Texture NPC = new Texture();
 
         //bottom wall
         batch.draw(bottomRightWall, 514, 200, 40, 40);
