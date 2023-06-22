@@ -112,6 +112,8 @@ public class Ruangan {
     public void draw(SpriteBatch batch, float stateTime) {
         //map
         if (TYPE.equalsIgnoreCase("Dungeon")) {
+            player.canMoveFree();
+
             Drawer.drawDungeon(batch);
             leftBorder = new Rectangle(48, 40, 5, 500);
             rightBorder = new Rectangle(710, 40, 5, 500);
