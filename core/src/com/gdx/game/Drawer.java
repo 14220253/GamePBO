@@ -144,9 +144,11 @@ public class Drawer {
                 break;
             case EVASION:
                 drawGreenCard(batch, cards);
+                break;
             case WEAPON_SIZE:
             case MAX_HEALTH:
                 drawYellowCard(batch, cards);
+                break;
         }
 
         //BASE TEXT
@@ -165,13 +167,38 @@ public class Drawer {
         //LOGO BASE
         drawLogoBase(batch, cards);
 
+        //LOGO
+
         switch (buff.getType()) {
             case RESTORE_HP:
                 logo = new TextureRegion(logos, 129, 0, 64, 64);
+                batch.draw(logo, 310, 300, 256, 256);
+                break;
+            case ATTACK:
+                logo = new TextureRegion(logos, 0, 0, 64, 64);
                 batch.draw(logo, 300, 300, 256, 256);
+                break;
+            case DEFENSE:
+                logo = new TextureRegion(logos, 61, 0, 64, 64);
+                batch.draw(logo, 280, 300, 256, 256);
+                break;
+            case RESTORE_MANA:
+                logo = new TextureRegion(logos, 193, 0, 64, 64);
+                batch.draw(logo, 310, 300, 256, 256);
+                break;
+            case EVASION:
+                logo = new TextureRegion(logos, 257, 0, 64, 64);
+                batch.draw(logo, 300, 300, 256, 256);
+                break;
+            case MAX_HEALTH:
+                logo = new TextureRegion(logos, 321, 0, 64, 64);
+                batch.draw(logo, 300, 300, 256, 256);
+                break;
+            case WEAPON_SIZE:
+                logo = new TextureRegion(logos, 384, 0, 64, 64);
+                batch.draw(logo, 300, 300, 256, 256);
+                break;
         }
-
-        //LOGO
 
         //TEXT
         BitmapFont font = new BitmapFont();
@@ -222,7 +249,7 @@ public class Drawer {
     }
     private static void drawGreenCard(SpriteBatch batch, Texture texture) {
         TextureRegion card = new TextureRegion(texture, 361, 0, 120, 135);
-        batch.draw(card, 200, 150, 430, 450);
+        batch.draw(card, 240, 150, 430, 450);
     }
     private static void drawYellowCard(SpriteBatch batch, Texture texture) {
         TextureRegion card = new TextureRegion(texture, 481, 0, 120, 135);
