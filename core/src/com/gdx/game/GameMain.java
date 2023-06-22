@@ -89,8 +89,8 @@ public class GameMain extends Game implements Screen {
 		///shop
 		manager.load("Idle Working.png", Texture.class);
 
-		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("2dpixelskin.atlas");
-		manager.load("2dpixelskin.json", Skin.class, skinParam);
+		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix.atlas");
+		manager.load("fix.json", Skin.class, skinParam);
 
 		this.manager.finishLoading();
 

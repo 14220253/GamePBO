@@ -4,15 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.gdx.UI.ShopUI;
 import com.gdx.objects.Buffs;
 
 public class Drawer {
@@ -36,17 +34,7 @@ public class Drawer {
         TextureRegion topShadowFloor = new TextureRegion(tiles, 71, 0, 31, 25);
         TextureRegion rightDoor = new TextureRegion(tiles, 248, 95, 7, 90);
         TextureRegion leftDoor = new TextureRegion(tiles, 255, 95, 10, 90);
-        //NPC
-        Texture NPC = app.getManager().get("Idle Working.png");
-        Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
-        TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
-        batch.draw(currentFrame, 20,50);
-        float dx = app.getPlayer().getPosX() - 20;
-        float dy = app.getPlayer().getPosY() - 50;
-        float d = dx*dx + dy*dy;
-        if(d <= 256){
-            app.setScreen(new ShopUI());
-        }
+
 
         //bottom wall
         batch.draw(bottomRightWall, 713, 40, 40, 40);
@@ -102,7 +90,19 @@ public class Drawer {
         TextureRegion bottomWall = new TextureRegion(tiles, 3, 75, 40, 5);
         TextureRegion floor = new TextureRegion(tiles, 71, 16, 31, 25);
         TextureRegion topShadowFloor = new TextureRegion(tiles, 71, 0, 31, 25);
-        Texture NPC = new Texture();
+
+        //NPC
+        Texture NPC = app.getManager().get("Idle Working.png");
+        Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
+        TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
+        batch.draw(currentFrame, 20,50);
+        float dx = app.getPlayer().getPosX() - 20;
+        float dy = app.getPlayer().getPosY() - 50;
+        float d = dx*dx + dy*dy;
+        if(d <= 256){
+            app.setScreen(new ShopUI());
+        }
+
 
         //bottom wall
         batch.draw(bottomRightWall, 514, 200, 40, 40);
