@@ -91,18 +91,8 @@ public class Drawer {
         TextureRegion floor = new TextureRegion(tiles, 71, 16, 31, 25);
         TextureRegion topShadowFloor = new TextureRegion(tiles, 71, 0, 31, 25);
 
-        //NPC
-        Texture NPC = app.getManager().get("Idle Working.png");
-        Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
-        TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
-        batch.draw(currentFrame, 250,400);
-        //test
-        float dx = app.getPlayer().getPosX() - 20;
-        float dy = app.getPlayer().getPosY() - 50;
-        float d = dx*dx + dy*dy;
-        if(d <= 256){
-            app.setScreen(new ShopUI());
-        }
+
+
 
 
         //bottom wall
@@ -134,6 +124,18 @@ public class Drawer {
         for (int i = 240; i <= 400; i += 25) {
             batch.draw(sideWall, 546, i, 5, 40);
             batch.draw(sideWall, 210, i, 5, 40);
+        }
+        //NPC
+        Texture NPC = app.getManager().get("Idle Working.png");
+        Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
+        TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
+        batch.draw(currentFrame, 250,400);
+        //test
+        float dx = app.getPlayer().getPosX() - 20;
+        float dy = app.getPlayer().getPosY() - 50;
+        float d = dx*dx + dy*dy;
+        if(d <= 256){
+            app.setScreen(new ShopUI());
         }
     }
 
