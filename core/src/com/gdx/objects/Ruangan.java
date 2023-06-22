@@ -141,10 +141,8 @@ public class Ruangan {
                     new Rectangle(400, 300, 64, 64))) {
                 app.setScreen(new ShopUI());
             }
-            float dx = app.getPlayer().getPosX() - 250;
-            float dy = app.getPlayer().getPosY() - 450;
-            float d = dx*dx + dy*dy;
-            if(d <= 256){
+
+            if(app.getPlayer().getPosX() == 400 && app.getPlayer().getPosY() == 300){
                 app.setScreen(new ShopUI());
             }
 
