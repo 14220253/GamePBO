@@ -14,6 +14,9 @@ public class MagicWeaponAnimation implements WeaponAnimation{
     int fixY;
     float frameTime = -1;
 
+    public MagicWeaponAnimation() {
+    }
+
     @Override
     public void attack(Player player, ArrayList<TextureRegion> weapon, float frameTime, Batch batch, float sizeScaling) {
         if (fixX < 0){

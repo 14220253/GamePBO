@@ -9,7 +9,7 @@ public class Inventory {
     //backpack
     private final int CAPACITY = 6;
     private int coins = 0;
-    private final ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Item> ITEMS = new ArrayList<>();
 
     public int getCoins() {
         return coins;
@@ -19,14 +19,14 @@ public class Inventory {
     }
 
     public void addItem(Item item) throws InventoryFullException {
-        if (items.size() == CAPACITY) {
+        if (ITEMS.size() == CAPACITY) {
             throw new InventoryFullException();
         } else
-            items.add(item);
+            ITEMS.add(item);
     }
 
     public void deleteItem(int indexItem) {
-        items.remove(indexItem);
+        ITEMS.remove(indexItem);
     }
     public void gainCoin(int coin){
         coins += coin;

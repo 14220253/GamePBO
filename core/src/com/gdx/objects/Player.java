@@ -23,10 +23,10 @@ public class Player extends Karakter { //interface Skill belum tau
     private int mana;
     private int maxHealth = 100; //default max hp 100, nanti bisa ditambah
     private int evasion = 0;
-    private final double healMultiplier = 1; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
+    private double healMultiplier = 1; //multiplier untuk healing mungkin bisa digunakan untuk buff/debuff
     private double exp;
     private Inventory inventory;
-    private final int maxEvasion = 60;
+    private final int MAXEVASION = 60;
     private PlayerAnimation playerAnimation;
     private TextureRegion currentFrame;
     private boolean isRunning;
@@ -184,7 +184,7 @@ public class Player extends Karakter { //interface Skill belum tau
         this.health += healing*healMultiplier;
     }
     public int getEvasion(){
-        return Math.min(evasion, maxEvasion); //evasion tidak boleh melebihi max evasion (perma miss OP)
+        return Math.min(evasion, MAXEVASION); //evasion tidak boleh melebihi max evasion (perma miss OP)
     }
     public void checkHealth(){
         health = Math.max(health, 0); //Health tidak boleh dibawah 0
@@ -293,7 +293,7 @@ public class Player extends Karakter { //interface Skill belum tau
     public void addAttack(double amount){attack += amount;}
     public void addDefense(double amount){defense += amount;}
     public void addMaxHealth(int amount) {maxHealth += amount;}
-    public void addEvasion(int amount) {amount = Math.min(maxEvasion, evasion + amount);}
+    public void addEvasion(int amount) {amount = Math.min(MAXEVASION, evasion + amount);}
     public void addWeaponSize(double amount) {
         getWeapon().setSizeScaling(getWeapon().getSizeScaling() + amount);
     }
@@ -306,7 +306,7 @@ public class Player extends Karakter { //interface Skill belum tau
         System.out.println("mana: " + mana);
         System.out.println("max health: " + maxHealth);
         System.out.println("evasion: " + evasion);
-        System.out.println("max evasion: " + maxEvasion);
+        System.out.println("max evasion: " + MAXEVASION);
         System.out.println();
     }
 }

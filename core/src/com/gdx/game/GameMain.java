@@ -87,10 +87,6 @@ public class GameMain extends Game {
 		font = new BitmapFont();
 		text = new BitmapFontCache(font);
 
-		this.floors = new ArrayList<>();
-		Floor floor = new Floor(1);
-		floor.initialize();
-		floors.add(floor);
 		entities = new ArrayList<>();
 		shapeRenderer = new ShapeRenderer();
 		isOnDebug = false;
@@ -103,6 +99,10 @@ public class GameMain extends Game {
 		this.mainMenuUI.forCreate();
 		this.player.canMoveFree();
 		floorCount = 0;
+		this.floors = new ArrayList<>();
+		Floor floor = new Floor(1, this.player);
+		floor.initialize();
+		floors.add(floor);
 	}
 
 	public void render() {
@@ -121,7 +121,7 @@ public class GameMain extends Game {
 		if (!floors.get(floorCount).isDone()) {
 			floors.get(floorCount).draw(batch, stateTime, player);
 		} else {
-			floors.add(new Floor(player.getLevel()));
+			floors.add(new Floor(player.getLevel(), player));
 			floorCount++;
 		}
 		this.stateTime += Gdx.graphics.getDeltaTime();
@@ -158,12 +158,13 @@ public class GameMain extends Game {
 			//TODO :)
 		}
 
-		this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
+
 		if (!floors.get(floorCount).getCurrentRoom().isShowingCard()) {
+			this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
 			this.player.draw(batch);
+			this.updatePlayerAttacks();
+			this.updateAllProjectile();
 		}
-		this.updatePlayerAttacks();
-		this.updateAllProjectile();
 	}
 
 	public void dispose() {

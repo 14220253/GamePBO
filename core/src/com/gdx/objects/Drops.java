@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
-import com.gdx.game.Static;
 
 import java.awt.*;
 import java.util.Random;
@@ -16,14 +15,15 @@ public class Drops {
     //koin, health, mana di lantai yang didrop musuh
     private TextureRegion currentFrame;
     private Animation<TextureRegion> animation;
-    private final Animation<TextureRegion> collectAnimation;
+    private Animation<TextureRegion> collectAnimation;
     private State state;
-    private final int posX;
-    private final int posY;
-    private final Rectangle hitbox;
+    private final int POSX;
+    private final int POSY;
+    private final Rectangle HITBOX;
     private int amount;
     private Texture texture;
     private Type type;
+    private GameMain app;
     private float startCollect = 0f;
     enum Type {
         COIN,
@@ -39,7 +39,7 @@ public class Drops {
     public Type getType() {return type;}
 
     public Drops(int posX, int posY, int floor, Type type) {
-        GameMain app = (GameMain) Gdx.app.getApplicationListener();
+        app = (GameMain) Gdx.app.getApplicationListener();
         currentFrame = new TextureRegion();
         switch (type) {
             case COIN:
@@ -62,9 +62,9 @@ public class Drops {
         Texture collected = app.getManager().get("coins/Collected.png");
         collectAnimation = Animator.animate(collected, 6, 1, false, false, 0.05f);
         state = State.AVALABLE;
-        this.posX = posX;
-        this.posY = posY;
-        hitbox = new Rectangle(posX, posY, 32, 32);
+        this.POSX = posX;
+        this.POSY = posY;
+        HITBOX = new Rectangle(posX, posY, 32, 32);
         this.type = type;
     }
 
@@ -75,10 +75,10 @@ public class Drops {
     public void draw(SpriteBatch batch, float stateTime) {
         if (state == State.AVALABLE) {
             currentFrame = animation.getKeyFrame(stateTime, true);
-            batch.draw(currentFrame, posX, posY, 32, 32);
+            batch.draw(currentFrame, POSX, POSY, 32, 32);
         }
         else if (state == State.COLLECTED) {
-            hitbox.setSize(0, 0);
+            HITBOX.setSize(0, 0);
             collect(batch, startCollect);
             startCollect += 1 * Gdx.graphics.getDeltaTime();
         }
@@ -86,14 +86,14 @@ public class Drops {
 
     public void collect(SpriteBatch batch, float stateTime) {
         currentFrame = collectAnimation.getKeyFrame(stateTime, false);
-        batch.draw(currentFrame, posX, posY);
+        batch.draw(currentFrame, POSX, POSY);
         if (collectAnimation.isAnimationFinished(stateTime)) {
             state = State.GONE;
         }
     }
 
     public Rectangle getHitbox() {
-        return hitbox;
+        return HITBOX;
     }
 
     public void setState(State state) {

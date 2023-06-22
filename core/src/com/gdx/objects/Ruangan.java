@@ -20,7 +20,7 @@ public class Ruangan {
     private Rectangle bottomBorder;
     private Rectangle upperborder;
     private Texture texture;
-    private final String type;
+    private final String TYPE;
     private ArrayList<Monster> monsters;
     private ArrayList<Breakable> breakables;
     private ArrayList<Drops> drops;
@@ -39,9 +39,11 @@ public class Ruangan {
     private Rectangle rightButtonHitbox;
     private Buffs selectedBuff;
     private boolean done;
+    private Player player;
 
-    public Ruangan(String type) {
-        this.type = type;
+    public Ruangan(String type, Player player) {
+        this.TYPE = type;
+        this.player = player;
     }
 
     /**
@@ -105,16 +107,16 @@ public class Ruangan {
         }
     }
 
-    public void draw(SpriteBatch batch, float stateTime, Player player) {
+    public void draw(SpriteBatch batch, float stateTime) {
         //map
-        if (type.equalsIgnoreCase("Dungeon")) {
+        if (TYPE.equalsIgnoreCase("Dungeon")) {
             Drawer.drawDungeon(batch);
             leftBorder = new Rectangle(48, 40, 5, 500);
             rightBorder = new Rectangle(710, 40, 5, 500);
             bottomBorder = new Rectangle(48, 55, 705, 8);
             upperborder = new Rectangle(48, 525, 705, 8);
         }
-        else if (type.equalsIgnoreCase("Shop")) {
+        else if (TYPE.equalsIgnoreCase("Shop")) {
             texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
             Drawer.drawDungeonShop(batch);
             rightBorder = new Rectangle(510, 203, 5, 300);
@@ -124,7 +126,7 @@ public class Ruangan {
         }
 
         //enemies
-        if (!type.equalsIgnoreCase("Shop") && !type.equalsIgnoreCase("boss")) {
+        if (!TYPE.equalsIgnoreCase("Shop") && !TYPE.equalsIgnoreCase("boss")) {
             //PROPS
             for (Breakable breakable : breakables) {
                 if (breakable.getState() == Breakable.State.HALFBROKEN) {

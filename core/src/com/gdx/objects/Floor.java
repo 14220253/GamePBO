@@ -11,13 +11,15 @@ public class Floor {
     //ruangan
     private ArrayList<Ruangan> rooms;
 
-    private final int level;
+    private final int LEVEL;
     private Ruangan currentRoom;
     private int room;
     private boolean done;
+    private Player player;
 
-    public Floor(int level) {
-        this.level = level;
+    public Floor(int level, Player player) {
+        this.LEVEL = level;
+        this.player = player;
     }
 
     public void initialize() {
@@ -25,18 +27,18 @@ public class Floor {
         for (int i = 0; i < 7; i++) {
             Ruangan ruangan;
             if (i < 5) {
-                ruangan = new Ruangan("dungeon");
-                ruangan.initialize(new Random().nextInt(1, 7), this.level, (i + 1));
+                ruangan = new Ruangan("dungeon", player);
+                ruangan.initialize(new Random().nextInt(1, 7), this.LEVEL, (i + 1));
                 rooms.add(ruangan);
             }
             if (i == 5) {
-                Ruangan ruanganShop = new Ruangan("shop");
-                ruanganShop.initialize(100, this.level, (i + 1));
+                Ruangan ruanganShop = new Ruangan("shop", player);
+                ruanganShop.initialize(100, this.LEVEL, (i + 1));
                 rooms.add(ruanganShop);
             }
             if (i == 6) {
-                Ruangan ruanganBoss = new Ruangan("dungeon");
-                ruanganBoss.initialize(0, this.level, (i + 1));
+                Ruangan ruanganBoss = new Ruangan("dungeon", player);
+                ruanganBoss.initialize(0, this.LEVEL, (i + 1));
                 rooms.add(ruanganBoss);
             }
         }
@@ -47,7 +49,7 @@ public class Floor {
 
     public void draw(SpriteBatch batch, float stateTime, Player player) {
         if (!currentRoom.isDone()) {
-            currentRoom.draw(batch, stateTime, player);
+            currentRoom.draw(batch, stateTime);
         }
         else {
             if (room == 6) {
