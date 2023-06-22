@@ -47,6 +47,7 @@ public class GameMain extends Game implements Screen {
 	BitmapFontCache text;
 	PlayerUI UI;
 	int floorCount;
+	MainGameScreen game;
 
 	public GameMain() {
 	}
@@ -103,12 +104,14 @@ public class GameMain extends Game implements Screen {
 		floor.initialize();
 		floors.add(floor);
 		this.setScreen(new MainMenuScreen());
+
+		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
 	}
 
 	public void render() {
 		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
 		this.batch.begin();
-		this.mainGame(this.batch);
+		game.mainGame(batch);
 		this.batch.end();
 	}
 
@@ -122,55 +125,7 @@ public class GameMain extends Game implements Screen {
 
 	}
 
-	public void mainGame(SpriteBatch batch) {
-		if (!floors.get(floorCount).isDone()) {
-			floors.get(floorCount).draw(batch, stateTime, player);
-		} else {
-			floors.add(new Floor(player.getLevel(), player));
-			floorCount++;
-		}
-		this.stateTime += Gdx.graphics.getDeltaTime();
-		UI.draw(batch);
 
-		if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
-			isOnDebug = !isOnDebug;
-		}
-		if(isOnDebug) {
-			try {
-				enableDebug();
-			} catch (NullPointerException e) {
-				System.out.println(e.getMessage());
-			}
-			catch (IllegalStateException ignored){}
-		}
-		try {
-			if ((double) this.player.getPosY() >= floors.get(floorCount).getCurrentRoom().getUpperborder().getY() - 20.0) {
-				this.player.setCanMoveUp(false);
-			}
-
-			if ((double) this.player.getPosY() <= floors.get(floorCount).getCurrentRoom().getBottomBorder().getY()) {
-				this.player.setCanMoveDown(false);
-			}
-
-			if ((double) this.player.getPosX() <= floors.get(floorCount).getCurrentRoom().getLeftBorder().getX() + 10.0) {
-				this.player.setCanMoveLeft(false);
-			}
-
-			if ((double) this.player.getPosX() >= floors.get(floorCount).getCurrentRoom().getRightBorder().getX()) {
-				this.player.setCanMoveRight(false);
-			}
-		} catch (Exception ignored){
-			//TODO :)
-		}
-
-
-		if (!floors.get(floorCount).getCurrentRoom().isShowingCard()) {
-			this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
-			this.player.draw(batch);
-			this.updatePlayerAttacks();
-			this.updateAllProjectile();
-		}
-	}
 
 	public void dispose() {
 		this.batch.dispose();
