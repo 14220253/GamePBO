@@ -87,17 +87,6 @@ public class GameMain extends Game implements Screen {
 		manager.load("pixelCardAssest_V01.png", Texture.class);
 
 		///shop
-		FileHandleResolver resolver = new InternalFileHandleResolver();
-		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-		manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
-		FreetypeFontLoader.FreeTypeFontLoaderParameter bigfontParameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-		bigfontParameter.fontFileName = "VT323-Regular.ttf";
-		bigfontParameter.fontParameters.size = 48;
-		bigfontParameter.fontParameters.color = com.badlogic.gdx.graphics.Color.WHITE;
-		bigfontParameter.fontParameters.borderColor = Color.BLACK;
-		bigfontParameter.fontParameters.borderWidth = 2;
-		bigfontParameter.fontParameters.flip = false;
-		manager.load("VT323-Regular.ttf", BitmapFont.class, bigfontParameter);
 		manager.load("Idle Working.png", Texture.class);
 
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("2dpixelskin.atlas");
