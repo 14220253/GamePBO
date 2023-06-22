@@ -4,9 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.gdx.UI.PlayerUI;
-import com.gdx.objects.Floor;
-import com.gdx.objects.Player;
+import com.gdx.objects.*;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,8 @@ public class MainGameScreen {
     private boolean isOnDebug;
     private PlayerUI UI;
     private GameMain app;
+    private ShapeRenderer shapeRenderer;
+    private ArrayList<Karakter> entities;
 
     public MainGameScreen(ArrayList<Floor> floors, int floorCount, float stateTime, Player player, boolean isOnDebug, PlayerUI UI, GameMain app) {
         this.floors = floors;
@@ -27,6 +29,8 @@ public class MainGameScreen {
         this.isOnDebug = isOnDebug;
         this.UI = UI;
         this.app = app;
+        shapeRenderer = new ShapeRenderer();
+        entities = new ArrayList<>();
     }
 
     public void mainGame(SpriteBatch batch) {
@@ -44,7 +48,7 @@ public class MainGameScreen {
         }
         if(isOnDebug) {
             try {
-                app.enableDebug();
+                enableDebug();
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
             }
@@ -76,6 +80,41 @@ public class MainGameScreen {
             this.player.draw(batch);
             app.updatePlayerAttacks();
             app.updateAllProjectile();
+        }
+    }
+    public void enableDebug() throws NullPointerException, IllegalStateException{
+
+        getEnities();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.rect(170, 70, 220, 80);
+        for (Karakter entity : entities) {
+            shapeRenderer.rect(
+                    (float) entity.getHitBox().getX(),
+                    (float) entity.getHitBox().getY(),
+                    (float) entity.getHitBox().getWidth(),
+                    (float) entity.getHitBox().getHeight()
+            );
+        }
+        for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
+            shapeRenderer.rect(player.getWeapon().getWeaponAnimation().getHitboxes()[i].x,
+                    player.getWeapon().getWeaponAnimation().getHitboxes()[i].y,
+                    player.getWeapon().getWeaponAnimation().getHitboxes()[i].width,
+                    player.getWeapon().getWeaponAnimation().getHitboxes()[i].height);
+        }
+        for (Breakable b: floors.get(floorCount).getCurrentRoom().getBreakables()) {
+            shapeRenderer.rect(b.getHitbox().x, b.getHitbox().y, b.getHitbox().width, b.getHitbox().height);
+        }
+        for (Drops d: floors.get(floorCount).getCurrentRoom().getDrops()) {
+            shapeRenderer.rect(d.getHitbox().x, d.getHitbox().y, d.getHitbox().width, d.getHitbox().height);
+        }
+        shapeRenderer.end();
+    }
+    public void getEnities() {
+        if (!entities.contains(player)) {
+            entities.add(player);
+        }
+        if (entities.size() <= 1) {
+            entities.addAll(floors.get(floorCount).getCurrentRoom().getMonsters());
         }
     }
 }

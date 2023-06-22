@@ -40,8 +40,6 @@ public class GameMain extends Game implements Screen {
 	Sprite activePlayerProjectile;
 	float stateTime;
 	ArrayList<Floor> floors;
-	ShapeRenderer shapeRenderer;
-	ArrayList<Karakter> entities;
 	boolean isOnDebug;
 	BitmapFont font;
 	BitmapFontCache text;
@@ -88,8 +86,7 @@ public class GameMain extends Game implements Screen {
 		font = new BitmapFont();
 		text = new BitmapFontCache(font);
 
-		entities = new ArrayList<>();
-		shapeRenderer = new ShapeRenderer();
+
 		isOnDebug = false;
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
@@ -133,40 +130,7 @@ public class GameMain extends Game implements Screen {
 		font.dispose();
 	}
 
-	public void enableDebug() throws NullPointerException, IllegalStateException{
-		getEnities();
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-		shapeRenderer.rect(170, 70, 220, 80);
-		for (Karakter entity : entities) {
-			shapeRenderer.rect(
-					(float) entity.getHitBox().getX(),
-					(float) entity.getHitBox().getY(),
-					(float) entity.getHitBox().getWidth(),
-					(float) entity.getHitBox().getHeight()
-			);
-		}
-		for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
-			shapeRenderer.rect(player.getWeapon().getWeaponAnimation().getHitboxes()[i].x,
-					player.getWeapon().getWeaponAnimation().getHitboxes()[i].y,
-					player.getWeapon().getWeaponAnimation().getHitboxes()[i].width,
-					player.getWeapon().getWeaponAnimation().getHitboxes()[i].height);
-		}
-		for (Breakable b: floors.get(floorCount).getCurrentRoom().getBreakables()) {
-			shapeRenderer.rect(b.getHitbox().x, b.getHitbox().y, b.getHitbox().width, b.getHitbox().height);
-		}
-		for (Drops d: floors.get(floorCount).getCurrentRoom().getDrops()) {
-			shapeRenderer.rect(d.getHitbox().x, d.getHitbox().y, d.getHitbox().width, d.getHitbox().height);
-		}
-		shapeRenderer.end();
-	}
-	public void getEnities() {
-		if (!entities.contains(player)) {
-			entities.add(player);
-		}
-		if (entities.size() <= 1) {
-			entities.addAll(floors.get(floorCount).getCurrentRoom().getMonsters());
-		}
-	}
+
 	public static float getAngleToMouse(float mouseX, float mouseY, float charX, float charY) {
 		mouseY = (float) Gdx.graphics.getHeight() - mouseY;
 		float deltaX = mouseX - charX;
