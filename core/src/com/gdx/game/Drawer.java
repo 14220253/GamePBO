@@ -96,6 +96,7 @@ public class Drawer {
         Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
         TextureRegion currentFrame = NPCAnimation.getKeyFrame(app.stateTime,true);
         batch.draw(currentFrame, 400,300);
+        //test
         float dx = app.getPlayer().getPosX() - 20;
         float dy = app.getPlayer().getPosY() - 50;
         float d = dx*dx + dy*dy;
