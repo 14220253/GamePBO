@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -77,9 +78,11 @@ public class ShopUI implements Screen, InputProcessor {
 
 
         //set judul shop ui
+        BitmapFont font = new BitmapFont();
+        BitmapFontCache text = new BitmapFontCache(font);
         titleLabel = new Label("SHOP", mySkin);
         Label.LabelStyle style = new Label.LabelStyle(titleLabel.getStyle());
-        style.font = assetManager.get("font.ttf", BitmapFont.class);
+        style.font = text.getFont();
         titleLabel.setStyle(style);
         titleLabel.setHeight(75);
         titleLabel.setX(113.5f);
