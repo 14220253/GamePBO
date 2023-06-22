@@ -1,6 +1,6 @@
-package com.gdx.UI;
+package com.gdx.screen;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -10,10 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.gdx.game.GameMain;
 
 
-public class MainMenuUI {
+public class MainMenuScreen implements Screen, InputProcessor {
+    GameMain parentGame;
     Texture mainMenu;
     Stage stage;
     TextureRegion menuWindow;
@@ -26,17 +29,15 @@ public class MainMenuUI {
     Button startButton;
     Button optionButton;
     Button exitButton;
-
-    public void forCreate() {
+    public MainMenuScreen() {
+        parentGame = (GameMain) Gdx.app.getApplicationListener();
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
-
         mainMenu = new Texture("mainMenu/menuUI.png");
         menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
         startButtonIdle = new TextureRegion(mainMenu, 0, 1, 475, 133);
         optionsButtonIdle = new TextureRegion(mainMenu, 0, 429, 475, 133);
         exitButtonIdle = new TextureRegion(mainMenu, 479, 429, 475, 133);
-
         startButtonHover = new TextureRegion(mainMenu, 0, 290, 475, 133);
         optionsButtonHover = new TextureRegion(mainMenu, 0, 717, 475, 133);
         exitButtonHover = new TextureRegion(mainMenu, 479, 717, 475, 133);
@@ -56,8 +57,7 @@ public class MainMenuUI {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //code buat pindah scene
-//                System.out.println("HIIIIIIII");
+                parentGame.setScreen(new GameMain());
             }
         });
         startButton.setX(240);
@@ -109,11 +109,80 @@ public class MainMenuUI {
         stage.addActor(exitButton);
     }
 
-    public void forRender() {
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
         stage.act();
         stage.draw();
     }
 
-    public MainMenuUI() {
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
     }
 }
