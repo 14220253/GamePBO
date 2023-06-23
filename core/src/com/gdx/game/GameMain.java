@@ -101,6 +101,7 @@ public class GameMain extends Game implements Screen {
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
 		manager.load("blue_background.png", Texture.class);
+		shopUI = new ShopUI();
 
 		//SOUNDS
 		manager.load("ambient.mp3", Music.class);
