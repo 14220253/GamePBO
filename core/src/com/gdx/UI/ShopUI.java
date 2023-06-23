@@ -374,8 +374,7 @@ public class ShopUI implements Screen, InputProcessor {
     }
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(multiInput);
-        parentGame.setScreen(this);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
