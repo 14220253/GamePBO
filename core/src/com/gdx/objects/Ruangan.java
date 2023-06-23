@@ -137,10 +137,6 @@ public class Ruangan {
             TextureRegion currentFrame = NPCAnimation.getKeyFrame(stateTime,true);
             batch.draw(currentFrame, 400,300, 64, 64);
             //test
-            if (Static.rectangleCollisionDetect(player.getHitBox(),
-                    new Rectangle(400, 300, 64, 64))) {
-                app.setScreen(new ShopUI());
-            }
             if(player.getPosY() == 300 && player.getPosX() ==400){
                 app.openShopUI();
             }
