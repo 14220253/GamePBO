@@ -225,14 +225,14 @@ public class GameMain extends Game implements Screen {
 //			}
 //		}
 	}
-	public void updatePlayerAttacks(){
+	public void updatePlayerAttacks() {
 		if (Gdx.input.isButtonJustPressed(0) && !this.player.isAttacking() && this.attackCooldown == 0.0F && !this.player.isDying()) {
 			this.player.setAttacking(true);
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
 
 			if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
-				((MeleeWeaponAnimation)player.getWeapon().getWeaponAnimation()).getSwingSound().play(0.5f);
+				((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getSwingSound().play(0.5f);
 			}
 		}
 
@@ -250,7 +250,7 @@ public class GameMain extends Game implements Screen {
 				//  code kena dmg untuk monster
 				//	}
 				//}
-				if (player.getWeapon().getWeaponAnimation().getHitboxes()[i].intersects(new Rectangle(60,400))){
+				if (player.getWeapon().getWeaponAnimation().getHitboxes()[i].intersects(new Rectangle(60, 400))) {
 //					System.out.println("test");
 				}
 			}
@@ -273,17 +273,6 @@ public class GameMain extends Game implements Screen {
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}
-
-		if(player.getSkill() != null){
-			updatePlayerSkill();
-		}
-	}
-	public void updatePlayerSkill(){
-		if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
-			player.getSkill().intitialize(player);
-		}
-		player.getSkill().update(player);
-		player.getSkill().draw(player,batch);
 	}
 
 	public SpriteBatch getBatch() {

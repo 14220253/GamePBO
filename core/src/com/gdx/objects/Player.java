@@ -316,6 +316,16 @@ public class Player extends Karakter { //interface Skill belum tau
                 soundTimer -= 1 * Gdx.graphics.getDeltaTime();
             }
         }
+        if(getSkill() != null){
+            updatePlayerSkill(app.getBatch());
+        }
+    }
+    public void updatePlayerSkill(Batch batch){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+            getSkill().intitialize(this);
+        }
+        this.getSkill().update(this);
+        this.getSkill().draw(this,batch);
     }
     public double getHpPercent() {return health / maxHealth;}
     public double getManaPercent() {return (double) mana / 100;}
