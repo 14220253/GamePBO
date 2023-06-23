@@ -57,6 +57,7 @@ public class GameMain extends Game implements Screen {
 	PlayerUI UI;
 	int floorCount;
 	MainGameScreen game;
+	ShopUI shopUI;
 
 	public GameMain() {
 	}
@@ -99,6 +100,7 @@ public class GameMain extends Game implements Screen {
 		manager.load("Idle Working.png", Texture.class);
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
+		manager.load("blue_background.png", Texture.class);
 
 		//SOUNDS
 		manager.load("ambient.mp3", Music.class);
@@ -126,15 +128,18 @@ public class GameMain extends Game implements Screen {
 		floor.initialize();
 		floors.add(floor);
 		this.setScreen(new MainMenuScreen());
-
-
+		shopUI = new ShopUI();
 		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
+	}
+	public void openShopUI(){
+		setScreen(shopUI);//---------------------
 	}
 
 	public void render() {
 		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
 		this.batch.begin();
 		game.mainGame(batch);
+		getScreen().render(Gdx.graphics.getDeltaTime());//----------
 		this.batch.end();
 	}
 

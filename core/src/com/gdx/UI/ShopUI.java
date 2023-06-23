@@ -53,15 +53,15 @@ public class ShopUI implements Screen, InputProcessor {
         //mendapatkan asset manager yang ada di game main
         assetManager = parentGame.getManager();
         //set camera
-        camera = new OrthographicCamera(341,200);
-        camera.setToOrtho(false, 341, 200);
+        camera = new OrthographicCamera(800,700);
+        camera.setToOrtho(false, 800, 700);
         //set viewport
         viewport = new FitViewport(341, 200, camera);
         //set shop ui batch
         batch = new SpriteBatch();
         //set stage camera
-        stageCamera = new OrthographicCamera(341, 200);
-        stageCamera.setToOrtho(false, 341, 200);
+        stageCamera = new OrthographicCamera(800, 700);
+        stageCamera.setToOrtho(false, 800, 700);
         //set stage dengan memasukkan view port yang telah dibuat
         stage = new Stage(new FitViewport(341, 200, stageCamera));
 
@@ -228,8 +228,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //----------------------------CROWN--------------------
         crown = new ImageButton(mySkin,"crown");
-        crown.setWidth(100);
-        crown.setHeight(100);
+        crown.setWidth(50);
+        crown.setHeight(50);
         crown.setY(90);
         crown.setX(130);
         crown.addListener(new InputListener() {
@@ -250,8 +250,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //--------------------------DIAMOND--------------------------
         diamond = new ImageButton(mySkin, "diamond");
-        diamond.setWidth(100);
-        diamond.setHeight(100);
+        diamond.setWidth(50);
+        diamond.setHeight(50);
         diamond.setX(180);
         diamond.setY(90);
         diamond.addListener(new InputListener() {
@@ -374,7 +374,7 @@ public class ShopUI implements Screen, InputProcessor {
     }
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(multiInput);
     }
 
     @Override
