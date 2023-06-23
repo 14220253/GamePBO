@@ -53,8 +53,8 @@ public class ShopUI implements Screen, InputProcessor {
         //mendapatkan asset manager yang ada di game main
         assetManager = parentGame.getManager();
         //set camera
-        camera = new OrthographicCamera(341,200);
-        camera.setToOrtho(false, 341, 200);
+        camera = new OrthographicCamera(800,700);
+        camera.setToOrtho(false, 800, 700);
         //set viewport
         viewport = new FitViewport(341, 200, camera);
         //set shop ui batch
