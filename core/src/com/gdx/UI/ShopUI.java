@@ -2,6 +2,7 @@ package com.gdx.UI;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -72,8 +73,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //load skin yang digunakan
         Skin mySkin = assetManager.get("fix1.json", Skin.class);
-
-
+        SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
+        assetManager.load("fix1.json", Skin.class, skinParam);
 
         //set judul shop ui
         BitmapFont font = new BitmapFont();
