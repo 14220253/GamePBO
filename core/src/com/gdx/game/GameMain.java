@@ -119,6 +119,7 @@ public class GameMain extends Game implements Screen {
 		floors.add(floor);
 		this.setScreen(new MainMenuScreen());
 
+
 		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
 	}
 

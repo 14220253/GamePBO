@@ -90,6 +90,11 @@ public class ShopUI implements Screen, InputProcessor {
 
         //set xbutton
         xButton = new TextButton("X", mySkin);
+        xButton.setHeight(20);
+        xButton.setWidth(20);
+        xButton.setX(320);
+        xButton.setY(180);
+
         xButton.addListener(new InputListener(){
             //jika ditekan current item akan menjadi ring dan option window akan dimunculkan
             @Override
@@ -104,6 +109,7 @@ public class ShopUI implements Screen, InputProcessor {
                 return true;
             }
         });
+        stage.addActor(xButton);
 
         //---------------------------------------RING-----------------------
         //set image button sebagai gambaran item yang nantinya dibeli
