@@ -10,18 +10,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.ShopUI;
@@ -61,7 +54,6 @@ public class GameMain extends Game implements Screen {
 
 	public GameMain() {
 	}
-
 	public void create() {
 		this.batch = new SpriteBatch();
 		this.stateTime = 0.0F;
@@ -112,6 +104,11 @@ public class GameMain extends Game implements Screen {
 		manager.load("Sword.mp3", Sound.class);
 		manager.load("Bow.mp3", Sound.class);
 		manager.load("Magic.mp3", Sound.class);
+		manager.load("SwordSwing.mp3", Sound.class);
+		manager.load("SkeletonDies.mp3", Sound.class);
+		manager.load("GoblinDies.mp3", Sound.class);
+		manager.load("DoorOpens.mp3", Sound.class);
+		manager.load("CloseDoor.mp3", Sound.class);
 
 		this.manager.finishLoading();
 
@@ -248,6 +245,10 @@ public class GameMain extends Game implements Screen {
 			this.player.setAttacking(true);
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
+
+			if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
+				((MeleeWeaponAnimation)player.getWeapon().getWeaponAnimation()).getSwingSound().play(0.5f);
+			}
 		}
 
 		this.attackCooldown -= Gdx.graphics.getDeltaTime();
@@ -283,7 +284,7 @@ public class GameMain extends Game implements Screen {
 		}
 
 		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
-			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
+			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}

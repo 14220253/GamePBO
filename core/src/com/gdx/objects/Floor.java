@@ -24,22 +24,22 @@ public class Floor {
 
     public Floor(int level, Player player) {
         this.player = player;
-        initialize();
         this.LEVEL = level;
+        initialize();
     }
     public Floor(int start, int level,  Player player) {
         this.player = player;
+        LEVEL = level;
         initialize();
         room = start;
         currentRoom = rooms.get(room);
-        LEVEL = level;
     }
 
     public void initialize() {
         app = (GameMain) Gdx.app.getApplicationListener();
 
         music = app.getManager().get("ambient.mp3");
-        music.setVolume(0.5f);
+        music.setVolume(0.4f);
 
         rooms = new ArrayList<>();
         for (int i = 0; i < 7; i++) {

@@ -2,6 +2,7 @@ package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -39,7 +40,6 @@ public class Ruangan {
     private boolean showingCard;
     private int level;
     private int roomNumber;
-    private boolean cooldown;
     private Texture buttons;
     private TextureRegion button;
     private Rectangle leftButtonHitbox;
@@ -47,6 +47,8 @@ public class Ruangan {
     private Buffs selectedBuff;
     private boolean done;
     private Player player;
+    private Sound openDoor;
+    private Sound closeDoor;
 
     public Ruangan(String type, Player player) {
         this.TYPE = type;
@@ -61,6 +63,8 @@ public class Ruangan {
     public void initialize(int template, int level, int roomNumber) {
         this.level = level;
         app = (GameMain) Gdx.app.getApplicationListener();
+        openDoor = app.getManager().get("DoorOpens.mp3");
+        closeDoor = app.getManager().get("CloseDoor.mp3");
         monsters = new ArrayList<>();
         breakables = new ArrayList<>();
         drops = new ArrayList<>();
@@ -70,7 +74,6 @@ public class Ruangan {
         rightDoorHitbox = new Rectangle(675, 265, 150, 100);
         this.roomNumber = roomNumber;
         showingCard = false;
-        cooldown = false;
         buttons = app.getManager().get("GUI.png");
         button = new TextureRegion(buttons, 144, 80, 48, 16);
         leftButtonHitbox = new Rectangle(170, 550, 220, 80);
@@ -151,7 +154,7 @@ public class Ruangan {
 
         }
 
-        //enemies
+        //entities
         if (!TYPE.equalsIgnoreCase("Shop") && !TYPE.equalsIgnoreCase("boss")) {
             //PROPS
             for (Breakable breakable : breakables) {
@@ -173,13 +176,13 @@ public class Ruangan {
             //COLLECT FLOOR ITEMS
             for (int i = 0; i < drops.size(); i++) {
                 if (Static.rectangleCollisionDetect(player.getHitBox(), drops.get(i).getHitbox())) {
-                    if (drops.get(i).getType() == Drops.Type.COIN) {
+                    if (drops.get(i).getType() == Drops.Type.COIN && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.getInventory().addCoin(drops.get(i).getAmount());
                     }
-                    if (drops.get(i).getType() == Drops.Type.HEALTH) {
+                    if (drops.get(i).getType() == Drops.Type.HEALTH && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.addHealth(drops.get(i).getAmount());
                     }
-                    if (drops.get(i).getType() == Drops.Type.MANA) {
+                    if (drops.get(i).getType() == Drops.Type.MANA && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.addMana(drops.get(i).getAmount());
                     }
                     drops.get(i).setState(Drops.State.COLLECTED);
@@ -208,16 +211,16 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             breakable.getHitbox())) {
                         breakable.setState(Breakable.State.HALFBROKEN);
-                        breakable.getBreakSound().play(0.3f);
+                        breakable.getBreakSound().play(0.2f);
                     }
                 }
                 for (Monster monster:monsters) {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             monster.getHitBox())) {
-                        monster.takeDamage(player.getAttack());
-                        if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
-                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
+                        if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation && monster.getImmunityFrames() == 0) {
+                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
                         }
+                        monster.takeDamage(player.getAttack());
                     }
                 }
             }
@@ -245,7 +248,7 @@ public class Ruangan {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 if (!showingCard) {
                     showingCard = true;
-                    cooldown = true;
+                    openDoor.play(0.7f);
                 }
             }
 
@@ -263,13 +266,10 @@ public class Ruangan {
                     Drawer.drawCard(batch, buffs.get(2));
                     selectedBuff = buffs.get(2);
                 }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                    if (!cooldown) {
-                        showingCard = false;
-                        player.canMoveFree();
-                    }
-                    else
-                        cooldown = false;
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                    showingCard = false;
+                    player.canMoveFree();
+                    closeDoor.play(0.7f);
                 }
                 //BUTTONS
                 batch.draw(button, (float) leftButtonHitbox.getX(), 700 - (float) leftButtonHitbox.getY() - (float) leftButtonHitbox.getHeight(),
@@ -297,10 +297,12 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(leftButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         showingCard = false;
                         player.canMoveFree();
+                        closeDoor.play(0.7f);
                     }
                     if (Static.rectangleCollisionDetect(rightButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         done = true;
                         selectedBuff.activate(player);
+                        closeDoor.play(0.7f);
                     }
                 }
             }
