@@ -13,14 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.gdx.UI.PlayerUI;
 import com.gdx.game.GameMain;
 import com.gdx.game.MainGameScreen;
-import com.gdx.objects.Floor;
-import com.gdx.objects.Player;
-
-import java.util.ArrayList;
-
 
 public class MainMenuScreen implements Screen, InputProcessor {
     GameMain parentGame;
@@ -36,12 +30,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
     Button startButton;
     Button optionButton;
     Button exitButton;
-    ArrayList<Floor> floors;
-    int floorCount;
-    float stateTime;
-    Player player;
-    boolean isOnDebug;
-    PlayerUI UI;
     public MainMenuScreen(final SpriteBatch batch) {
         parentGame = (GameMain) Gdx.app.getApplicationListener();
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -151,7 +139,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
     @Override
     public void hide() {
-
+        stage.dispose();
     }
 
     @Override
