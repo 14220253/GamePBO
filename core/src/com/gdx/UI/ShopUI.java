@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.Exceptions.InventoryFullException;
 import com.gdx.game.GameMain;
+import com.gdx.game.MainGameScreen;
 import com.gdx.objects.Accesories;
 import com.gdx.objects.Consumable;
 import com.gdx.objects.Item;
@@ -36,7 +37,7 @@ public class ShopUI implements Screen, InputProcessor {
 
     Stage stage;
     Label titleLabel;
-    TextButton cancelButton, confirmButton;
+    TextButton cancelButton, confirmButton, xButton;
     ImageButton diamond, ring, potion, crown, helmet, shoes, book;
     Window optionWindow;
     TextField optionWindowText;
@@ -86,6 +87,29 @@ public class ShopUI implements Screen, InputProcessor {
         titleLabel.setY(180);
         titleLabel.setAlignment(Align.center);
         stage.addActor(titleLabel);
+
+        //set xbutton
+        xButton = new TextButton("X", mySkin);
+        xButton.setHeight(20);
+        xButton.setWidth(20);
+        xButton.setX(320);
+        xButton.setY(180);
+
+        xButton.addListener(new InputListener(){
+            //jika ditekan current item akan menjadi ring dan option window akan dimunculkan
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                if( x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
+                    dispose();
+                    parentGame.setScreen(new GameMain());
+                }
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        stage.addActor(xButton);
 
         //---------------------------------------RING-----------------------
         //set image button sebagai gambaran item yang nantinya dibeli
@@ -380,7 +404,8 @@ public class ShopUI implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
+        stage.getViewport().update(width, height);
     }
 
     @Override

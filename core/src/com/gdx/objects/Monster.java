@@ -207,20 +207,24 @@ public class Monster extends Karakter {
         else return dmg;
     }
     public void moveToCoordinates(int x, int y, float deltaTime){
-        float angle = MathUtils.atan2(y - posY, x - posX);
-        float distance = Vector2.dst(posX, posY, x, y);
+        float deltaX = x - posX;
+        float deltaY = y - posY;
+        float distance = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         float distanceToMove = speed * deltaTime;
+
         if (distance == 0){
             movement = Movement.IDLE;
         }
         else {
             movement = Movement.RUNNING;
-        }if (distanceToMove >= distance && state == State.ALIVE) {
+        } if (distanceToMove >= distance && state == State.ALIVE) {
             posX = x;
             posY = y;
         } else {
-            posX += distanceToMove * MathUtils.cos(angle);
-            posY += distanceToMove * MathUtils.sin(angle);
+            float moveX = (deltaX / distance) * distanceToMove;
+            float moveY = (deltaY / distance) * distanceToMove;
+            posX += moveX;
+            posY += moveY;
         }
         if (posX > x){
             lookingLeft = true;
