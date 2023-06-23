@@ -23,13 +23,16 @@ public class Floor {
     private Music music;
 
     public Floor(int level, Player player) {
+        initialize();
         this.LEVEL = level;
         this.player = player;
     }
-    public Floor(int start) {
+    public Floor(int start, int level,  Player player) {
+        this.player = player;
         initialize();
-        currentRoom = rooms.get(start);
-        LEVEL = 1;
+        room = start;
+        currentRoom = rooms.get(room);
+        LEVEL = level;
     }
 
     public void initialize() {
