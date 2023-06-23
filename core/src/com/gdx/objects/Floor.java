@@ -23,9 +23,9 @@ public class Floor {
     private Music music;
 
     public Floor(int level, Player player) {
+        this.player = player;
         initialize();
         this.LEVEL = level;
-        this.player = player;
     }
     public Floor(int start, int level,  Player player) {
         this.player = player;

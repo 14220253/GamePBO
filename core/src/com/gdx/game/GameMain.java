@@ -128,7 +128,8 @@ public class GameMain extends Game implements Screen {
 		this.player.canMoveFree();
 		floorCount = 0;
 		this.floors = new ArrayList<>();
-		Floor floor = new Floor(5, 1, player);
+//		Floor floor = new Floor(6, 1, player); //kalo mau mulai dari floor tertentu
+		Floor floor = new Floor(1, player);
 		floors.add(floor);
 		this.setScreen(new MainMenuScreen());
 		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
