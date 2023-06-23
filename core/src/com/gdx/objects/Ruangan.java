@@ -6,16 +6,11 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.gdx.UI.ShopUI;
 import com.gdx.game.Animator;
 import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
-import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
-import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
-import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
 
 import java.awt.*;
 import java.util.ArrayList;

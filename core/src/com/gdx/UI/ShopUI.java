@@ -2,7 +2,6 @@ package com.gdx.UI;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,10 +21,6 @@ import com.gdx.game.MainGameScreen;
 import com.gdx.objects.Accesories;
 import com.gdx.objects.Consumable;
 import com.gdx.objects.Item;
-import com.gdx.objects.Player;
-import sun.security.util.math.intpoly.IntegerPolynomial;
-
-import java.util.ArrayList;
 
 
 public class ShopUI implements Screen, InputProcessor {

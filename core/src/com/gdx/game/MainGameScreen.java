@@ -1,10 +1,8 @@
 package com.gdx.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -61,8 +59,8 @@ MainGameScreen implements Screen {
             }
             catch (IllegalStateException ignored){}
         }
-        try {
-            if (!floors.get(floorCount).getCurrentRoom().isDone()) {
+        if (!floors.get(floorCount).getCurrentRoom().isDone()) {
+            if (floors.get(floorCount).getCurrentRoom().getUpperborder() != null) {
                 if ((double) this.player.getPosY() >= floors.get(floorCount).getCurrentRoom().getUpperborder().getY() - 20.0) {
                     this.player.setCanMoveUp(false);
                 }
@@ -79,8 +77,6 @@ MainGameScreen implements Screen {
                     this.player.setCanMoveRight(false);
                 }
             }
-        } catch (Exception e){
-            System.out.println("Loading");
         }
         if (!floors.get(floorCount).getCurrentRoom().isShowingCard()) {
             this.player.draw(batch);

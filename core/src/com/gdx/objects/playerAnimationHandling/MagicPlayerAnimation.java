@@ -3,13 +3,9 @@ package com.gdx.objects.playerAnimationHandling;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
-import com.gdx.game.Static;
-
-import java.util.ArrayList;
 
 public class MagicPlayerAnimation implements PlayerAnimation{
     private final GameMain app;
