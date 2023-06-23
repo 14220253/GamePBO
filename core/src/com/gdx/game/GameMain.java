@@ -96,7 +96,7 @@ public class GameMain extends Game implements Screen {
 		manager.load("pixelCardAssest_V01.png", Texture.class);
 
 		//shop
-		shopUI = new ShopUI();
+
 		manager.load("Idle Working.png", Texture.class);
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
@@ -130,6 +130,7 @@ public class GameMain extends Game implements Screen {
 		floors.add(floor);
 		this.setScreen(new MainMenuScreen());
 		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
+		shopUI = new ShopUI();
 	}
 	public void openShopUI(){
 		shopUI.show();  // Panggil show() untuk menampilkan ShopUI
