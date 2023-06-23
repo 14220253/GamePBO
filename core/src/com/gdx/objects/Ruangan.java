@@ -160,7 +160,9 @@ public class Ruangan {
             //MONSTERS
             for (Monster monster : monsters) {
                 if (monster.isRunsToPlayer()){
-                    monster.moveToCoordinates(player.posX, player.posY, Gdx.graphics.getDeltaTime());
+                    if (monster.getState() != Monster.State.DYING) {
+                        monster.moveToCoordinates(player.posX, player.posY, Gdx.graphics.getDeltaTime());
+                    }
                 }
                 monster.draw(batch, stateTime);
             }

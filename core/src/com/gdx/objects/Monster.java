@@ -141,6 +141,9 @@ public class Monster extends Karakter {
         }
     }
     public void drawRunning(float stateTime, SpriteBatch batch) {
+        if (getHealth() == 0) {
+            state = State.DYING;
+        }
         if (lookingLeft)
             currentFrame = animationRunLeft.getKeyFrame(stateTime, true);
         else
@@ -180,7 +183,7 @@ public class Monster extends Karakter {
         } else {
             batch.draw(currentFrame, getPosX() - 40, getPosY(), 130, 100);
         }
-        if (animationDeathLeft.isAnimationFinished(stateTime) || animationDeathRight.isAnimationFinished(stateTime)) {
+        if (animationDeathLeft.isAnimationFinished(deathTimer) || animationDeathRight.isAnimationFinished(deathTimer)) {
             state = State.DEAD;
         }
     }
