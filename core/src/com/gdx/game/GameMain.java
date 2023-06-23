@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.gdx.Exceptions.NotEnoughCoinsException;
 import com.gdx.UI.ShopUI;
 import com.gdx.objects.Skills.ImpenetrableShield;
 import com.gdx.screen.MainMenuScreen;
@@ -102,6 +103,9 @@ public class GameMain extends Game implements Screen {
 		manager.load("GoblinDies.mp3", Sound.class);
 		manager.load("DoorOpens.mp3", Sound.class);
 		manager.load("CloseDoor.mp3", Sound.class);
+		manager.load("CoinCollect.mp3", Sound.class);
+		manager.load("HeartCollect.mp3", Sound.class);
+		manager.load("ManaCollect.mp3", Sound.class);
 
 		this.manager.finishLoading();
 

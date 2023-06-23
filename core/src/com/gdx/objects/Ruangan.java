@@ -173,12 +173,15 @@ public class Ruangan {
                 if (Static.rectangleCollisionDetect(player.getHitBox(), drops.get(i).getHitbox())) {
                     if (drops.get(i).getType() == Drops.Type.COIN && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.getInventory().addCoin(drops.get(i).getAmount());
+                        drops.get(i).getCollectSound().play(0.5f);
                     }
                     if (drops.get(i).getType() == Drops.Type.HEALTH && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.addHealth(drops.get(i).getAmount());
+                        drops.get(i).getCollectSound().play(0.3f);
                     }
                     if (drops.get(i).getType() == Drops.Type.MANA && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.addMana(drops.get(i).getAmount());
+                        drops.get(i).getCollectSound().play(0.8f);
                     }
                     drops.get(i).setState(Drops.State.COLLECTED);
                 }

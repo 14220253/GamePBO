@@ -1,6 +1,7 @@
 package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,6 +10,7 @@ import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Random;
 
 public class Drops {
@@ -25,6 +27,7 @@ public class Drops {
     private Type type;
     private GameMain app;
     private float startCollect = 0f;
+    private Sound collectSound;
     enum Type {
         COIN,
         HEALTH,
@@ -46,16 +49,19 @@ public class Drops {
                 texture = app.getManager().get("coins/MonedaD.png");
                 animation = Animator.animate(texture, 5, 1, false, false);
                 amount = Math.round(new Random().nextFloat(0.5f, 5.49f)) * floor;
+                collectSound = app.getManager().get("CoinCollect.mp3");
                 break;
             case HEALTH:
                 texture = app.getManager().get("heart.png");
                 animation = Animator.animate(texture, 3, 3, false, false, 2);
                 amount = 10;
+                collectSound = app.getManager().get("HeartCollect.mp3");
                 break;
             case MANA:
                 texture = app.getManager().get("star.png");
                 animation = Animator.animate(texture, 4, 1, false, false);
                 amount = 10;
+                collectSound = app.getManager().get("ManaCollect.mp3");
                 break;
         }
 
@@ -103,4 +109,6 @@ public class Drops {
     public State getState() {
         return state;
     }
+
+    public Sound getCollectSound() {return collectSound;}
 }
