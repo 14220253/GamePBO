@@ -56,23 +56,25 @@ MainGameScreen {
             catch (IllegalStateException ignored){}
         }
         try {
-            if ((double) this.player.getPosY() >= floors.get(floorCount).getCurrentRoom().getUpperborder().getY() - 20.0) {
-                this.player.setCanMoveUp(false);
-            }
+            if (!floors.get(floorCount).getCurrentRoom().isDone()) {
+                if ((double) this.player.getPosY() >= floors.get(floorCount).getCurrentRoom().getUpperborder().getY() - 20.0) {
+                    this.player.setCanMoveUp(false);
+                }
 
-            if ((double) this.player.getPosY() <= floors.get(floorCount).getCurrentRoom().getBottomBorder().getY()) {
-                this.player.setCanMoveDown(false);
-            }
+                if ((double) this.player.getPosY() <= floors.get(floorCount).getCurrentRoom().getBottomBorder().getY()) {
+                    this.player.setCanMoveDown(false);
+                }
 
-            if ((double) this.player.getPosX() <= floors.get(floorCount).getCurrentRoom().getLeftBorder().getX() + 10.0) {
-                this.player.setCanMoveLeft(false);
-            }
+                if ((double) this.player.getPosX() <= floors.get(floorCount).getCurrentRoom().getLeftBorder().getX() + 10.0) {
+                    this.player.setCanMoveLeft(false);
+                }
 
-            if ((double) this.player.getPosX() >= floors.get(floorCount).getCurrentRoom().getRightBorder().getX()) {
-                this.player.setCanMoveRight(false);
+                if ((double) this.player.getPosX() >= floors.get(floorCount).getCurrentRoom().getRightBorder().getX()) {
+                    this.player.setCanMoveRight(false);
+                }
             }
-        } catch (Exception ignored){
-            //TODO :)
+        } catch (Exception e){
+            System.out.println("Loading");
         }
         if (!floors.get(floorCount).getCurrentRoom().isShowingCard()) {
             this.player.draw(batch);
