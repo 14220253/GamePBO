@@ -50,6 +50,7 @@ public class Monster extends Karakter {
     private int immunityFrames;
     private float speed;
     private float deathTimer;
+    private boolean runsToPlayer;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
         super(health, attack, defense, level, posX, posY, hitBox);
@@ -58,7 +59,7 @@ public class Monster extends Karakter {
         this.damageMultiplier = damageMultiplier;
         this.defenceMultiplier = defenceMultiplier;
         maxHealth = this.health;
-        speed = (float) ((Math.random() * 90) + 40);
+        speed = (float) ((Math.random() * 90) + 80);
         healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
 
         if (type.equalsIgnoreCase("orc")) {
@@ -71,6 +72,7 @@ public class Monster extends Karakter {
             animationRunLeft = Animator.animate(run,6, 1, true, false);
             animationDeathRight = Animator.animate(die, 6, 1, false, false, 0.08f);
             animationDeathLeft = Animator.animate(die, 6, 1, true, false, 0.08f);
+            this.runsToPlayer = true;
             this.type = type;
         }
         if (type.equalsIgnoreCase("skeleton")) {
@@ -83,6 +85,7 @@ public class Monster extends Karakter {
             animationRunLeft = Animator.animate(run,6, 1, true, false);
             animationDeathRight = Animator.animate(die, 8, 1, false, false, 0.08f);
             animationDeathLeft = Animator.animate(die, 8, 1, true, false, 0.08f);
+            this.runsToPlayer = false;
             this.type = type;
         }
 
@@ -133,16 +136,18 @@ public class Monster extends Karakter {
         if (state == State.DYING) {
             die(batch, deathTimer);
             deathTimer += 1 * Gdx.graphics.getDeltaTime();
+        } else if (movement == Movement.RUNNING){
+            drawRunning(stateTime,batch);
         }
     }
-    private void run(float stateTime, SpriteBatch batch) {
+    public void drawRunning(float stateTime, SpriteBatch batch) {
         if (lookingLeft)
-            currentFrame = animationRunLeft.getKeyFrame(stateTime, false);
+            currentFrame = animationRunLeft.getKeyFrame(stateTime, true);
         else
-            currentFrame = animationRunRight.getKeyFrame(stateTime, false);
+            currentFrame = animationRunRight.getKeyFrame(stateTime, true);
         setSprite(currentFrame);
         if (type.equalsIgnoreCase("orc")) {
-            batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);
+            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
         } else {
             batch.draw(currentFrame, getPosX() - 40, getPosY(), 130, 100);
         }
@@ -187,22 +192,39 @@ public class Monster extends Karakter {
     public void checkHealth() {
         health = Math.max(health, 0);
     }
+
+    public boolean isRunsToPlayer() {
+        return runsToPlayer;
+    }
+
     public double checkNegativeDmg(double dmg){ //Dmg tidak boleh negative (nanti jadi heal) (dan minimal 1 untuk monster)
         if (dmg < 1){
             return 1;
         }
         else return dmg;
     }
-    public void runToCoordinates(int x, int y, float deltaTime){
+    public void moveToCoordinates(int x, int y, float deltaTime){
         float angle = MathUtils.atan2(y - posY, x - posX);
         float distance = Vector2.dst(posX, posY, x, y);
         float distanceToMove = speed * deltaTime;
-        if (distanceToMove >= distance) {
+        if (distance == 0){
+            movement = Movement.IDLE;
+        }
+        else {
+            movement = Movement.RUNNING;
+        }if (distanceToMove >= distance && state == State.ALIVE) {
             posX = x;
             posY = y;
         } else {
             posX += distanceToMove * MathUtils.cos(angle);
             posY += distanceToMove * MathUtils.sin(angle);
         }
+        if (posX > x){
+            lookingLeft = true;
+        }
+        if (posX < x){
+            lookingLeft = false;
+        }
+        updateHitbox();
     }
 }
