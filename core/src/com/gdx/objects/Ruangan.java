@@ -11,6 +11,10 @@ import com.gdx.game.Animator;
 import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
+import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
+import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
+import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
+import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -137,6 +141,9 @@ public class Ruangan {
             TextureRegion currentFrame = NPCAnimation.getKeyFrame(stateTime,true);
             batch.draw(currentFrame, 400,300, 64, 64);
             //test
+            if(Static.rectangleCollisionDetect(new Rectangle(400,300,64,64),player.getHitBox())) {
+                app.openShopUI();//this
+            }
             if(player.getPosY() == 300 && player.getPosX() ==400){
                 app.openShopUI();
             }
@@ -161,6 +168,7 @@ public class Ruangan {
                     }
                 }
                 monster.draw(batch, stateTime);
+                monster.setRunning(true);
             }
             //COLLECT FLOOR ITEMS
             for (int i = 0; i < drops.size(); i++) {
@@ -186,8 +194,10 @@ public class Ruangan {
         //MONSTER HIT PLAYER
         for(Monster monster: monsters) {
             if (Static.rectangleCollisionDetect(monster.getHitBox(), player.getHitBox())) {
-                monster.takeDamage(player.getAttack());
-                player.takeDamage(monster.getAttack());
+                if (player.getImmunityFrames() == 0) {
+                    monster.takeDamage(player.getAttack());
+                    player.takeDamage(monster.getAttack());
+                }
             }
         }
 
@@ -198,12 +208,16 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             breakable.getHitbox())) {
                         breakable.setState(Breakable.State.HALFBROKEN);
+                        breakable.getBreakSound().play(0.3f);
                     }
                 }
                 for (Monster monster:monsters) {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             monster.getHitBox())) {
                         monster.takeDamage(player.getAttack());
+                        if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
+                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
+                        }
                     }
                 }
             }

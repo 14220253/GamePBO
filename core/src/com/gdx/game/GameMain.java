@@ -13,6 +13,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -100,30 +102,41 @@ public class GameMain extends Game implements Screen {
 		manager.load("fix1.json", Skin.class, skinParam);
 		manager.load("blue_background.png", Texture.class);
 
+
+		//SOUNDS
+		manager.load("ambient.mp3", Music.class);
+		manager.load("Steps.ogg", Sound.class);
+		manager.load("Barrel.mp3", Sound.class);
+		manager.load("Box.mp3", Sound.class);
+		manager.load("Ceramic.mp3", Sound.class);
+		manager.load("Sword.mp3", Sound.class);
+		manager.load("Bow.mp3", Sound.class);
+		manager.load("Magic.mp3", Sound.class);
+
 		this.manager.finishLoading();
 
 		font = new BitmapFont();
 		text = new BitmapFontCache(font);
 
-
 		isOnDebug = false;
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeRangedPlayer();
+		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(100);
 		UI = new PlayerUI(player);
 		this.player.canMoveFree();
 		floorCount = 0;
 		this.floors = new ArrayList<>();
-		Floor floor = new Floor(1, this.player);
-		floor.initialize();
+//		Floor floor = new Floor(6, 1, player); //kalo mau mulai dari floor tertentu
+		Floor floor = new Floor(1, player);
 		floors.add(floor);
 		this.setScreen(new MainMenuScreen());
-		shopUI = new ShopUI();
 		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
+		shopUI = new ShopUI();
 	}
 	public void openShopUI(){
+		shopUI.show();  // Panggil show() untuk menampilkan ShopUI
 		setScreen(shopUI);//---------------------
 	}
 
@@ -131,7 +144,7 @@ public class GameMain extends Game implements Screen {
 		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
 		this.batch.begin();
 		game.mainGame(batch);
-		getScreen().render(Gdx.graphics.getDeltaTime());//----------
+		getScreen().render(Gdx.graphics.getDeltaTime());//------------------
 		this.batch.end();
 	}
 
@@ -266,9 +279,11 @@ public class GameMain extends Game implements Screen {
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
 			player.addMana(-5);
+			((MagicWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
 		}
 
 		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
+			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}

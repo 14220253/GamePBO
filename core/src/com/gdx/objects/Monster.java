@@ -85,7 +85,7 @@ public class Monster extends Karakter {
             animationRunLeft = Animator.animate(run,6, 1, true, false);
             animationDeathRight = Animator.animate(die, 8, 1, false, false, 0.08f);
             animationDeathLeft = Animator.animate(die, 8, 1, true, false, 0.08f);
-            this.runsToPlayer = false;
+            this.runsToPlayer = true;
             this.type = type;
         }
 
@@ -148,12 +148,10 @@ public class Monster extends Karakter {
             currentFrame = animationRunLeft.getKeyFrame(stateTime, true);
         else
             currentFrame = animationRunRight.getKeyFrame(stateTime, true);
+
         setSprite(currentFrame);
-        if (type.equalsIgnoreCase("orc")) {
-            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
-        } else {
-            batch.draw(currentFrame, getPosX() - 40, getPosY(), 130, 100);
-        }
+        batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+
         batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
     }
 
@@ -233,5 +231,9 @@ public class Monster extends Karakter {
             lookingLeft = false;
         }
         updateHitbox();
+    }
+
+    public void setRunning(boolean bool) {
+        runsToPlayer = bool;
     }
 }

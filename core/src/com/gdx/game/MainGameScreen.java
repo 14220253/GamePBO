@@ -74,15 +74,14 @@ MainGameScreen {
         } catch (Exception ignored){
             //TODO :)
         }
-        this.player.draw(batch);
         if (!floors.get(floorCount).getCurrentRoom().isShowingCard()) {
+            this.player.draw(batch);
             this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
             app.updatePlayerAttacks();
             app.updateAllProjectile();
         }
     }
     public void enableDebug() throws NullPointerException, IllegalStateException{
-
         getEnities();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.rect(170, 70, 220, 80);
@@ -93,6 +92,9 @@ MainGameScreen {
                     (float) entity.getHitBox().getWidth(),
                     (float) entity.getHitBox().getHeight()
             );
+            if (entity instanceof Monster) {
+                ((Monster) entity).setRunning(false);
+            }
         }
         for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
             shapeRenderer.rect(player.getWeapon().getWeaponAnimation().getHitboxes()[i].x,

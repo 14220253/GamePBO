@@ -2,6 +2,7 @@ package com.gdx.UI;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -53,17 +54,17 @@ public class ShopUI implements Screen, InputProcessor {
         //mendapatkan asset manager yang ada di game main
         assetManager = parentGame.getManager();
         //set camera
-        camera = new OrthographicCamera(800,700);
-        camera.setToOrtho(false, 800, 700);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set viewport
-        viewport = new FitViewport(341, 200, camera);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         //set shop ui batch
         batch = new SpriteBatch();
         //set stage camera
-        stageCamera = new OrthographicCamera(800, 700);
-        stageCamera.setToOrtho(false, 800, 700);
+        stageCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stageCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set stage dengan memasukkan view port yang telah dibuat
-        stage = new Stage(new FitViewport(341, 200, stageCamera));
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), stageCamera));
 
         //input multiplexer
         multiInput = new InputMultiplexer();
@@ -73,8 +74,6 @@ public class ShopUI implements Screen, InputProcessor {
         //load skin yang digunakan
         Skin mySkin = assetManager.get("fix1.json", Skin.class);
 
-
-
         //set judul shop ui
         BitmapFont font = new BitmapFont();
         BitmapFontCache text = new BitmapFontCache(font);
@@ -82,9 +81,9 @@ public class ShopUI implements Screen, InputProcessor {
         Label.LabelStyle style = new Label.LabelStyle(titleLabel.getStyle());
         style.font = text.getFont();
         titleLabel.setStyle(style);
-        titleLabel.setHeight(75);
-        titleLabel.setX(113.5f);
-        titleLabel.setY(180);
+        titleLabel.setHeight(100);
+        titleLabel.setX(Gdx.graphics.getWidth()/2-(titleLabel.getWidth()/2));
+        titleLabel.setY((Gdx.graphics.getHeight()*4/3) - (titleLabel.getHeight()/2));
         titleLabel.setAlignment(Align.center);
         stage.addActor(titleLabel);
 
@@ -115,8 +114,8 @@ public class ShopUI implements Screen, InputProcessor {
         //set image button sebagai gambaran item yang nantinya dibeli
         //image button ring set posisi dan set bentuk gambar
         ring = new ImageButton(mySkin,"ring");
-        ring.setWidth(50);
-        ring.setHeight(50);
+        ring.setWidth(100);
+        ring.setHeight(100);
         ring.setX(55);
         ring.setY(100);
         ring.addListener(new InputListener(){
@@ -139,8 +138,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //image button potion set posisi dan ukuran
         potion = new ImageButton(mySkin,"potion");
-        potion.setWidth(50);
-        potion.setHeight(50);
+        potion.setWidth(100);
+        potion.setHeight(100);
         potion.setX(105);
         potion.setY(100);
         potion.addListener(new InputListener() {
@@ -162,8 +161,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //-------------------------------------BOOK--------------------
         book = new ImageButton(mySkin,"book");
-        book.setWidth(50);
-        book.setHeight(50);
+        book.setWidth(1000);
+        book.setHeight(100);
         book.setX(155);
         book.setY(100);
         book.addListener(new InputListener() {
@@ -184,8 +183,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //--------------------HELMET---------------------
         helmet = new ImageButton(mySkin,"helmet");
-        helmet.setWidth(50);
-        helmet.setHeight(50);
+        helmet.setWidth(100);
+        helmet.setHeight(100);
         helmet.setX(205);
         helmet.setY(100);
         helmet.addListener(new InputListener() {
@@ -206,8 +205,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //---------------------------SHOES---------------------
         shoes = new ImageButton(mySkin,"shoes");
-        shoes.setWidth(50);
-        shoes.setHeight(50);
+        shoes.setWidth(100);
+        shoes.setHeight(100);
         shoes.setX(80);
         shoes.setY(90);
         shoes.addListener(new InputListener() {
@@ -228,8 +227,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //----------------------------CROWN--------------------
         crown = new ImageButton(mySkin,"crown");
-        crown.setWidth(50);
-        crown.setHeight(50);
+        crown.setWidth(100);
+        crown.setHeight(100);
         crown.setY(90);
         crown.setX(130);
         crown.addListener(new InputListener() {
@@ -250,8 +249,8 @@ public class ShopUI implements Screen, InputProcessor {
 
         //--------------------------DIAMOND--------------------------
         diamond = new ImageButton(mySkin, "diamond");
-        diamond.setWidth(50);
-        diamond.setHeight(50);
+        diamond.setWidth(100);
+        diamond.setHeight(100);
         diamond.setX(180);
         diamond.setY(90);
         diamond.addListener(new InputListener() {
@@ -375,6 +374,7 @@ public class ShopUI implements Screen, InputProcessor {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(multiInput);
+
     }
 
     @Override
@@ -425,7 +425,7 @@ public class ShopUI implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
     @Override
     public boolean keyDown(int keycode) {
