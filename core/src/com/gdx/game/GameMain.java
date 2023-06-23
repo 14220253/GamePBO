@@ -121,7 +121,6 @@ public class GameMain extends Game implements Screen {
 		this.player.canMoveFree();
 		shopUI = new ShopUI();
 		this.setScreen(new MainMenuScreen(batch));
-		Floor floor = new Floor(5,1,this.player);
 	}
 	public void openShopUI(){
 		shopUI.show();

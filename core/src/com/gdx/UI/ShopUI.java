@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.Exceptions.InventoryFullException;
+import com.gdx.Exceptions.NotEnoughCoinsException;
 import com.gdx.game.GameMain;
 import com.gdx.game.MainGameScreen;
 import com.gdx.objects.Accesories;
@@ -41,7 +42,7 @@ public class ShopUI implements Screen, InputProcessor {
     //condition checking
     Item currentItem;
     String clickedButton;
-    int coin = 300;
+    int coin = 0;
     InputMultiplexer multiInput;
     public ShopUI(){
         //deklarasi parentgame
@@ -121,7 +122,10 @@ public class ShopUI implements Screen, InputProcessor {
                 if( x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
                     currentItem = new Accesories("ring", "hp + 10");
                     clickedButton = "ring";
+                    coin = 200;
                     optionWindow.setVisible(true);
+                    optionWindowText.setText("Buy for" + coin + "coin ?");
+
                 }
             }
             @Override
@@ -143,9 +147,12 @@ public class ShopUI implements Screen, InputProcessor {
            @Override
            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                   currentItem = new Consumable("potion", "hp + 10");
+                   currentItem = new Consumable("potion", "hp + 15");
                    clickedButton = "potion";
+                   coin = 205;
                    optionWindow.setVisible(true);
+                   optionWindowText.setText("Buy for" + coin + "coin ?");
+
                }
            }
            @Override
@@ -168,7 +175,10 @@ public class ShopUI implements Screen, InputProcessor {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
                     currentItem = new Accesories("book", "atk + 5");
                     clickedButton = "book";
+                    coin = 100;
                     optionWindow.setVisible(true);
+                    optionWindowText.setText("Buy for" + coin + "coin ?");
+
                 }
             }
             @Override
@@ -190,7 +200,10 @@ public class ShopUI implements Screen, InputProcessor {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
                     currentItem = new Accesories("helmet", "def + 5");
                     clickedButton = "helmet";
+                    coin = 150;
                     optionWindow.setVisible(true);
+                    optionWindowText.setText("Buy for" + coin + "coin ?");
+
                 }
             }
             @Override
@@ -212,7 +225,10 @@ public class ShopUI implements Screen, InputProcessor {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
                     currentItem = new Accesories("shoes", "def + 3");
                     clickedButton = "shoes";
+                    coin = 75;
                     optionWindow.setVisible(true);
+                    optionWindowText.setText("Buy for" + coin + "coin ?");
+
                 }
             }
             @Override
@@ -234,7 +250,10 @@ public class ShopUI implements Screen, InputProcessor {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
                     currentItem = new Accesories("crown", "def + 2");
                     clickedButton = "crown";
+                    coin = 50;
                     optionWindow.setVisible(true);
+                    optionWindowText.setText("Buy for" + coin + "coin ?");
+
                 }
             }
             @Override
@@ -256,7 +275,10 @@ public class ShopUI implements Screen, InputProcessor {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
                     currentItem = new Accesories("diamond", "atk + 2");
                     clickedButton = "diamond";
+                    coin = 65;
                     optionWindow.setVisible(true);
+                    optionWindowText.setText("Buy for" + coin + "coin ?");
+
                 }
             }
             @Override
@@ -290,9 +312,9 @@ public class ShopUI implements Screen, InputProcessor {
 
         //menambahkan semua actor yang diperukan di option window
         //-----------------------------textfield
-        optionWindowText = new TextField(("Are You Sure Want to Buy This for" + coin +" "), mySkin2);
-        optionWindowText.setHeight(300);
-        optionWindowText.setWidth(400);
+        optionWindowText = new TextField(("Buy for " + coin +"coin?"), mySkin2);
+        optionWindowText.setHeight(400);
+        optionWindowText.setWidth(500);
         optionWindowText.setX(200);
         optionWindowText.setY(200);
         optionWindow.add(optionWindowText);
@@ -310,40 +332,48 @@ public class ShopUI implements Screen, InputProcessor {
                     try {
                         parentGame.getPlayer().getInventory().addItem(currentItem);
                         currentItem = null;
-                        if(parentGame.getPlayer().getInventory().getCoins() >= coin) {
-                            parentGame.getPlayer().getInventory().addCoin(-1 * coin);
-                        }else{
-                            optionWindowText.setText("Sorry, not enough coin");
-                            clickedButton = "";
-                        }
                     } catch (InventoryFullException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try{
+                        parentGame.getPlayer().getInventory().spendCoin(coin);
+                    } catch (NotEnoughCoinsException e) {
+                        optionWindowText.setText("Sorry, not enough coin");
+                        clickedButton = "";
+                        coin = 0;
                         throw new RuntimeException(e);
                     }
                     //disable selected button
                     if(clickedButton.equals("ring")){
                         ring.setDisabled(true);
                         clickedButton = "";
+                        coin = 0;
                     }else if (clickedButton.equals("potion")){
                         potion.setDisabled(true);
                         clickedButton = "";
+                        coin = 0;
                     }else if (clickedButton.equals("helmet")){
                         helmet.setDisabled(true);
                         clickedButton = "";
+                        coin = 0;
                     }else if (clickedButton.equals("shoes")){
                         shoes.setDisabled(true);
                         clickedButton = "";
+                        coin = 0;
                     }else if (clickedButton.equals("diamond")){
                         diamond.setDisabled(true);
                         clickedButton = "";
+                        coin = 0;
                     }else if (clickedButton.equals("book")){
                         book.setDisabled(true);
                         clickedButton = "";
+                        coin = 0;
                     }else if (clickedButton.equals("crown")){
                         crown.setDisabled(true); //karena ga bisa beli lebih dari 1 item yang sama
                         clickedButton = "";
+                        coin = 0;
                     }
                     //code here buat balik ke scene shop
-
                 }
             }
             @Override
