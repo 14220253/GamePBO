@@ -53,17 +53,17 @@ public class ShopUI implements Screen, InputProcessor {
         //mendapatkan asset manager yang ada di game main
         assetManager = parentGame.getManager();
         //set camera
-        camera = new OrthographicCamera(800,700);
-        camera.setToOrtho(false, 800, 700);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set viewport
-        viewport = new FitViewport(341, 200, camera);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         //set shop ui batch
         batch = new SpriteBatch();
         //set stage camera
-        stageCamera = new OrthographicCamera(800, 700);
-        stageCamera.setToOrtho(false, 800, 700);
+        stageCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stageCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //set stage dengan memasukkan view port yang telah dibuat
-        stage = new Stage(new FitViewport(341, 200, stageCamera));
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), stageCamera));
 
         //input multiplexer
         multiInput = new InputMultiplexer();

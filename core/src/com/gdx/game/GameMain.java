@@ -139,7 +139,7 @@ public class GameMain extends Game implements Screen {
 		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
 		this.batch.begin();
 		game.mainGame(batch);
-		getScreen().render(Gdx.graphics.getDeltaTime());//----------
+		getScreen().render(Gdx.graphics.getDeltaTime());//------------------
 		this.batch.end();
 	}
 
