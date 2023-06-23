@@ -138,7 +138,7 @@ public class Ruangan {
             batch.draw(currentFrame, 400,300, 64, 64);
             //test
             if(Static.rectangleCollisionDetect(new Rectangle(400,300,64,64),player.getHitBox())) {
-                app.openShopUI();
+                app.openShopUI();//this
             }
             if(player.getPosY() == 300 && player.getPosX() ==400){
                 app.openShopUI();
