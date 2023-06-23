@@ -96,12 +96,12 @@ public class GameMain extends Game implements Screen {
 		manager.load("pixelCardAssest_V01.png", Texture.class);
 
 		//shop
-
+		shopUI = new ShopUI();
 		manager.load("Idle Working.png", Texture.class);
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
 		manager.load("blue_background.png", Texture.class);
-		shopUI = new ShopUI();
+
 
 		//SOUNDS
 		manager.load("ambient.mp3", Music.class);
