@@ -128,11 +128,10 @@ public class GameMain extends Game implements Screen {
 		floor.initialize();
 		floors.add(floor);
 		this.setScreen(new MainMenuScreen());
-		shopUI = new ShopUI();
 		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
 	}
 	public void openShopUI(){
-		setScreen(shopUI);//---------------------
+		this.setScreen(shopUI);//---------------------
 	}
 
 	public void render() {

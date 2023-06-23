@@ -82,9 +82,9 @@ public class ShopUI implements Screen, InputProcessor {
         Label.LabelStyle style = new Label.LabelStyle(titleLabel.getStyle());
         style.font = text.getFont();
         titleLabel.setStyle(style);
-        titleLabel.setHeight(75);
-        titleLabel.setX(113.5f);
-        titleLabel.setY(180);
+        titleLabel.setHeight(100);
+        titleLabel.setX(Gdx.graphics.getWidth()/2-(titleLabel.getWidth()/2));
+        titleLabel.setY((Gdx.graphics.getHeight()*4/3) - (titleLabel.getHeight()/2));
         titleLabel.setAlignment(Align.center);
         stage.addActor(titleLabel);
 
@@ -115,8 +115,8 @@ public class ShopUI implements Screen, InputProcessor {
         //set image button sebagai gambaran item yang nantinya dibeli
         //image button ring set posisi dan set bentuk gambar
         ring = new ImageButton(mySkin,"ring");
-        ring.setWidth(50);
-        ring.setHeight(50);
+        ring.setWidth(100);
+        ring.setHeight(100);
         ring.setX(55);
         ring.setY(100);
         ring.addListener(new InputListener(){
