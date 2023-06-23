@@ -141,7 +141,7 @@ public class Monster extends Karakter {
         if (state == State.DYING) {
             if (!deathSoundPlayed) {
                 deathSoundPlayed = true;
-                deathSound.play(0.5f);
+                deathSound.play(0.4f);
             }
             die(batch, deathTimer);
             deathTimer += 1 * Gdx.graphics.getDeltaTime();
