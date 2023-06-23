@@ -42,21 +42,14 @@ public class GameMain extends Game implements Screen {
 	float attackStateTime;
 	float attackCooldown;
 	Sprite activePlayerProjectile;
-	float stateTime;
-	ArrayList<Floor> floors;
-	boolean isOnDebug;
 	BitmapFont font;
 	BitmapFontCache text;
-	PlayerUI UI;
-	int floorCount;
-	MainGameScreen game;
 	ShopUI shopUI;
 
 	public GameMain() {
 	}
 	public void create() {
 		this.batch = new SpriteBatch();
-		this.stateTime = 0.0F;
 		this.manager = new AssetManager();
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
@@ -115,22 +108,14 @@ public class GameMain extends Game implements Screen {
 		font = new BitmapFont();
 		text = new BitmapFontCache(font);
 
-		isOnDebug = false;
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(100);
-		UI = new PlayerUI(player);
 		this.player.canMoveFree();
-		floorCount = 0;
-		this.floors = new ArrayList<>();
-//		Floor floor = new Floor(6, 1, player); //kalo mau mulai dari floor tertentu
-		Floor floor = new Floor(1, player);
-		floors.add(floor);
-		this.setScreen(new MainMenuScreen());
-		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
 		shopUI = new ShopUI();
+		this.setScreen(new MainMenuScreen(batch));
 	}
 	public void openShopUI(){
 		shopUI.show();  // Panggil show() untuk menampilkan ShopUI
@@ -140,7 +125,6 @@ public class GameMain extends Game implements Screen {
 	public void render() {
 		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
 		this.batch.begin();
-		game.mainGame(batch);
 		getScreen().render(Gdx.graphics.getDeltaTime());//------------------
 		this.batch.end();
 	}
@@ -191,28 +175,26 @@ public class GameMain extends Game implements Screen {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
 		Weapon weapon = new Weapon("Excalibur", "OP", 100, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
-		Player player1 = new Player(weapon, new MeleePlayerAnimation());
-		return player1;
+		return new Player(weapon, new MeleePlayerAnimation());
 	}
 
-	public Player makeRangedPlayer() {
-		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
-		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0F, 1.5F, 1.0F, rangeWeaponAnimation);
-		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
-		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
-		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
-		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
-		Player player1 = new Player(weapon, new RangedPlayerAnimation());
-		return player1;
-	}
+	//public Player makeRangedPlayer() {
+//		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
+//		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0F, 1.5F, 1.0F, rangeWeaponAnimation);
+//		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
+//		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
+//		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
+//		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+//		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
+//		Player player1 = new Player(weapon, new RangedPlayerAnimation());
+//		return player1;
+	//}
 
 	public Player makeMagicPlayer() {
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
 		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0F, 1.5F, 2.0F, magicWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 81, 3, 28, 9));
-		Player player1 = new Player(weapon, new MagicPlayerAnimation());
-		return player1;
+		return new Player(weapon, new MagicPlayerAnimation());
 	}
 
 	public AssetManager getManager() {
@@ -226,19 +208,19 @@ public class GameMain extends Game implements Screen {
 	}
 
 	public void updateAllProjectile() {
-		ArrayList<Integer> indexToDelete = new ArrayList();
-
-		int i;
-		for (i = 0; i < this.projectiles.size(); ++i) {
-			this.projectiles.get(i).draw(this.batch);
-			this.projectiles.get(i).update();
-			if ((double) this.projectiles.get(i).getPositionY() >= this.floors.get(floorCount).getCurrentRoom().getUpperborder().getY()) {
-				indexToDelete.add(i);
-			} else if ((double) this.projectiles.get(i).getPositionY() <= this.floors.get(floorCount).getCurrentRoom().getBottomBorder().getY() - 15.0) {
-				indexToDelete.add(i);
-			} else if ((double) this.projectiles.get(i).getPositionX() <= this.floors.get(floorCount).getCurrentRoom().getLeftBorder().getX()) {
-			}
-		}
+//		ArrayList<Integer> indexToDelete = new ArrayList();
+//
+//		int i;
+//		for (i = 0; i < this.projectiles.size(); ++i) {
+//			this.projectiles.get(i).draw(this.batch);
+//			this.projectiles.get(i).update();
+//			if ((double) this.projectiles.get(i).getPositionY() >= this.floors.get(floorCount).getCurrentRoom().getUpperborder().getY()) {
+//				indexToDelete.add(i);
+//			} else if ((double) this.projectiles.get(i).getPositionY() <= this.floors.get(floorCount).getCurrentRoom().getBottomBorder().getY() - 15.0) {
+//				indexToDelete.add(i);
+//			} else if ((double) this.projectiles.get(i).getPositionX() <= this.floors.get(floorCount).getCurrentRoom().getLeftBorder().getX()) {
+//			}
+//		}
 	}
 	public void updatePlayerAttacks(){
 		if (Gdx.input.isButtonJustPressed(0) && !this.player.isAttacking() && this.attackCooldown == 0.0F && !this.player.isDying()) {
@@ -299,5 +281,9 @@ public class GameMain extends Game implements Screen {
 		}
 		player.getSkill().update(player);
 		player.getSkill().draw(player);
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
 	}
 }

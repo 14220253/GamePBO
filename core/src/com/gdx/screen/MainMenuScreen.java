@@ -2,6 +2,7 @@ package com.gdx.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,7 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.gdx.UI.PlayerUI;
 import com.gdx.game.GameMain;
+import com.gdx.game.MainGameScreen;
+import com.gdx.objects.Floor;
+import com.gdx.objects.Player;
+
+import java.util.ArrayList;
 
 
 public class MainMenuScreen implements Screen, InputProcessor {
@@ -29,7 +36,13 @@ public class MainMenuScreen implements Screen, InputProcessor {
     Button startButton;
     Button optionButton;
     Button exitButton;
-    public MainMenuScreen() {
+    ArrayList<Floor> floors;
+    int floorCount;
+    float stateTime;
+    Player player;
+    boolean isOnDebug;
+    PlayerUI UI;
+    public MainMenuScreen(final SpriteBatch batch) {
         parentGame = (GameMain) Gdx.app.getApplicationListener();
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
@@ -57,7 +70,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                parentGame.setScreen(new GameMain());
+                parentGame.setScreen(new MainGameScreen(batch));
             }
         });
         startButton.setX(240);
@@ -99,7 +112,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //code buat exit
+                Gdx.app.exit();
             }
         });
         exitButton.setX(240);

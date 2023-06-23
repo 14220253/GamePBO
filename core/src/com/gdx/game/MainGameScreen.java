@@ -3,15 +3,18 @@ package com.gdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.PlayerUI;
 import com.gdx.objects.*;
 
 import java.util.ArrayList;
 
 public class
-MainGameScreen {
+MainGameScreen implements Screen {
     private ArrayList<Floor> floors;
     private int floorCount;
     private float stateTime;
@@ -21,15 +24,18 @@ MainGameScreen {
     private GameMain app;
     private ShapeRenderer shapeRenderer;
     private ArrayList<Karakter> entities;
-
-    public MainGameScreen(ArrayList<Floor> floors, int floorCount, float stateTime, Player player, boolean isOnDebug, PlayerUI UI, GameMain app) {
-        this.floors = floors;
-        this.floorCount = floorCount;
-        this.stateTime = stateTime;
-        this.player = player;
-        this.isOnDebug = isOnDebug;
-        this.UI = UI;
-        this.app = app;
+    SpriteBatch batch;
+    public MainGameScreen(SpriteBatch batch) {
+        app = (GameMain) Gdx.app.getApplicationListener();
+        floors = new ArrayList<>();
+        player = app.getPlayer();
+        Floor floor = new Floor(1, player);
+        floors.add(floor);
+        floorCount = 0;
+        stateTime = 0.0F;
+        isOnDebug = false;
+        this.batch = batch;
+        UI = new PlayerUI(player);
         shapeRenderer = new ShapeRenderer();
         entities = new ArrayList<>();
     }
@@ -80,7 +86,7 @@ MainGameScreen {
             this.player.draw(batch);
             this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
             app.updatePlayerAttacks();
-            app.updateAllProjectile();
+            //app.updateAllProjectile();
         }
     }
     public void enableDebug() throws NullPointerException, IllegalStateException{
@@ -119,5 +125,41 @@ MainGameScreen {
         if (entities.size() <= 1) {
             entities.addAll(floors.get(floorCount).getCurrentRoom().getMonsters());
         }
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
+        mainGame(batch);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }
