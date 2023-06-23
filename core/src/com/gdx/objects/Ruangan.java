@@ -141,9 +141,8 @@ public class Ruangan {
                     new Rectangle(400, 300, 64, 64))) {
                 app.setScreen(new ShopUI());
             }
-            if(player.getPosY() == 300 && player.getPosX()==400){
+            if(player.getPosX() == 400 && player.getPosY() == 300){
                 ShopUI shopui = new ShopUI();
-                app.setScreen(shopui);
                 shopui.show();
             }
 
