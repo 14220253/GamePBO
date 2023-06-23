@@ -26,6 +26,11 @@ public class Floor {
         this.LEVEL = level;
         this.player = player;
     }
+    public Floor(int start) {
+        initialize();
+        currentRoom = rooms.get(start);
+        LEVEL = 1;
+    }
 
     public void initialize() {
         app = (GameMain) Gdx.app.getApplicationListener();

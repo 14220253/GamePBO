@@ -11,6 +11,10 @@ import com.gdx.game.Animator;
 import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
+import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
+import com.gdx.objects.weaponAnimationHandling.MagicWeaponAnimation;
+import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
+import com.gdx.objects.weaponAnimationHandling.RangeWeaponAnimation;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -211,6 +215,9 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             monster.getHitBox())) {
                         monster.takeDamage(player.getAttack());
+                        if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
+                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
+                        }
                     }
                 }
             }

@@ -1,11 +1,13 @@
 package com.gdx.objects.weaponAnimationHandling;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.gdx.game.GameMain;
 import com.gdx.objects.Player;
 
 import java.awt.*;
@@ -23,7 +25,16 @@ public class MeleeWeaponAnimation implements WeaponAnimation{
     float angleTime;
     Rectangle[]hitboxes = new Rectangle[3];
     ShapeRenderer shapeRenderer = new ShapeRenderer();
+    Sound attackSound;
+    GameMain app;
 
+    public MeleeWeaponAnimation() {
+        app = (GameMain) Gdx.app.getApplicationListener();
+        attackSound = app.getManager().get("Sword.mp3");
+    }
+    public Sound getAttackSound() {
+        return attackSound;
+    }
     @Override
     public void attack(Player player, ArrayList<TextureRegion>weapon, float frameTime, Batch batch, float sizeScaling) {
         if (frameTime == 0f) {

@@ -109,6 +109,9 @@ public class GameMain extends Game implements Screen {
 		manager.load("Barrel.mp3", Sound.class);
 		manager.load("Box.mp3", Sound.class);
 		manager.load("Ceramic.mp3", Sound.class);
+		manager.load("Sword.mp3", Sound.class);
+		manager.load("Bow.mp3", Sound.class);
+		manager.load("Magic.mp3", Sound.class);
 
 		this.manager.finishLoading();
 
@@ -276,9 +279,11 @@ public class GameMain extends Game implements Screen {
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
 			player.addMana(-5);
+			((MagicWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
 		}
 
 		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
+			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}
