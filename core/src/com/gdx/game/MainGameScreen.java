@@ -74,11 +74,9 @@ MainGameScreen {
         } catch (Exception ignored){
             //TODO :)
         }
-
-
+        this.player.draw(batch);
         if (!floors.get(floorCount).getCurrentRoom().isShowingCard()) {
             this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
-            this.player.draw(batch);
             app.updatePlayerAttacks();
             app.updateAllProjectile();
         }

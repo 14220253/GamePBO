@@ -106,7 +106,7 @@ public class GameMain extends Game implements Screen {
 		isOnDebug = false;
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeMeleePlayer();
+		this.player = this.makeRangedPlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(100);
 		UI = new PlayerUI(player);

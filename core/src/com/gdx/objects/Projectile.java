@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.awt.*;
+
 public class Projectile {
     private final float velocityX;
     private final float velocityY;
@@ -13,6 +15,7 @@ public class Projectile {
     private final Sprite sprite;
     private final float angle;
     private boolean isplayerProjectile;
+    private Rectangle hitBox;
 
     public Projectile(float positionX, float positionY, float angle, float speed, Sprite sprite, boolean isPlayerProjectile) {
         this.positionX = positionX;
@@ -24,6 +27,7 @@ public class Projectile {
         this.sprite = sprite;
         sprite.setOriginCenter();
         sprite.setRotation(angle);
+        hitBox = new Rectangle(5,5);
     }
 
     public void draw(Batch batch){
@@ -35,6 +39,7 @@ public class Projectile {
         positionY+=velocityY * Gdx.graphics.getDeltaTime()*60;
         sprite.setX(positionX);
         sprite.setY(positionY);
+        hitBox.setLocation((int) positionX, (int) positionY);
     }
 
     public float getPositionX() {
