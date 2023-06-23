@@ -425,7 +425,7 @@ public class ShopUI implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
     @Override
     public boolean keyDown(int keycode) {
