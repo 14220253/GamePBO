@@ -211,13 +211,6 @@ public class GameMain extends Game implements Screen {
 	public AssetManager getManager() {
 		return this.manager;
 	}
-	public void updateNPC (int x, int y){
-		if(player.getPosX()== x && player.getPosY() ==y){
-			this.setScreen(new ShopUI());
-		}
-
-	}
-
 	public void updateAllProjectile() {
 //		ArrayList<Integer> indexToDelete = new ArrayList();
 //

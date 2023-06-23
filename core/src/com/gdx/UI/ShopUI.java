@@ -101,7 +101,7 @@ public class ShopUI implements Screen, InputProcessor {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if( x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
                     dispose();
-                    parentGame.setScreen(new GameMain());
+                    parentGame.setScreen(new MainGameScreen(parentGame.getBatch()));
                 }
             }
             @Override
@@ -124,7 +124,7 @@ public class ShopUI implements Screen, InputProcessor {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 if( x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                    currentItem = new Accesories("ring", "");
+                    currentItem = new Accesories("ring", "hp + 10");
                     clickedButton = "ring";
                     optionWindow.setVisible(true);
                 }
@@ -148,7 +148,7 @@ public class ShopUI implements Screen, InputProcessor {
            @Override
            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                   currentItem = new Consumable("potion", "");
+                   currentItem = new Consumable("potion", "hp + 10");
                    clickedButton = "potion";
                    optionWindow.setVisible(true);
                }
@@ -171,7 +171,7 @@ public class ShopUI implements Screen, InputProcessor {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                    currentItem = new Accesories("book", "");
+                    currentItem = new Accesories("book", "atk + 5");
                     clickedButton = "book";
                     optionWindow.setVisible(true);
                 }
@@ -193,7 +193,7 @@ public class ShopUI implements Screen, InputProcessor {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                    currentItem = new Accesories("helmet", "");
+                    currentItem = new Accesories("helmet", "def + 5");
                     clickedButton = "helmet";
                     optionWindow.setVisible(true);
                 }
@@ -215,7 +215,7 @@ public class ShopUI implements Screen, InputProcessor {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                    currentItem = new Accesories("shoes", "");
+                    currentItem = new Accesories("shoes", "def + 3");
                     clickedButton = "shoes";
                     optionWindow.setVisible(true);
                 }
@@ -237,7 +237,7 @@ public class ShopUI implements Screen, InputProcessor {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                    currentItem = new Accesories("crown", "");
+                    currentItem = new Accesories("crown", "def + 2");
                     clickedButton = "crown";
                     optionWindow.setVisible(true);
                 }
@@ -259,7 +259,7 @@ public class ShopUI implements Screen, InputProcessor {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (x >= 0 && y >= 0 && x <= event.getTarget().getWidth() && y <= event.getTarget().getHeight()) {
-                    currentItem = new Accesories("diamond", "");
+                    currentItem = new Accesories("diamond", "atk + 2");
                     clickedButton = "diamond";
                     optionWindow.setVisible(true);
                 }
