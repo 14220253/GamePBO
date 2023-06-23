@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.ShopUI;
+import com.gdx.objects.Skills.ImpenetrableShield;
 import com.gdx.screen.MainMenuScreen;
 import com.gdx.UI.PlayerUI;
 import com.gdx.objects.*;
@@ -111,6 +112,7 @@ public class GameMain extends Game implements Screen {
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
 		this.player = this.makeMeleePlayer();
+		this.player.setSkill(new ImpenetrableShield());
 		this.player.setPosX(400);
 		this.player.setPosY(100);
 		this.player.canMoveFree();
