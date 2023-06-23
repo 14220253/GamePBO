@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
+import com.gdx.objects.Skills.Skill;
 import com.gdx.objects.playerAnimationHandling.PlayerAnimation;
 
 import java.awt.*;
@@ -38,6 +38,8 @@ public class Player extends Karakter { //interface Skill belum tau
     private boolean canMoveDown;
     private boolean isDying;
     private boolean isDead;
+    private boolean isInvulnerable;
+    private boolean isSkillActive;
     private int moveUpKey;
     private int moveDownKey;
     private int moveRightKey;
@@ -45,6 +47,7 @@ public class Player extends Karakter { //interface Skill belum tau
     private float speed; //speed in units per frame
     private float deathStateTime;
     private int immunityFrames;
+    private Skill skill;
     Weapon weapon;
 
     public Player(Weapon weapon, PlayerAnimation playerAnimation) {
@@ -69,12 +72,28 @@ public class Player extends Karakter { //interface Skill belum tau
         isAttacking = false;
         isDead = false;
         isDying = false;
+        isInvulnerable = false;
         health = 100;
         speed = 300f; // 300 pixels a second
         mana = 100;
         inventory = new Inventory();
     }
 
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
+    }
+
+    public boolean isSkillActive() {
+        return isSkillActive;
+    }
+
+    public void setSkillActive(boolean skillActive) {
+        isSkillActive = skillActive;
+    }
 
     public void drawAttack(float frameTime, Batch batch) {
         weapon.drawAttack(this,frameTime,batch);
@@ -82,7 +101,7 @@ public class Player extends Karakter { //interface Skill belum tau
 
     @Override
     public void takeDamage(double dmg) {
-        if (immunityFrames == 0) {
+        if (immunityFrames == 0 && !isInvulnerable) {
             int roll = (int)(Math.random()*101); // random 0-100
             if (roll > getEvasion()){ // kena dmg jika random roll melebihi evasion
                 this.health -= checkNegativeDmg((dmg-defense));
@@ -90,6 +109,10 @@ public class Player extends Karakter { //interface Skill belum tau
                 immunityFrames = 40;
             }
         }
+    }
+
+    public void setInvulnerable(boolean invulnerable) {
+        isInvulnerable = invulnerable;
     }
 
     public void revive(int health){

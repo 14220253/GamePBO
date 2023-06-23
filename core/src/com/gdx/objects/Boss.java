@@ -1,8 +1,9 @@
 package com.gdx.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.gdx.objects.Skills.Skill;
 
-public class Boss extends Karakter implements Skill {
+public class Boss extends Karakter {
     //musuh boss
 
     //stats

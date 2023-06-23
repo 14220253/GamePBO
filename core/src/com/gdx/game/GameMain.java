@@ -261,5 +261,16 @@ public class GameMain extends Game implements Screen {
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}
+
+		if(player.getSkill() != null){
+			updatePlayerSkill();
+		}
+	}
+	public void updatePlayerSkill(){
+		if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+			player.getSkill().intitialize(player);
+		}
+		player.getSkill().update(player);
+		player.getSkill().draw(player);
 	}
 }

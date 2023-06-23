@@ -12,15 +12,6 @@ import com.gdx.game.Static;
 import java.util.ArrayList;
 
 public class RangedPlayerAnimation implements PlayerAnimation{
-    //kiko mini todo list
-    // make rangedplayer death animation, make magicPlayer wizard animation
-    // rework attacks so it runs of stateTime
-    // rework projectile creation on ranged player
-    // rework magicWeaponAnimation + explotion
-    // package monsterBehaviour
-    // package monsterAnimation
-    // rework class monster jadi update() dan draw()
-    // buat breakable coin/hp/magic
     private final GameMain app;
     private final Texture textureIdle;
     private final Texture textureRun;
