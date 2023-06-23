@@ -2,6 +2,7 @@ package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -51,6 +52,8 @@ public class Monster extends Karakter {
     private float speed;
     private float deathTimer;
     private boolean runsToPlayer;
+    private Sound deathSound;
+    private boolean deathSoundPlayed;
     public Monster(double health, int attack, int defense, int level, int posX, int posY,
                    Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
         super(health, attack, defense, level, posX, posY, hitBox);
@@ -61,6 +64,7 @@ public class Monster extends Karakter {
         maxHealth = this.health;
         speed = (float) ((Math.random() * 90) + 80);
         healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
+        deathSoundPlayed = false;
 
         if (type.equalsIgnoreCase("orc")) {
             idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
@@ -74,6 +78,7 @@ public class Monster extends Karakter {
             animationDeathLeft = Animator.animate(die, 6, 1, true, false, 0.08f);
             this.runsToPlayer = true;
             this.type = type;
+            deathSound = app.getManager().get("GoblinDies.mp3");
         }
         if (type.equalsIgnoreCase("skeleton")) {
             idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
@@ -85,8 +90,9 @@ public class Monster extends Karakter {
             animationRunLeft = Animator.animate(run,6, 1, true, false);
             animationDeathRight = Animator.animate(die, 8, 1, false, false, 0.08f);
             animationDeathLeft = Animator.animate(die, 8, 1, true, false, 0.08f);
-            this.runsToPlayer = false;
+            this.runsToPlayer = true;
             this.type = type;
+            deathSound = app.getManager().get("SkeletonDies.mp3");
         }
 
         this.hitBox.setLocation(this.posX, this.posY);
@@ -104,6 +110,10 @@ public class Monster extends Karakter {
 
     public TextureRegion getSprite() {
         return sprite;
+    }
+
+    public Sound getDeathSound() {
+        return deathSound;
     }
 
     public void setSprite(TextureRegion sprite) {
@@ -134,6 +144,10 @@ public class Monster extends Karakter {
             batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
         }
         if (state == State.DYING) {
+            if (!deathSoundPlayed) {
+                deathSoundPlayed = true;
+                deathSound.play(0.5f);
+            }
             die(batch, deathTimer);
             deathTimer += 1 * Gdx.graphics.getDeltaTime();
         } else if (movement == Movement.RUNNING){
@@ -148,12 +162,10 @@ public class Monster extends Karakter {
             currentFrame = animationRunLeft.getKeyFrame(stateTime, true);
         else
             currentFrame = animationRunRight.getKeyFrame(stateTime, true);
+
         setSprite(currentFrame);
-        if (type.equalsIgnoreCase("orc")) {
-            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
-        } else {
-            batch.draw(currentFrame, getPosX() - 40, getPosY(), 130, 100);
-        }
+        batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+
         batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
     }
 
@@ -233,5 +245,13 @@ public class Monster extends Karakter {
             lookingLeft = false;
         }
         updateHitbox();
+    }
+
+    public void setRunning(boolean bool) {
+        runsToPlayer = bool;
+    }
+
+    public int getImmunityFrames() {
+        return immunityFrames;
     }
 }

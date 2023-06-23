@@ -1,9 +1,11 @@
 package com.gdx.objects.weaponAnimationHandling;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gdx.game.GameMain;
 import com.gdx.objects.Player;
 import com.gdx.objects.Projectile;
 
@@ -17,6 +19,16 @@ public class RangeWeaponAnimation implements WeaponAnimation,CreateProjectile{
     Sprite animation1, animation2, animation3;
     Sprite activeAnimation;
     boolean canCreateProjectile;
+    Sound attackSound;
+    GameMain app;
+
+    public RangeWeaponAnimation() {
+        app = (GameMain) Gdx.app.getApplicationListener();
+        attackSound = app.getManager().get("Bow.mp3");
+    }
+    public Sound getAttackSound() {
+        return attackSound;
+    }
 
     @Override
     public void attack(Player player, ArrayList<TextureRegion>weapon, float frameTime, Batch batch, float sizeScaling) {

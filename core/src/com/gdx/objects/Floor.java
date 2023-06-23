@@ -1,6 +1,9 @@
 package com.gdx.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.gdx.game.GameMain;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,13 +19,28 @@ public class Floor {
     private int room;
     private boolean done;
     private Player player;
+    private GameMain app;
+    private Music music;
 
     public Floor(int level, Player player) {
-        this.LEVEL = level;
         this.player = player;
+        this.LEVEL = level;
+        initialize();
+    }
+    public Floor(int start, int level,  Player player) {
+        this.player = player;
+        LEVEL = level;
+        initialize();
+        room = start;
+        currentRoom = rooms.get(room);
     }
 
     public void initialize() {
+        app = (GameMain) Gdx.app.getApplicationListener();
+
+        music = app.getManager().get("ambient.mp3");
+        music.setVolume(0.4f);
+
         rooms = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             Ruangan ruangan;
@@ -49,9 +67,11 @@ public class Floor {
 
     public void draw(SpriteBatch batch, float stateTime, Player player) {
         if (!currentRoom.isDone()) {
+            music.play();
             currentRoom.draw(batch, stateTime);
         }
         else {
+            music.pause();
             if (room == 6) {
                 done = true;
             }
@@ -60,7 +80,7 @@ public class Floor {
                 currentRoom = rooms.get(room);
                 if (room == 5) {
                     player.setPosX(400);
-                    player.setPosY(300);
+                    player.setPosY(200);
                     player.canMoveFree();
                 } else {
                     player.setPosX(400);

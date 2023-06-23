@@ -1,8 +1,10 @@
 package com.gdx.objects.weaponAnimationHandling;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.gdx.game.GameMain;
 import com.gdx.objects.Player;
 
 import java.awt.*;
@@ -13,8 +15,16 @@ public class MagicWeaponAnimation implements WeaponAnimation{
     int fixX = -1;
     int fixY;
     float frameTime = -1;
+    Sound attackSound;
+    GameMain app;
 
     public MagicWeaponAnimation() {
+        app = (GameMain) Gdx.app.getApplicationListener();
+        attackSound = app.getManager().get("Magic.mp3");
+    }
+
+    public Sound getAttackSound() {
+        return attackSound;
     }
 
     @Override

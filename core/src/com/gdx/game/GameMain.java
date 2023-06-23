@@ -10,16 +10,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.ShopUI;
@@ -47,21 +42,14 @@ public class GameMain extends Game implements Screen {
 	float attackStateTime;
 	float attackCooldown;
 	Sprite activePlayerProjectile;
-	float stateTime;
-	ArrayList<Floor> floors;
-	boolean isOnDebug;
 	BitmapFont font;
 	BitmapFontCache text;
-	PlayerUI UI;
-	int floorCount;
-	MainGameScreen game;
+	ShopUI shopUI;
 
 	public GameMain() {
 	}
-
 	public void create() {
 		this.batch = new SpriteBatch();
-		this.stateTime = 0.0F;
 		this.manager = new AssetManager();
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
@@ -97,36 +85,47 @@ public class GameMain extends Game implements Screen {
 		manager.load("Idle Working.png", Texture.class);
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
+		manager.load("blue_background.png", Texture.class);
+
+
+		//SOUNDS
+		manager.load("ambient.mp3", Music.class);
+		manager.load("Steps.ogg", Sound.class);
+		manager.load("Barrel.mp3", Sound.class);
+		manager.load("Box.mp3", Sound.class);
+		manager.load("Ceramic.mp3", Sound.class);
+		manager.load("Sword.mp3", Sound.class);
+		manager.load("Bow.mp3", Sound.class);
+		manager.load("Magic.mp3", Sound.class);
+		manager.load("SwordSwing.mp3", Sound.class);
+		manager.load("SkeletonDies.mp3", Sound.class);
+		manager.load("GoblinDies.mp3", Sound.class);
+		manager.load("DoorOpens.mp3", Sound.class);
+		manager.load("CloseDoor.mp3", Sound.class);
 
 		this.manager.finishLoading();
 
 		font = new BitmapFont();
 		text = new BitmapFontCache(font);
 
-
-		isOnDebug = false;
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeRangedPlayer();
+		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(100);
-		UI = new PlayerUI(player);
 		this.player.canMoveFree();
-		floorCount = 0;
-		this.floors = new ArrayList<>();
-		Floor floor = new Floor(1, this.player);
-		floor.initialize();
-		floors.add(floor);
-		this.setScreen(new MainMenuScreen());
-
-
-		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
+		shopUI = new ShopUI();
+		this.setScreen(new MainMenuScreen(batch));
+	}
+	public void openShopUI(){
+		shopUI.show();  // Panggil show() untuk menampilkan ShopUI
+		setScreen(shopUI);//---------------------
 	}
 
 	public void render() {
 		ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F);
 		this.batch.begin();
-		game.mainGame(batch);
+		getScreen().render(Gdx.graphics.getDeltaTime());//------------------
 		this.batch.end();
 	}
 
@@ -176,28 +175,26 @@ public class GameMain extends Game implements Screen {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
 		Weapon weapon = new Weapon("Excalibur", "OP", 100, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
-		Player player1 = new Player(weapon, new MeleePlayerAnimation());
-		return player1;
+		return new Player(weapon, new MeleePlayerAnimation());
 	}
 
-	public Player makeRangedPlayer() {
-		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
-		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0F, 1.5F, 1.0F, rangeWeaponAnimation);
-		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
-		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
-		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
-		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
-		Player player1 = new Player(weapon, new RangedPlayerAnimation());
-		return player1;
-	}
+	//public Player makeRangedPlayer() {
+//		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
+//		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0F, 1.5F, 1.0F, rangeWeaponAnimation);
+//		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
+//		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
+//		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
+//		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+//		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
+//		Player player1 = new Player(weapon, new RangedPlayerAnimation());
+//		return player1;
+	//}
 
 	public Player makeMagicPlayer() {
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
 		Weapon weapon = new Weapon("Woo", "VeryCOOL", 99, 1, 2.0F, 1.5F, 2.0F, magicWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 81, 3, 28, 9));
-		Player player1 = new Player(weapon, new MagicPlayerAnimation());
-		return player1;
+		return new Player(weapon, new MagicPlayerAnimation());
 	}
 
 	public AssetManager getManager() {
@@ -211,25 +208,29 @@ public class GameMain extends Game implements Screen {
 	}
 
 	public void updateAllProjectile() {
-		ArrayList<Integer> indexToDelete = new ArrayList();
-
-		int i;
-		for (i = 0; i < this.projectiles.size(); ++i) {
-			this.projectiles.get(i).draw(this.batch);
-			this.projectiles.get(i).update();
-			if ((double) this.projectiles.get(i).getPositionY() >= this.floors.get(floorCount).getCurrentRoom().getUpperborder().getY()) {
-				indexToDelete.add(i);
-			} else if ((double) this.projectiles.get(i).getPositionY() <= this.floors.get(floorCount).getCurrentRoom().getBottomBorder().getY() - 15.0) {
-				indexToDelete.add(i);
-			} else if ((double) this.projectiles.get(i).getPositionX() <= this.floors.get(floorCount).getCurrentRoom().getLeftBorder().getX()) {
-			}
-		}
+//		ArrayList<Integer> indexToDelete = new ArrayList();
+//
+//		int i;
+//		for (i = 0; i < this.projectiles.size(); ++i) {
+//			this.projectiles.get(i).draw(this.batch);
+//			this.projectiles.get(i).update();
+//			if ((double) this.projectiles.get(i).getPositionY() >= this.floors.get(floorCount).getCurrentRoom().getUpperborder().getY()) {
+//				indexToDelete.add(i);
+//			} else if ((double) this.projectiles.get(i).getPositionY() <= this.floors.get(floorCount).getCurrentRoom().getBottomBorder().getY() - 15.0) {
+//				indexToDelete.add(i);
+//			} else if ((double) this.projectiles.get(i).getPositionX() <= this.floors.get(floorCount).getCurrentRoom().getLeftBorder().getX()) {
+//			}
+//		}
 	}
 	public void updatePlayerAttacks(){
 		if (Gdx.input.isButtonJustPressed(0) && !this.player.isAttacking() && this.attackCooldown == 0.0F && !this.player.isDying()) {
 			this.player.setAttacking(true);
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
+
+			if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
+				((MeleeWeaponAnimation)player.getWeapon().getWeaponAnimation()).getSwingSound().play(0.5f);
+			}
 		}
 
 		this.attackCooldown -= Gdx.graphics.getDeltaTime();
@@ -261,9 +262,11 @@ public class GameMain extends Game implements Screen {
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
 			player.addMana(-5);
+			((MagicWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
 		}
 
 		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
+			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}
@@ -278,5 +281,9 @@ public class GameMain extends Game implements Screen {
 		}
 		player.getSkill().update(player);
 		player.getSkill().draw(player);
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
 	}
 }

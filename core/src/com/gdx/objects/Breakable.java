@@ -1,6 +1,7 @@
 package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,6 +23,7 @@ public class Breakable {
     private int posY;
     private State state;
     private Drops.Type type;
+    private Sound breakSound;
 
     enum State {
         NORMAL,
@@ -85,6 +87,7 @@ public class Breakable {
         broken = new TextureRegion(props, 0, 64, 16, 16);
         hitbox = new Rectangle(posX, posY, 32, 48);
         type = Drops.Type.COIN;
+        breakSound = app.getManager().get("Box.mp3");
     }
     private void initializeBarrel() {
         normal = new TextureRegion(props, 16, 0, 16, 32);
@@ -92,6 +95,7 @@ public class Breakable {
         broken = new TextureRegion(props, 16, 64, 16, 16);
         hitbox = new Rectangle(posX, posY, 32, 48);
         type = Drops.Type.COIN;
+        breakSound = app.getManager().get("Barrel.mp3");
     }
     private void initializeWidePot() {
         Random r = new Random();
@@ -111,6 +115,7 @@ public class Breakable {
         halfBroken = new TextureRegion(props, 32, 32, 16, 16);
         broken = new TextureRegion(props, 32, 48, 16, 16);
         hitbox = new Rectangle(posX,  posY, 32, 32);
+        breakSound = app.getManager().get("Ceramic.mp3");
     }
     private void initializeTallPot() {
         Random r = new Random();
@@ -130,5 +135,10 @@ public class Breakable {
         halfBroken = new TextureRegion(props, 48, 32, 16, 16);
         broken = new TextureRegion(props, 48, 48, 16, 16);
         hitbox = new Rectangle(posX + 8,  posY, 16, 32);
+        breakSound = app.getManager().get("Ceramic.mp3");
+    }
+
+    public Sound getBreakSound() {
+        return breakSound;
     }
 }
