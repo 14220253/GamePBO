@@ -151,7 +151,7 @@ public class Ruangan {
 
         }
 
-        //enemies
+        //entities
         if (!TYPE.equalsIgnoreCase("Shop") && !TYPE.equalsIgnoreCase("boss")) {
             //PROPS
             for (Breakable breakable : breakables) {
@@ -173,13 +173,13 @@ public class Ruangan {
             //COLLECT FLOOR ITEMS
             for (int i = 0; i < drops.size(); i++) {
                 if (Static.rectangleCollisionDetect(player.getHitBox(), drops.get(i).getHitbox())) {
-                    if (drops.get(i).getType() == Drops.Type.COIN) {
+                    if (drops.get(i).getType() == Drops.Type.COIN && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.getInventory().addCoin(drops.get(i).getAmount());
                     }
-                    if (drops.get(i).getType() == Drops.Type.HEALTH) {
+                    if (drops.get(i).getType() == Drops.Type.HEALTH && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.addHealth(drops.get(i).getAmount());
                     }
-                    if (drops.get(i).getType() == Drops.Type.MANA) {
+                    if (drops.get(i).getType() == Drops.Type.MANA && drops.get(i).getState() != Drops.State.COLLECTED) {
                         player.addMana(drops.get(i).getAmount());
                     }
                     drops.get(i).setState(Drops.State.COLLECTED);
@@ -208,16 +208,16 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             breakable.getHitbox())) {
                         breakable.setState(Breakable.State.HALFBROKEN);
-                        breakable.getBreakSound().play(0.3f);
+                        breakable.getBreakSound().play(0.2f);
                     }
                 }
                 for (Monster monster:monsters) {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             monster.getHitBox())) {
-                        monster.takeDamage(player.getAttack());
-                        if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
-                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
+                        if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation && monster.getImmunityFrames() == 0) {
+                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
                         }
+                        monster.takeDamage(player.getAttack());
                     }
                 }
             }

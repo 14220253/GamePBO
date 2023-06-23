@@ -61,7 +61,6 @@ public class GameMain extends Game implements Screen {
 
 	public GameMain() {
 	}
-
 	public void create() {
 		this.batch = new SpriteBatch();
 		this.stateTime = 0.0F;
@@ -112,6 +111,9 @@ public class GameMain extends Game implements Screen {
 		manager.load("Sword.mp3", Sound.class);
 		manager.load("Bow.mp3", Sound.class);
 		manager.load("Magic.mp3", Sound.class);
+		manager.load("SwordSwing.mp3", Sound.class);
+		manager.load("SkeletonDies.mp3", Sound.class);
+		manager.load("GoblinDies.mp3", Sound.class);
 
 		this.manager.finishLoading();
 
@@ -248,6 +250,10 @@ public class GameMain extends Game implements Screen {
 			this.player.setAttacking(true);
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
+
+			if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
+				((MeleeWeaponAnimation)player.getWeapon().getWeaponAnimation()).getSwingSound().play(0.5f);
+			}
 		}
 
 		this.attackCooldown -= Gdx.graphics.getDeltaTime();
@@ -283,7 +289,7 @@ public class GameMain extends Game implements Screen {
 		}
 
 		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
-			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.3f);
+			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}

@@ -26,12 +26,19 @@ public class MeleeWeaponAnimation implements WeaponAnimation{
     Rectangle[]hitboxes = new Rectangle[3];
     ShapeRenderer shapeRenderer = new ShapeRenderer();
     Sound attackSound;
+    Sound swingSound;
     GameMain app;
 
     public MeleeWeaponAnimation() {
         app = (GameMain) Gdx.app.getApplicationListener();
         attackSound = app.getManager().get("Sword.mp3");
+        swingSound = app.getManager().get("SwordSwing.mp3");
     }
+
+    public Sound getSwingSound() {
+        return swingSound;
+    }
+
     public Sound getAttackSound() {
         return attackSound;
     }
