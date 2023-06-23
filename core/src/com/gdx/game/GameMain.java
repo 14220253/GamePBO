@@ -114,6 +114,8 @@ public class GameMain extends Game implements Screen {
 		manager.load("SwordSwing.mp3", Sound.class);
 		manager.load("SkeletonDies.mp3", Sound.class);
 		manager.load("GoblinDies.mp3", Sound.class);
+		manager.load("DoorOpens.mp3", Sound.class);
+		manager.load("CloseDoor.mp3", Sound.class);
 
 		this.manager.finishLoading();
 
