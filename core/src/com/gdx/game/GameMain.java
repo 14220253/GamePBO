@@ -131,7 +131,8 @@ public class GameMain extends Game implements Screen {
 		game = new MainGameScreen(floors, floorCount, stateTime, player, isOnDebug, UI, this);
 	}
 	public void openShopUI(){
-		this.setScreen(shopUI);//---------------------
+		shopUI.show();  // Panggil show() untuk menampilkan ShopUI
+		setScreen(shopUI);//---------------------
 	}
 
 	public void render() {
