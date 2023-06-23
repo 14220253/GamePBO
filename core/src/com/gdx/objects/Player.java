@@ -2,10 +2,12 @@ package com.gdx.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.Exceptions.InventoryFullException;
+import com.gdx.game.GameMain;
 import com.gdx.objects.Skills.Skill;
 import com.gdx.objects.playerAnimationHandling.PlayerAnimation;
 
@@ -48,6 +50,9 @@ public class Player extends Karakter { //interface Skill belum tau
     private float deathStateTime;
     private int immunityFrames;
     private Skill skill;
+    private Sound steps;
+    private GameMain app;
+    private float soundTimer;
     Weapon weapon;
 
     public Player(Weapon weapon, PlayerAnimation playerAnimation) {
@@ -77,6 +82,10 @@ public class Player extends Karakter { //interface Skill belum tau
         speed = 300f; // 300 pixels a second
         mana = 100;
         inventory = new Inventory();
+
+        app = (GameMain) Gdx.app.getApplicationListener();
+        steps = app.getManager().get("Steps.ogg");
+        soundTimer = 0f;
     }
 
     public Skill getSkill() {
@@ -109,6 +118,10 @@ public class Player extends Karakter { //interface Skill belum tau
                 immunityFrames = 40;
             }
         }
+    }
+
+    public int getImmunityFrames() {
+        return immunityFrames;
     }
 
     public void setInvulnerable(boolean invulnerable) {
@@ -292,6 +305,15 @@ public class Player extends Karakter { //interface Skill belum tau
             } else if (deathStateTime+2.5f > playerAnimation.getMaxDyingStateTime()) {
                 isDead = true;
                 hitBox = null;
+            }
+        }
+        if (isRunning) {
+            if (soundTimer <= 0) {
+                steps.play(0.3f);
+                soundTimer = 0.6f;
+            }
+            else {
+                soundTimer -= 1 * Gdx.graphics.getDeltaTime();
             }
         }
     }

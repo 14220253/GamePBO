@@ -13,6 +13,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -98,16 +100,22 @@ public class GameMain extends Game implements Screen {
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
 
+		//SOUNDS
+		manager.load("ambient.mp3", Music.class);
+		manager.load("Steps.ogg", Sound.class);
+		manager.load("Barrel.mp3", Sound.class);
+		manager.load("Box.mp3", Sound.class);
+		manager.load("Ceramic.mp3", Sound.class);
+
 		this.manager.finishLoading();
 
 		font = new BitmapFont();
 		text = new BitmapFontCache(font);
 
-
 		isOnDebug = false;
 		this.tiles = this.manager.get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
 		this.weapons = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-		this.player = this.makeRangedPlayer();
+		this.player = this.makeMeleePlayer();
 		this.player.setPosX(400);
 		this.player.setPosY(100);
 		UI = new PlayerUI(player);

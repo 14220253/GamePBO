@@ -165,6 +165,7 @@ public class Ruangan {
                     }
                 }
                 monster.draw(batch, stateTime);
+                monster.setRunning(true);
             }
             //COLLECT FLOOR ITEMS
             for (int i = 0; i < drops.size(); i++) {
@@ -190,8 +191,10 @@ public class Ruangan {
         //MONSTER HIT PLAYER
         for(Monster monster: monsters) {
             if (Static.rectangleCollisionDetect(monster.getHitBox(), player.getHitBox())) {
-                monster.takeDamage(player.getAttack());
-                player.takeDamage(monster.getAttack());
+                if (player.getImmunityFrames() == 0) {
+                    monster.takeDamage(player.getAttack());
+                    player.takeDamage(monster.getAttack());
+                }
             }
         }
 
@@ -202,6 +205,7 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             breakable.getHitbox())) {
                         breakable.setState(Breakable.State.HALFBROKEN);
+                        breakable.getBreakSound().play(0.3f);
                     }
                 }
                 for (Monster monster:monsters) {
