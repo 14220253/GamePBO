@@ -10,11 +10,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.ShopUI;
@@ -83,11 +89,12 @@ public class GameMain extends Game implements Screen {
 		manager.load("Free Pixel Effects Pack/17_felspell_spritesheet.png", Texture.class);
 
 		//shop
-
 		manager.load("Idle Working.png", Texture.class);
 		SkinLoader.SkinParameter skinParam = new SkinLoader.SkinParameter("fix1.atlas");
 		manager.load("fix1.json", Skin.class, skinParam);
-		manager.load("blue_background.png", Texture.class);
+		SkinLoader.SkinParameter skinParam2 = new SkinLoader.SkinParameter("uiskin.atlas");
+		manager.load("uiskin.json", Skin.class, skinParam2);
+		manager.load("background.png", Texture.class);
 
 
 		//SOUNDS
@@ -119,9 +126,10 @@ public class GameMain extends Game implements Screen {
 		this.player.canMoveFree();
 		shopUI = new ShopUI();
 		this.setScreen(new MainMenuScreen(batch));
+		Floor floor = new Floor(5,1,this.player);
 	}
 	public void openShopUI(){
-		shopUI.show();  // Panggil show() untuk menampilkan ShopUI
+		shopUI.show();
 		setScreen(shopUI);//---------------------
 	}
 

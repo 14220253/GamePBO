@@ -73,6 +73,7 @@ public class ShopUI implements Screen, InputProcessor {
 
         //load skin yang digunakan
         Skin mySkin = assetManager.get("fix1.json", Skin.class);
+        Skin mySkin2 = assetManager.get("uiskin.json", Skin.class);
 
         //set judul shop ui
         BitmapFont font = new BitmapFont();
@@ -82,17 +83,17 @@ public class ShopUI implements Screen, InputProcessor {
         style.font = text.getFont();
         titleLabel.setStyle(style);
         titleLabel.setHeight(100);
-        titleLabel.setX(Gdx.graphics.getWidth()/2-(titleLabel.getWidth()/2));
-        titleLabel.setY((Gdx.graphics.getHeight()*4/3) - (titleLabel.getHeight()/2));
+        titleLabel.setX(350);
+        titleLabel.setY(500);
         titleLabel.setAlignment(Align.center);
         stage.addActor(titleLabel);
 
         //set xbutton
-        xButton = new TextButton("X", mySkin);
+        xButton = new TextButton("X", mySkin2);
         xButton.setHeight(20);
         xButton.setWidth(20);
-        xButton.setX(320);
-        xButton.setY(180);
+        xButton.setX(600);
+        xButton.setY(600);
 
         xButton.addListener(new InputListener(){
             //jika ditekan current item akan menjadi ring dan option window akan dimunculkan
@@ -116,8 +117,8 @@ public class ShopUI implements Screen, InputProcessor {
         ring = new ImageButton(mySkin,"ring");
         ring.setWidth(100);
         ring.setHeight(100);
-        ring.setX(55);
-        ring.setY(100);
+        ring.setX(200);
+        ring.setY(300);
         ring.addListener(new InputListener(){
             //jika ditekan current item akan menjadi ring dan option window akan dimunculkan
             @Override
@@ -140,8 +141,8 @@ public class ShopUI implements Screen, InputProcessor {
         potion = new ImageButton(mySkin,"potion");
         potion.setWidth(100);
         potion.setHeight(100);
-        potion.setX(105);
-        potion.setY(100);
+        potion.setX(300);
+        potion.setY(300);
         potion.addListener(new InputListener() {
            //jika ditekan current item akan menjadi potion dan option window akan dimunculkan
            @Override
@@ -161,10 +162,10 @@ public class ShopUI implements Screen, InputProcessor {
 
         //-------------------------------------BOOK--------------------
         book = new ImageButton(mySkin,"book");
-        book.setWidth(1000);
+        book.setWidth(100);
         book.setHeight(100);
-        book.setX(155);
-        book.setY(100);
+        book.setX(400);
+        book.setY(300);
         book.addListener(new InputListener() {
             //jika ditekan current item akan menjadi book dan option window akan dimunculkan
             @Override
@@ -185,8 +186,8 @@ public class ShopUI implements Screen, InputProcessor {
         helmet = new ImageButton(mySkin,"helmet");
         helmet.setWidth(100);
         helmet.setHeight(100);
-        helmet.setX(205);
-        helmet.setY(100);
+        helmet.setX(500);
+        helmet.setY(300);
         helmet.addListener(new InputListener() {
             //jika ditekan current item akan menjadi helmet dan option window akan dimunculkan
             @Override
@@ -207,8 +208,8 @@ public class ShopUI implements Screen, InputProcessor {
         shoes = new ImageButton(mySkin,"shoes");
         shoes.setWidth(100);
         shoes.setHeight(100);
-        shoes.setX(80);
-        shoes.setY(90);
+        shoes.setX(250);
+        shoes.setY(200);
         shoes.addListener(new InputListener() {
             //jika ditekan current item akan menjadi helmet dan option window akan dimunculkan
             @Override
@@ -229,8 +230,8 @@ public class ShopUI implements Screen, InputProcessor {
         crown = new ImageButton(mySkin,"crown");
         crown.setWidth(100);
         crown.setHeight(100);
-        crown.setY(90);
-        crown.setX(130);
+        crown.setY(200);
+        crown.setX(350);
         crown.addListener(new InputListener() {
             //jika ditekan current item akan menjadi helmet dan option window akan dimunculkan
             @Override
@@ -251,8 +252,8 @@ public class ShopUI implements Screen, InputProcessor {
         diamond = new ImageButton(mySkin, "diamond");
         diamond.setWidth(100);
         diamond.setHeight(100);
-        diamond.setX(180);
-        diamond.setY(90);
+        diamond.setX(450);
+        diamond.setY(200);
         diamond.addListener(new InputListener() {
             //jika ditekan current item akan menjadi helmet dan option window akan dimunculkan
             @Override
@@ -279,10 +280,12 @@ public class ShopUI implements Screen, InputProcessor {
         stage.addActor(shoes);
 
         //option window setelah mengklik image button
-        optionWindow = new Window("WARNING", mySkin, "default");
+        optionWindow = new Window("WARNING", mySkin2, "default");
         //set ukuran dari option window
-        optionWindow.setHeight(200);
-        optionWindow.setWidth(300);
+        optionWindow.setHeight(300);
+        optionWindow.setWidth(400);
+        optionWindow.setX(200);
+        optionWindow.setY(200);
         optionWindow.setMovable(true); //bisa digerakkan
         optionWindow.setModal(true);
         optionWindow.setResizable(false); //tidak bisa dibesar kecilkan
@@ -292,17 +295,18 @@ public class ShopUI implements Screen, InputProcessor {
 
         //menambahkan semua actor yang diperukan di option window
         //-----------------------------textfield
-        optionWindowText = new TextField(("Are You Sure Want to Buy This for" + coin +" "), mySkin);
-        optionWindowText.setAlignment(Align.center);
-        optionWindowText.setHeight(32);
-        optionWindowText.setWidth(50);
-        optionWindowText.setX(125);
-        optionWindowText.setY(116);
+        optionWindowText = new TextField(("Are You Sure Want to Buy This for" + coin +" "), mySkin2);
+        optionWindowText.setHeight(300);
+        optionWindowText.setWidth(400);
+        optionWindowText.setX(200);
+        optionWindowText.setY(200);
         optionWindow.add(optionWindowText);
         //confirm sebagai buy button
-        confirmButton = new TextButton("CONFIRM", mySkin);
-        confirmButton.setX(127.5f);
-        confirmButton.setY(80);
+        confirmButton = new TextButton("CONFIRM", mySkin2);
+        confirmButton.setX(250);
+        confirmButton.setY(50);
+        confirmButton.setWidth(75);
+        confirmButton.setHeight(50);
         //-----------------------------confirm button
         confirmButton.addListener(new InputListener(){
             @Override
@@ -311,7 +315,12 @@ public class ShopUI implements Screen, InputProcessor {
                     try {
                         parentGame.getPlayer().getInventory().addItem(currentItem);
                         currentItem = null;
-                        parentGame.getPlayer().getInventory().addCoin(-1*coin);
+                        if(parentGame.getPlayer().getInventory().getCoins() >= coin) {
+                            parentGame.getPlayer().getInventory().addCoin(-1 * coin);
+                        }else{
+                            optionWindowText.setText("Sorry, not enough coin");
+                            clickedButton = "";
+                        }
                     } catch (InventoryFullException e) {
                         throw new RuntimeException(e);
                     }
@@ -350,9 +359,11 @@ public class ShopUI implements Screen, InputProcessor {
         });
         optionWindow.addActor(confirmButton);
         //------------------cancel button
-        cancelButton = new TextButton("CANCEL", mySkin);
-        cancelButton.setX(137.5f);
-        cancelButton.setY(80);
+        cancelButton = new TextButton("CANCEL", mySkin2);
+        cancelButton.setX(325);
+        cancelButton.setY(50);
+        cancelButton.setWidth(75);
+        cancelButton.setHeight(50);
         cancelButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -369,7 +380,6 @@ public class ShopUI implements Screen, InputProcessor {
 
         });
         optionWindow.addActor(cancelButton);
-
     }
     @Override
     public void show() {
@@ -384,7 +394,7 @@ public class ShopUI implements Screen, InputProcessor {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        Texture background = assetManager.get("blue_background.png", Texture.class);
+        Texture background = assetManager.get("background.png", Texture.class);
 
         for(int i=0; i<10; i++) {
             for (int j = 0; j < 18; j++)
