@@ -145,7 +145,7 @@ public class Ruangan {
             if(player.getPosY() == 300 && player.getPosX() ==400){
                 app.openShopUI();
             }
-
+            centerDoorHitbox.setLocation(350, 320);
 
         }
 
@@ -245,9 +245,14 @@ public class Ruangan {
                     showingCard = true;
                     openDoor.play(0.7f);
                 }
+                if  (TYPE.equalsIgnoreCase("shop")) {
+                    done = true;
+                    closeDoor.play(0.7f);
+                }
             }
 
-            if (showingCard) {
+
+            if (showingCard && !TYPE.equalsIgnoreCase("shop")) {
                 player.cannotMove();
                 if (Static.rectangleCollisionDetect(player.hitBox, centerDoorHitbox)) {
                     Drawer.drawCard(batch, buffs.get(0));
