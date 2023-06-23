@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.gdx.UI.ShopUI;
 import com.gdx.screen.MainMenuScreen;
 import com.gdx.UI.PlayerUI;
 import com.gdx.objects.*;
@@ -138,8 +139,6 @@ public class GameMain extends Game implements Screen {
 
 	}
 
-
-
 	public void dispose() {
 		this.batch.dispose();
 		this.manager.dispose();
@@ -202,6 +201,12 @@ public class GameMain extends Game implements Screen {
 
 	public AssetManager getManager() {
 		return this.manager;
+	}
+	public void updateNPC (int x, int y){
+		if(player.getPosX()== x && player.getPosY() ==y){
+			this.setScreen(new ShopUI());
+		}
+
 	}
 
 	public void updateAllProjectile() {
