@@ -80,6 +80,7 @@ public class GameMain extends Game implements Screen {
 		manager.load("coins/MonedaD.png", Texture.class);
 		manager.load("coins/Collected.png", Texture.class);
 		manager.load("pixelCardAssest_V01.png", Texture.class);
+		manager.load("Free Pixel Effects Pack/17_felspell_spritesheet.png", Texture.class);
 
 		//shop
 
@@ -282,7 +283,7 @@ public class GameMain extends Game implements Screen {
 			player.getSkill().intitialize(player);
 		}
 		player.getSkill().update(player);
-		player.getSkill().draw(player);
+		player.getSkill().draw(player,batch);
 	}
 
 	public SpriteBatch getBatch() {
