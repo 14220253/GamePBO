@@ -159,7 +159,14 @@ public class Monster extends Karakter {
             currentFrame = animationRunRight.getKeyFrame(stateTime, true);
 
         setSprite(currentFrame);
-        batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+        if (immunityFrames != 0) {
+            batch.setColor(Color.RED);
+            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+            immunityFrames -= 1 * Gdx.graphics.getDeltaTime();
+            batch.setColor(1, 1, 1, 1);
+        } else {
+            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+        }
 
         batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
     }
