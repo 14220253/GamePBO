@@ -310,6 +310,12 @@ public class Ruangan {
                 }
             }
         }
+        //remove semua monster kalau player mati
+        if (player.isDying()){
+            if (monsters.size() > 0) {
+                monsters.subList(0, monsters.size()).clear();
+            }
+        }
     }
 
 

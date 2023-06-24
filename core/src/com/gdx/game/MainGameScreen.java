@@ -3,6 +3,7 @@ package com.gdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -22,6 +23,7 @@ MainGameScreen implements Screen {
     private GameMain app;
     private ShapeRenderer shapeRenderer;
     private ArrayList<Karakter> entities;
+    private Texture gameOverScreen;
     SpriteBatch batch;
     public MainGameScreen(SpriteBatch batch) {
         app = (GameMain) Gdx.app.getApplicationListener();
@@ -36,6 +38,8 @@ MainGameScreen implements Screen {
         UI = new PlayerUI(player);
         shapeRenderer = new ShapeRenderer();
         entities = new ArrayList<>();
+        gameOverScreen = app.getManager().get("gameOverScreen.png");
+
     }
 
     public void mainGame(SpriteBatch batch) {
@@ -83,6 +87,10 @@ MainGameScreen implements Screen {
             this.player.update(Gdx.graphics.getDeltaTime(), this.stateTime);
             app.updatePlayerAttacks();
             //app.updateAllProjectile();
+        }
+        //draw game over screen
+        if (player.isDead()){
+          batch.draw(gameOverScreen,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         }
     }
     public void enableDebug() throws NullPointerException, IllegalStateException{
