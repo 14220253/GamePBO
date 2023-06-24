@@ -38,8 +38,8 @@ public class Floor {
     public void initialize() {
         app = (GameMain) Gdx.app.getApplicationListener();
 
-        music = app.getManager().get("ambient.mp3");
-        music.setVolume(0.4f);
+        music = app.getManager().get("Music.mp3");
+        music.setVolume(0.7f);
 
         rooms = new ArrayList<>();
         for (int i = 0; i < 7; i++) {

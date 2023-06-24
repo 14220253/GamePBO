@@ -345,7 +345,7 @@ public class Player extends Karakter { //interface Skill belum tau
         mana = Math.min(100, mana + amount);
     }
     @Override
-    public int getAttack() {
+    public double getAttack() {
         return super.getAttack() * weapon.getAtk();
     }
     public void addAttack(double amount){attack += amount;}

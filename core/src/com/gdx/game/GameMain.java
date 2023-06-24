@@ -91,7 +91,7 @@ public class GameMain extends Game implements Screen {
 
 
 		//SOUNDS
-		manager.load("ambient.mp3", Music.class);
+		manager.load("Music.mp3", Music.class);
 		manager.load("Steps.ogg", Sound.class);
 		manager.load("Barrel.mp3", Sound.class);
 		manager.load("Box.mp3", Sound.class);

@@ -10,6 +10,9 @@ import com.gdx.game.Animator;
 import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
+import com.gdx.objects.Monsters.Monster;
+import com.gdx.objects.Monsters.Orc;
+import com.gdx.objects.Monsters.Skeleton;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
 
 import java.awt.*;
@@ -321,243 +324,268 @@ public class Ruangan {
 
 
     private void initializeTemplate(int template, int level) {
+        int health = 50;
+        int attack = 10;
+        int defense = level / 2;
+        double hpMultiplier = 1 + ((double) level / 10);
+        double damageMultiplier = 1 + ((double) level / 10);
+        double defenseMultiplier = ((double) level / 10);
+
         if (template == 0) {
-            Monster boss = new Monster(500,30,5,level,400,300,new Rectangle(40,50),1.2,1.2,1.2,"skeleton");
+            Monster boss = new Skeleton(health * 10, attack * 2, defense + (defense / 10) + 5, level,
+                    hpMultiplier, damageMultiplier, defenseMultiplier);
             monsters.add(boss);
         }
         if (template == 1) {
-            Monster monster1, monster2, monster3;
-            if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster1= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            int posX = 200;
+            int posY = 400;
+            for (int i = 1; i <= 3; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                            damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 200;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster2= new Monster(50, 10, 0, level, 200, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster2= new Monster(50, 10, 0, level, 200, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            if (Static.coinFlip() == 0) {
-                monster3= new Monster(50, 10, 0, level, 600, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster3= new Monster(50, 10, 0, level, 600, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            monsters.add(monster1);
-            monsters.add(monster2);
-            monsters.add(monster3);
         }
         if (template == 2) {
-            Monster monster1, monster2, monster3;
-            if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster1= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
+            int posX;
+            int posY;
+            for (int i = 1; i <= 3; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monsters.add(monster);
+                        switch (i) {
+                            case 1:
+                                posX = 400;
+                                posY = 450;
+                                monster.setLocation(posX, posY);
+                                break;
+                            case 2:
+                                posX = 125;
+                                posY = 300;
+                                monster.setLocation(posX, posY);
+                                break;
+                            case 3:
+                                posX = 625;
+                                posY = 300;
+                                monster.setLocation(posX, posY);
+                                break;
+                        }
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        switch (i) {
+                            case 1:
+                                posX = 400;
+                                posY = 450;
+                                monster.setLocation(posX, posY);
+                                break;
+                            case 2:
+                                posX = 125;
+                                posY = 300;
+                                monster.setLocation(posX, posY);
+                                break;
+                            case 3:
+                                posX = 625;
+                                posY = 300;
+                                monster.setLocation(posX, posY);
+                                break;
+                        }
+                        monsters.add(monster);
+                        break;
+                }
 
-            if (Static.coinFlip() == 0) {
-                monster2= new Monster(50, 10, 0, level, 125, 300,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster2= new Monster(50, 10, 0, level, 125, 300,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
             }
-
-            if (Static.coinFlip() == 0) {
-                monster3= new Monster(50, 10, 0, level, 675, 300,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster3= new Monster(50, 10, 0, level, 675, 300,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            monsters.add(monster1);
-            monsters.add(monster2);
-            monsters.add(monster3);
         }
         if (template == 3) {
-            Monster monster1, monster2, monster3, monster4;
-            if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 100, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster1= new Monster(50, 10, 0, level, 100, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            int posX = 150;
+            int posY = 400;
+            for (int i = 1; i <= 4; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 150;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster2= new Monster(50, 10, 0, level, 300, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster2= new Monster(50, 10, 0, level, 300, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            if (Static.coinFlip() == 0) {
-                monster3= new Monster(50, 10, 0, level, 450, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster3= new Monster(50, 10, 0, level, 450, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            if (Static.coinFlip() == 0) {
-                monster4= new Monster(50, 10, 0, level, 650, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster4= new Monster(50, 10, 0, level, 650, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            monsters.add(monster1);
-            monsters.add(monster2);
-            monsters.add(monster3);
-            monsters.add(monster4);
         }
         if (template == 4) {
-            Monster monster1, monster2, monster3, monster4;
-            if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 100, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster1= new Monster(50, 10, 0, level, 100, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            int posX = 250;
+            int posY = 450;
+            for (int i = 1; i <= 2; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 300;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster2= new Monster(50, 10, 0, level, 250, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster2= new Monster(50, 10, 0, level, 250, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            posX = 100;
+            posY = 250;
+            for (int i = 1; i <= 2; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 550;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster3= new Monster(50, 10, 0, level, 550, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster3= new Monster(50, 10, 0, level, 550, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            if (Static.coinFlip() == 0) {
-                monster4= new Monster(50, 10, 0, level, 650, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster4= new Monster(50, 10, 0, level, 650, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            monsters.add(monster1);
-            monsters.add(monster2);
-            monsters.add(monster3);
-            monsters.add(monster4);
         }
         if (template == 5) {
-            Monster monster1, monster2, monster3, monster4, monster5;
-            if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 150, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster1= new Monster(50, 10, 0, level, 150, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            int posX = 150;
+            int posY = 250;
+            for (int i = 1; i <= 2; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 500;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster2= new Monster(50, 10, 0, level, 150, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster2= new Monster(50, 10, 0, level, 150, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            posX = 250;
+            posY = 450;
+            for (int i = 1; i <= 2; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 250;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster3= new Monster(50, 10, 0, level, 650, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster3= new Monster(50, 10, 0, level, 650, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            if (Static.coinFlip() == 0) {
-                monster4= new Monster(50, 10, 0, level, 650, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster4= new Monster(50, 10, 0, level, 650, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            if (Static.coinFlip() == 0) {
-                monster5= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster5= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            monsters.add(monster1);
-            monsters.add(monster2);
-            monsters.add(monster3);
-            monsters.add(monster4);
-            monsters.add(monster5);
         }
         if (template == 6) {
-            Monster monster1, monster2, monster3, monster4, monster5;
-            if (Static.coinFlip() == 0) {
-                monster1= new Monster(50, 10, 0, level, 150, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster1= new Monster(50, 10, 0, level, 150, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            int posX = 250;
+            int posY = 375;
+            for (int i = 1; i <= 2; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 300;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster2= new Monster(50, 10, 0, level, 250, 375,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster2= new Monster(50, 10, 0, level, 250, 375,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            posX = 150;
+            posY = 250;
+            for (int i = 1; i <= 2; i++) {
+                int coinFlip = Static.coinFlip();
+                Monster monster;
+                switch (coinFlip) {
+                    case 0:
+                        monster = new Orc(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                    case 1:
+                        monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                                damageMultiplier, defenseMultiplier);
+                        monster.setLocation(posX, posY);
+                        monsters.add(monster);
+                        break;
+                }
+                posX += 500;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster3= new Monster(50, 10, 0, level, 550, 375,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster3= new Monster(50, 10, 0, level, 550, 375,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
+            posX = 400;
+            posY = 450;
+            int coinFlip = Static.coinFlip();
+            Monster monster;
+            switch (coinFlip) {
+                case 0:
+                    monster = new Orc(health, attack, defense, level, hpMultiplier,
+                            damageMultiplier, defenseMultiplier);
+                    monster.setLocation(posX, posY);
+                    monsters.add(monster);
+                    break;
+                case 1:
+                    monster = new Skeleton(health, attack, defense, level, hpMultiplier,
+                            damageMultiplier, defenseMultiplier);
+                    monster.setLocation(posX, posY);
+                    monsters.add(monster);
+                    break;
             }
-
-            if (Static.coinFlip() == 0) {
-                monster4= new Monster(50, 10, 0, level, 650, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster4= new Monster(50, 10, 0, level, 650, 250,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            if (Static.coinFlip() == 0) {
-                monster5= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "orc");
-            } else {
-                monster5= new Monster(50, 10, 0, level, 400, 450,
-                        new Rectangle(40,  50), 1.2, 1.2, 1.2, "skeleton");
-            }
-
-            monsters.add(monster1);
-            monsters.add(monster2);
-            monsters.add(monster3);
-            monsters.add(monster4);
-            monsters.add(monster5);
         }
     }
     public ArrayList<Monster> getMonsters() {return new ArrayList<>(monsters);}

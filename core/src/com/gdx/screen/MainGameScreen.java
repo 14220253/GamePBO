@@ -1,4 +1,4 @@
-package com.gdx.game;
+package com.gdx.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.PlayerUI;
+import com.gdx.game.GameMain;
 import com.gdx.objects.*;
+import com.gdx.objects.Monsters.Monster;
 
 import java.util.ArrayList;
 

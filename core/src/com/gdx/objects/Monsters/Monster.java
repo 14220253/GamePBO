@@ -1,4 +1,4 @@
-package com.gdx.objects;
+package com.gdx.objects.Monsters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -7,12 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
+import com.gdx.objects.Karakter;
 
-import java.awt.*;
-
-public class Monster extends Karakter {
+public abstract class Monster extends Karakter {
     //musuh
 
     //stats
@@ -23,35 +21,35 @@ public class Monster extends Karakter {
     //lvl
 
     //multiplier untuk stats per naik level
-    private double hpMultiplier;
-    private double damageMultiplier;
-    private double defenceMultiplier;
-    private Texture idle;
-    private Texture run;
-    private Texture die;
-    private Animation<TextureRegion> animationIdleRight;
-    private Animation<TextureRegion> animationIdleLeft;
-    private Animation<TextureRegion> animationRunLeft;
-    private Animation<TextureRegion> animationRunRight;
-    private Animation<TextureRegion> animationDeathLeft;
-    private Animation<TextureRegion> animationDeathRight;
-    private TextureRegion sprite;
-    private TextureRegion currentFrame;
-    private Texture healthBar;
-    private double maxHealth;
-    private GameMain app;
-    private State state = State.ALIVE;
-    private Movement movement = Movement.IDLE;
-    private String type;
-    private int immunityFrames;
-    private float speed;
-    private float deathTimer;
-    private boolean runsToPlayer;
-    private Sound deathSound;
-    private boolean deathSoundPlayed;
-    public Monster(double health, int attack, int defense, int level, int posX, int posY,
-                   Rectangle hitBox, double hpMultiplier, double damageMultiplier, double defenceMultiplier, String type) {
-        super(health, attack, defense, level, posX, posY, hitBox);
+    protected double hpMultiplier;
+    protected double damageMultiplier;
+    protected double defenceMultiplier;
+    protected Texture idle;
+    protected Texture run;
+    protected Texture die;
+    protected Animation<TextureRegion> animationIdleRight;
+    protected Animation<TextureRegion> animationIdleLeft;
+    protected Animation<TextureRegion> animationRunLeft;
+    protected Animation<TextureRegion> animationRunRight;
+    protected Animation<TextureRegion> animationDeathLeft;
+    protected Animation<TextureRegion> animationDeathRight;
+    protected TextureRegion sprite;
+    protected TextureRegion currentFrame;
+    protected Texture healthBar;
+    protected double maxHealth;
+    protected GameMain app;
+    protected State state = State.ALIVE;
+    protected Movement movement = Movement.IDLE;
+    protected String type;
+    protected int immunityFrames;
+    protected float speed;
+    protected float deathTimer;
+    protected boolean runsToPlayer;
+    protected Sound deathSound;
+    protected boolean deathSoundPlayed;
+    public Monster(double health, double attack, double defense, int level,
+                   double hpMultiplier, double damageMultiplier, double defenceMultiplier) {
+        super(health, attack, defense, level);
         app = (GameMain) Gdx.app.getApplicationListener();
         this.hpMultiplier = hpMultiplier;
         this.damageMultiplier = damageMultiplier;
@@ -61,39 +59,16 @@ public class Monster extends Karakter {
         healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
         deathSoundPlayed = false;
 
-        if (type.equalsIgnoreCase("orc")) {
-            idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Idle/Idle-Sheet.png");
-            run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Run/Run-Sheet-Resize.png");
-            die = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Orc Crew/Orc/Death/Death-Sheet.png");
-            animationIdleRight = Animator.animate(idle,4, 1, false, false);
-            animationIdleLeft = Animator.animate(idle,4, 1, true, false);
-            animationRunRight = Animator.animate(run, 6, 1, false, false);
-            animationRunLeft = Animator.animate(run,6, 1, true, false);
-            animationDeathRight = Animator.animate(die, 6, 1, false, false, 0.08f);
-            animationDeathLeft = Animator.animate(die, 6, 1, true, false, 0.08f);
-            this.runsToPlayer = true;
-            this.type = type;
-            deathSound = app.getManager().get("GoblinDies.mp3");
-        }
-        if (type.equalsIgnoreCase("skeleton")) {
-            idle = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Idle/Idle-Sheet.png");
-            run = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Run/Run-Sheet-Resize.png");
-            die = app.getManager().get("Pixel Crawler - FREE - 1.8/Enemy/Skeleton Crew/Skeleton - Base/Death/Death-Sheet.png");
-            animationIdleRight = Animator.animate(idle,4, 1, false, false);
-            animationIdleLeft = Animator.animate(idle,4, 1, true, false);
-            animationRunRight = Animator.animate(run, 6, 1, false, false);
-            animationRunLeft = Animator.animate(run,6, 1, true, false);
-            animationDeathRight = Animator.animate(die, 8, 1, false, false, 0.08f);
-            animationDeathLeft = Animator.animate(die, 8, 1, true, false, 0.08f);
-            this.runsToPlayer = true;
-            this.type = type;
-            deathSound = app.getManager().get("SkeletonDies.mp3");
-        }
+        this.health = health * hpMultiplier;
+        this.attack = attack * damageMultiplier;
+        this.defense = defense * defenceMultiplier;
 
+
+        hitBox.setSize(40, 50);
         this.hitBox.setLocation(this.posX, this.posY);
     }
 
-    enum State {
+    public enum State {
         ALIVE,
         DYING,
         DEAD
@@ -138,6 +113,29 @@ public class Monster extends Karakter {
             }
             batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
         }
+
+        if (movement == Movement.RUNNING && state == State.ALIVE){
+            if (getHealth() == 0) {
+                state = State.DYING;
+            }
+            if (lookingLeft)
+                currentFrame = animationRunLeft.getKeyFrame(stateTime, true);
+            else
+                currentFrame = animationRunRight.getKeyFrame(stateTime, true);
+
+            setSprite(currentFrame);
+            if (immunityFrames != 0) {
+                batch.setColor(Color.RED);
+                batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+                immunityFrames -= 1 * Gdx.graphics.getDeltaTime();
+                batch.setColor(1, 1, 1, 1);
+            } else {
+                batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
+            }
+
+            batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
+        }
+
         if (state == State.DYING) {
             if (!deathSoundPlayed) {
                 deathSoundPlayed = true;
@@ -145,30 +143,7 @@ public class Monster extends Karakter {
             }
             die(batch, deathTimer);
             deathTimer += 1 * Gdx.graphics.getDeltaTime();
-        } else if (movement == Movement.RUNNING){
-            drawRunning(stateTime,batch);
         }
-    }
-    public void drawRunning(float stateTime, SpriteBatch batch) {
-        if (getHealth() == 0) {
-            state = State.DYING;
-        }
-        if (lookingLeft)
-            currentFrame = animationRunLeft.getKeyFrame(stateTime, true);
-        else
-            currentFrame = animationRunRight.getKeyFrame(stateTime, true);
-
-        setSprite(currentFrame);
-        if (immunityFrames != 0) {
-            batch.setColor(Color.RED);
-            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
-            immunityFrames -= 1 * Gdx.graphics.getDeltaTime();
-            batch.setColor(1, 1, 1, 1);
-        } else {
-            batch.draw(currentFrame, getPosX(), getPosY(), 40, 50);
-        }
-
-        batch.draw(hpBar(), getPosX() - 5, getPosY() + 50, hpBar().getRegionWidth() * 3, 5);
     }
 
 
@@ -192,11 +167,6 @@ public class Monster extends Karakter {
         }
 
         setSprite(currentFrame);
-        if (type.equalsIgnoreCase("orc")) {
-            batch.draw(currentFrame, getPosX(), getPosY(), 80, 100);
-        } else {
-            batch.draw(currentFrame, getPosX() - 40, getPosY(), 130, 100);
-        }
         if (animationDeathLeft.isAnimationFinished(deathTimer) || animationDeathRight.isAnimationFinished(deathTimer)) {
             state = State.DEAD;
         }

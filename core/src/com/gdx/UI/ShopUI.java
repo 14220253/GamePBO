@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.Exceptions.InventoryFullException;
 import com.gdx.Exceptions.NotEnoughCoinsException;
 import com.gdx.game.GameMain;
-import com.gdx.game.MainGameScreen;
+import com.gdx.screen.MainGameScreen;
 import com.gdx.objects.Accesories;
 import com.gdx.objects.Consumable;
 import com.gdx.objects.Item;

@@ -8,8 +8,8 @@ public abstract class Karakter {
     //diturunkan ke player, musuh, boss
     //bisa bergerak, mati, menyerang, dll
     protected double health;
-    protected int attack;
-    protected int defense;
+    protected double attack;
+    protected double defense;
     protected int level;
     protected int posX;
     protected int posY;
@@ -22,15 +22,14 @@ public abstract class Karakter {
     public Karakter() {
     }
 
-    public Karakter(double health, int attack, int defense, int level, int posX, int posY, Rectangle hitBox) {
+    public Karakter(double health, double attack, double defense, int level) {
         this.health = health;
         this.attack = attack;
         this.defense = defense;
         this.level = level;
-        this.posX = posX;
-        this.posY = posY;
-        this.hitBox = hitBox;
+        hitBox = new Rectangle();
     }
+
 
     public double getHealth() {
         return health;
@@ -91,15 +90,19 @@ public abstract class Karakter {
     public boolean isLookingLeft() {
         return lookingLeft;
     }
+    public void setLocation(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
+    }
 
     public void setLookingLeft(boolean lookingLeft) {
         this.lookingLeft = lookingLeft;
     }
-    abstract void takeDamage(double dmg);
+    protected abstract void takeDamage(double dmg);
 
-    public int getAttack() {return attack;}
+    public double getAttack() {return attack;}
 
-    public int getDefense() {return defense;}
+    public double getDefense() {return defense;}
 
     public int getLevel() {return level;}
 }
