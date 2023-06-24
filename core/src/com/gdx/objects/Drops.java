@@ -10,7 +10,6 @@ import com.gdx.game.Animator;
 import com.gdx.game.GameMain;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Random;
 
 public class Drops {

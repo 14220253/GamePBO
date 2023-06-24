@@ -304,7 +304,6 @@ public class Player extends Karakter { //interface Skill belum tau
                 currentFrame = playerAnimation.getDyingFrame(deathStateTime, isLookingLeft);
             } else if (deathStateTime+2.5f > playerAnimation.getMaxDyingStateTime()) {
                 isDead = true;
-                hitBox = null;
             }
         }
         if (isRunning) {
@@ -331,6 +330,10 @@ public class Player extends Karakter { //interface Skill belum tau
     public double getManaPercent() {return (double) mana / 100;}
 
     public int getMana() {return mana;}
+
+    public boolean isDead() {
+        return isDead;
+    }
 
     public Inventory getInventory() {
         return inventory;

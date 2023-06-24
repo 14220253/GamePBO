@@ -340,8 +340,7 @@ public class ShopUI implements Screen, InputProcessor {
                     } catch (NotEnoughCoinsException e) {
                         optionWindowText.setText("Sorry, not enough coin");
                         clickedButton = "";
-                        coin = 0;
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                     //disable selected button
                     if(clickedButton.equals("ring")){

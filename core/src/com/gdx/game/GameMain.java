@@ -72,6 +72,7 @@ public class GameMain extends Game implements Screen {
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Props.png", Texture.class);
 		this.manager.load("heart.png", Texture.class);
 		this.manager.load("star.png", Texture.class);
+		this.manager.load("gameOverScreen.png", Texture.class);
 		manager.load("BuffLogos.png", Texture.class);
 		manager.load("GUI.png", Texture.class);
 		manager.load("healthbar/SleekBars.png", Texture.class);
@@ -178,7 +179,7 @@ public class GameMain extends Game implements Screen {
 
 	public Player makeMeleePlayer() {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
-		Weapon weapon = new Weapon("Excalibur", "OP", 100, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
+		Weapon weapon = new Weapon("Excalibur", "OP", 20, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
 		return new Player(weapon, new MeleePlayerAnimation());
 	}

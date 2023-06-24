@@ -209,14 +209,14 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             breakable.getHitbox())) {
                         breakable.setState(Breakable.State.HALFBROKEN);
-                        breakable.getBreakSound().play(0.2f);
+                        breakable.getBreakSound().play(0.25f);
                     }
                 }
                 for (Monster monster:monsters) {
                     if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
                             monster.getHitBox())) {
                         if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation && monster.getImmunityFrames() == 0) {
-                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
+                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.8f);
                         }
                         monster.takeDamage(player.getAttack());
                     }
@@ -246,11 +246,11 @@ public class Ruangan {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 if (!showingCard) {
                     showingCard = true;
-                    openDoor.play(0.7f);
+                    openDoor.play(1.2f);
                 }
                 if  (TYPE.equalsIgnoreCase("shop")) {
                     done = true;
-                    closeDoor.play(0.7f);
+                    closeDoor.play(1.2f);
                 }
             }
 
@@ -272,7 +272,7 @@ public class Ruangan {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     showingCard = false;
                     player.canMoveFree();
-                    closeDoor.play(0.7f);
+                    closeDoor.play(1.2f);
                 }
                 //BUTTONS
                 batch.draw(button, (float) leftButtonHitbox.getX(), 700 - (float) leftButtonHitbox.getY() - (float) leftButtonHitbox.getHeight(),
@@ -300,14 +300,20 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(leftButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         showingCard = false;
                         player.canMoveFree();
-                        closeDoor.play(0.7f);
+                        closeDoor.play(1.2f);
                     }
                     if (Static.rectangleCollisionDetect(rightButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         done = true;
                         selectedBuff.activate(player);
-                        closeDoor.play(0.7f);
+                        closeDoor.play(1.2f);
                     }
                 }
+            }
+        }
+        //remove semua monster kalau player mati
+        if (player.isDying()){
+            if (monsters.size() > 0) {
+                monsters.subList(0, monsters.size()).clear();
             }
         }
     }
@@ -315,6 +321,10 @@ public class Ruangan {
 
 
     private void initializeTemplate(int template, int level) {
+        if (template == 0) {
+            Monster boss = new Monster(500,30,5,level,400,300,new Rectangle(40,50),1.2,1.2,1.2,"skeleton");
+            monsters.add(boss);
+        }
         if (template == 1) {
             Monster monster1, monster2, monster3;
             if (Static.coinFlip() == 0) {

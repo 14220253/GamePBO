@@ -32,9 +32,11 @@ public class Inventory {
         coins += coin;
     }
     public void spendCoin(int coin) throws NotEnoughCoinsException {
-        if ((coins -= coin) < 0){
+        if ((coins - coin) < 0){
+            System.out.println("KURANG KOIN");
             throw new NotEnoughCoinsException();
         } else {
+            System.out.println("KOIN CUKUP");
             coins -= coin;
         }
     }
