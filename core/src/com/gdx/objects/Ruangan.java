@@ -321,6 +321,10 @@ public class Ruangan {
 
 
     private void initializeTemplate(int template, int level) {
+        if (template == 0) {
+            Monster boss = new Monster(500,30,5,level,400,300,new Rectangle(40,50),1.2,1.2,1.2,"skeleton");
+            monsters.add(boss);
+        }
         if (template == 1) {
             Monster monster1, monster2, monster3;
             if (Static.coinFlip() == 0) {
