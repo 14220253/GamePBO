@@ -50,6 +50,7 @@ public class GameMain extends Game implements Screen {
 	public void create() {
 		this.batch = new SpriteBatch();
 		this.manager = new AssetManager();
+		//OBJECTS
 		this.manager.load("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Idle/Idle-Sheet.png", Texture.class);
 		this.manager.load("Pixel Crawler - FREE - 1.8/Heroes/Knight/Run/Run-Sheet.png", Texture.class);
@@ -80,6 +81,17 @@ public class GameMain extends Game implements Screen {
 		manager.load("coins/Collected.png", Texture.class);
 		manager.load("pixelCardAssest_V01.png", Texture.class);
 		manager.load("Free Pixel Effects Pack/17_felspell_spritesheet.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/arm launch.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/death animation.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/downwards arm launch.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/glowing.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/glowing idle.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/head glow.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/idle.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/invunerable.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile_glowing.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/weapon PNG/Laser_sheet.png", Texture.class);
 
 		//shop
 		manager.load("Idle Working.png", Texture.class);
@@ -179,7 +191,7 @@ public class GameMain extends Game implements Screen {
 
 	public Player makeMeleePlayer() {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
-		Weapon weapon = new Weapon("Excalibur", "OP", 20, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
+		Weapon weapon = new Weapon("Excalibur", "OP", 100, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
 		return new Player(weapon, new MeleePlayerAnimation());
 	}

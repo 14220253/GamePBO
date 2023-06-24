@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.UI.PlayerUI;
 import com.gdx.game.GameMain;
 import com.gdx.objects.*;
+import com.gdx.objects.Map.Floor;
 import com.gdx.objects.Monsters.Monster;
 
 import java.util.ArrayList;

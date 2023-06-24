@@ -24,7 +24,7 @@ public class Breakable {
     private Drops.Type type;
     private Sound breakSound;
 
-    enum State {
+    public enum State {
         NORMAL,
         HALFBROKEN,
         BROKEN
