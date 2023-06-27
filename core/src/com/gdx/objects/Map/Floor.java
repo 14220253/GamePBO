@@ -80,8 +80,8 @@ public class Floor {
                 room++;
                 currentRoom = rooms.get(room);
                 if (room == 5) {
-                    player.setPosX(400);
-                    player.setPosY(200);
+                    player.setPosX(300);
+                    player.setPosY(220);
                     player.canMoveFree();
                 } else {
                     player.setPosX(400);

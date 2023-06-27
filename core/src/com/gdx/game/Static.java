@@ -33,6 +33,9 @@ public class Static {
     public static int randomizer(int n) {
         return new Random().nextInt(0, n);
     }
+    public static int randomizer(int n1, int n2) {
+        return new Random().nextInt(n1, n2);
+    }
 
 
     public static int getDigits(int num) {

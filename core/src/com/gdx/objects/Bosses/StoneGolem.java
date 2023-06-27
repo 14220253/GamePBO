@@ -3,10 +3,14 @@ package com.gdx.objects.Bosses;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gdx.game.Animator;
-import com.gdx.game.GameMain;
+import com.gdx.game.Static;
+import com.gdx.objects.Map.Ruangan;
+import com.gdx.objects.Player;
+import jdk.tools.jlink.plugin.PluginException;
 
 import java.awt.*;
 
@@ -16,22 +20,61 @@ public class StoneGolem extends Boss{
     private Animation<TextureRegion> spawnAnimation;
     private Animation<TextureRegion> idleAnimationRight;
     private Animation<TextureRegion> idleAnimationLeft;
+    private Animation<TextureRegion> normalArmLaunchLeft;
+    private Animation<TextureRegion> normalArmLaunchRight;
+    private Texture armLaunchProjectile;
+    private Sprite armLaunchSprite;
+    private Rectangle armLaunchHitbox;
     private TextureRegion currentFrame;
     private final int WIDTH;
     private final int HEIGHT;
+    private final int CENTERX;
+    private final int CENTERY;
+    private float skillCooldown;
+    private BossSkill armLaunch;
+    private Facing facing;
+    private int playerPosX;
+    private int playerPosY;
+    private double projectilePosX;
+    private double projectilePosY;
+    private int projectileWidth;
+    private int projectileHeight;
+    private Player player;
+    private Ruangan ruangan;
+    enum Facing{
+        LEFT,
+        RIGHT
+    }
 
-    public StoneGolem(double health, double attack, double defense, int level, double hpMultiplier, double damageMultiplier, double defenceMultiplier) {
+    public StoneGolem(double health, double attack, double defense, int level,
+                      double hpMultiplier, double damageMultiplier, double defenceMultiplier,
+                      Player player, Ruangan ruangan) {
         super(health, attack, defense, level, hpMultiplier, damageMultiplier, defenceMultiplier);
         spawnTimer = 0f;
         spawning = true;
-        posX = 300;
-        posY = 350;
-        WIDTH = 192;
-        HEIGHT = 200;
+        posX = 270;
+        posY = 200;
+        WIDTH = 288;
+        HEIGHT = 300;
         hitBox = new Rectangle(posX, posY, WIDTH, HEIGHT);
+        skillCooldown = 5f;
+        facing = Facing.RIGHT;
+        playerPosX = 0;
+        playerPosY= 0;
+        projectileWidth = 300;
+        projectileHeight = 300;
+        this.player = player;
+        this.ruangan = ruangan;
+        CENTERX = posX + (WIDTH /2);
+        CENTERY = posY + (HEIGHT / 2);
+        projectilePosX= posX;
+        projectilePosY = posY;
+
         initializeIdle();
         initializeSpawnAnimation();
+        initializeNormalArmLaunch();
 
+        TES = 0f;
     }
 
 
@@ -43,16 +86,90 @@ public class StoneGolem extends Boss{
     @Override
     public void draw(SpriteBatch batch, float stateTime) {
         //SPAWNING
-        if (spawnTimer < 2f) {
+        if (spawnTimer < 1.5f) {
             currentFrame = spawnAnimation.getKeyFrame(spawnTimer, false);
-            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+            batch.draw(currentFrame, posX - 10, posY, WIDTH, HEIGHT);
             spawnTimer += 1 * Gdx.graphics.getDeltaTime();
         } //BATTLE
         else {
             spawning = false;
-            currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
-            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+//            currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
+//            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+
+            armLaunch.drawSkill(batch, TES, player, ruangan);
+            TES += 1.5 * Gdx.graphics.getDeltaTime();
         }
+    }
+    //TEST
+    private float TES;
+    double degree = 0;
+    double angle = 0;
+    double kemiringan = 0;
+    public void initializeNormalArmLaunch() {
+        final Texture armLaunchTexture = app.getManager().get("Bosses/Mecha-stone Golem 0.1/PNG sheet/arm launch.png");
+        normalArmLaunchLeft = Animator.animate(armLaunchTexture, 9, 1, true,false);
+        normalArmLaunchRight = Animator.animate(armLaunchTexture, 9, 1, false, false);
+        armLaunchProjectile = app.getManager().get("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile.png");
+        armLaunchHitbox = new Rectangle();
+        armLaunchHitbox.setSize(100, 100);
+        armLaunchSprite = new Sprite(armLaunchProjectile);
+        armLaunch = new BossSkill() {
+            @Override
+            public void drawSkill(SpriteBatch batch, float stateTime, Player player, Ruangan ruangan) {
+                switch (facing) {
+                    case LEFT:
+                        currentFrame = normalArmLaunchLeft.getKeyFrame(stateTime, false);
+                        batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                        break;
+                    case RIGHT:
+                        currentFrame = normalArmLaunchRight.getKeyFrame(stateTime, false);
+                        batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                        break;
+                }
+                if (normalArmLaunchLeft.isAnimationFinished(stateTime) || normalArmLaunchRight.isAnimationFinished(stateTime)) {
+                    if (playerPosX == 0 && playerPosY == 0) {
+                        //TES
+                        playerPosX = 100;
+                        playerPosY = 100;
+//                        playerPosX = player.getPosX();
+//                        playerPosY = player.getPosY();
+                        angle = Math.atan2(CENTERY - playerPosY, CENTERX - playerPosX);
+                        degree = Math.toDegrees(angle);
+                        kemiringan = (double) (playerPosY - posY) / (playerPosX - posX) + Static.randomizer(-2, 3);
+                        armLaunchSprite.setOrigin((float)armLaunchTexture.getWidth() / 2, (float) armLaunchTexture.getHeight() / 2);
+                        armLaunchSprite.rotate((float) degree);
+                    }
+
+                    //in border
+                    if ((projectilePosX < ruangan.getRightBorder().getX() &&
+                            projectilePosX > ruangan.getLeftBorder().getX() - projectileWidth) &&
+                            (projectilePosY > ruangan.getBottomBorder().getY() - projectileHeight &&
+                                    projectilePosY < ruangan.getUpperborder().getY())) {
+
+                        if (playerPosX > CENTERX) {
+                            projectilePosX += 2f;
+                            projectilePosY = ((projectilePosX - posX) * kemiringan) + (posX / 2);
+                        } else {
+                            //TODO
+                            projectilePosX -= 2f;
+                            projectilePosY = ((projectilePosX - posX) * kemiringan) - posX;
+                        }
+
+                        //draw projectile
+                        batch.draw(armLaunchSprite, (float) projectilePosX, (float) projectilePosY, projectileWidth, projectileHeight);
+                    } else {
+                        projectilePosY = posX;
+                        projectilePosX = posX;
+                        //stop projectile
+                    }
+                }
+            }
+
+            @Override
+            public Rectangle getHurtBox() {
+                return null;
+            }
+        };
     }
     public void initializeIdle() {
         Texture idle = app.getManager().get("Bosses/Mecha-stone Golem 0.1/PNG sheet/idle.png");

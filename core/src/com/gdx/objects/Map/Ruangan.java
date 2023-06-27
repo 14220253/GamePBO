@@ -237,6 +237,11 @@ public class Ruangan {
             }
         }
 
+
+
+
+
+
         if (TYPE.equalsIgnoreCase("boss")){
             if (boss instanceof StoneGolem) {
                 boss.draw(batch, stateTime);
@@ -347,7 +352,9 @@ public class Ruangan {
         double defenseMultiplier = ((double) level / 10);
 
         if (template == 0) {
-            boss = new StoneGolem(health * 20, attack * 5, defense * 5, level, hpMultiplier, damageMultiplier, defenseMultiplier);
+            boss = new StoneGolem(health * 20, attack * 5, defense * 5, level,
+                    hpMultiplier, damageMultiplier, defenseMultiplier,
+                    PLAYER, this);
         }
         if (template == 1) {
             int posX = 200;
