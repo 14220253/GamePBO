@@ -250,6 +250,21 @@ public class Ruangan {
                 }
                 else {
                     PLAYER.canMoveFree();
+
+                    if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), boss.getHitBox())) {
+                        PLAYER.takeDamage(boss.getAttack());
+                        boss.takeDamage(PLAYER.getAttack());
+                    }
+
+                    if (Static.rectangleCollisionDetect(((StoneGolem) boss).getCurrentSkill().getHurtBox(), PLAYER.getHitBox())) {
+                        PLAYER.takeDamage(boss.getAttack());
+                    }
+
+                    for (int i = 0; i < PLAYER.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
+                        if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i], boss.getHitBox())) {
+                            boss.takeDamage(PLAYER.getAttack());
+                        }
+                    }
                 }
             }
         }

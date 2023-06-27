@@ -1,6 +1,7 @@
 package com.gdx.objects.Bosses;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -41,6 +42,7 @@ public class StoneGolem extends Boss{
     private int projectileHeight;
     private Player player;
     private Ruangan ruangan;
+    private float immunityFrame;
     enum Facing{
         LEFT,
         RIGHT
@@ -85,6 +87,21 @@ public class StoneGolem extends Boss{
 
     @Override
     public void draw(SpriteBatch batch, float stateTime) {
+        if (playerPosX < posX) {
+            facing = Facing.LEFT;
+        }
+        else {
+            facing = Facing.RIGHT;
+        }
+
+        if (immunityFrame != 0) {
+            currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
+            batch.setColor(Color.RED);
+            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+            immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
+            batch.setColor(1, 1, 1, 1);
+        }
+
         //SPAWNING
         if (spawnTimer < 1.5f) {
             currentFrame = spawnAnimation.getKeyFrame(spawnTimer, false);
@@ -128,16 +145,24 @@ public class StoneGolem extends Boss{
                 }
                 if (normalArmLaunchLeft.isAnimationFinished(stateTime) || normalArmLaunchRight.isAnimationFinished(stateTime)) {
                     if (playerPosX == 0 && playerPosY == 0) {
-                        //TES
-                        playerPosX = 100;
-                        playerPosY = 100;
-//                        playerPosX = player.getPosX();
-//                        playerPosY = player.getPosY();
+                        playerPosX = player.getPosX();
+                        playerPosY = player.getPosY();
                         angle = Math.atan2(CENTERY - playerPosY, CENTERX - playerPosX);
                         degree = Math.toDegrees(angle);
                         kemiringan = (double) (playerPosY - posY) / (playerPosX - posX) + Static.randomizer(-2, 3);
                         armLaunchSprite.setOrigin((float)armLaunchTexture.getWidth() / 2, (float) armLaunchTexture.getHeight() / 2);
                         armLaunchSprite.rotate((float) degree);
+
+                        if (playerPosX > CENTERX) {
+                            projectilePosX= posX;
+                            projectilePosY = posY;
+                        } else {
+                            projectilePosX= posX - (WIDTH / 2);
+                            projectilePosY = posY;
+                            System.out.println(kemiringan);
+                            System.out.println(playerPosX);
+                            System.out.println(playerPosY);
+                        }
                     }
 
                     //in border
@@ -147,27 +172,36 @@ public class StoneGolem extends Boss{
                                     projectilePosY < ruangan.getUpperborder().getY())) {
 
                         if (playerPosX > CENTERX) {
-                            projectilePosX += 2f;
+                            projectilePosX += 5f;
                             projectilePosY = ((projectilePosX - posX) * kemiringan) + (posX / 2);
                         } else {
                             //TODO
-                            projectilePosX -= 2f;
-                            projectilePosY = ((projectilePosX - posX) * kemiringan) - posX;
+                            projectilePosX -= 5f;
+                            projectilePosY = ((projectilePosX - posX) * kemiringan) + posX;
                         }
 
                         //draw projectile
                         batch.draw(armLaunchSprite, (float) projectilePosX, (float) projectilePosY, projectileWidth, projectileHeight);
                     } else {
-                        projectilePosY = posX;
-                        projectilePosX = posX;
                         //stop projectile
+                        if (playerPosX > CENTERX) {
+                            projectilePosX= posX;
+                            projectilePosY = posY;
+                        } else {
+                            projectilePosX= posX - (WIDTH / 2);
+                            projectilePosY = posY;
+                        }
+                        playerPosX = 0;
+                        playerPosY = 0;
                     }
                 }
             }
 
             @Override
             public Rectangle getHurtBox() {
-                return null;
+                armLaunchHitbox.setLocation((int) projectilePosX, (int) projectilePosY);
+                armLaunchHitbox.setSize(projectileWidth, projectileHeight);
+                return armLaunchHitbox;
             }
         };
     }
@@ -185,5 +219,16 @@ public class StoneGolem extends Boss{
 
     public boolean isSpawning() {
         return spawning;
+    }
+    @Override
+    public void takeDamage(double dmg) {
+        if (immunityFrame == 0) {
+            health -= checkNegativeDmg(dmg-defense);
+            checkHealth();
+            immunityFrame = 30;
+        }
+    }
+    public BossSkill getCurrentSkill() {
+        return armLaunch;
     }
 }
