@@ -222,11 +222,11 @@ public class Drawer {
     }
     private static void drawStoneBase(SpriteBatch batch, Texture texture) {
         TextureRegion base = new TextureRegion(texture, 121, 220, 120, 40);
-        batch.draw(base, 220, 160, 390, 150);
+        batch.draw(base, 235, 160, 390, 150);
     }
     private static void drawGoldBase(SpriteBatch batch, Texture texture) {
         TextureRegion base = new TextureRegion(texture, 241, 220, 120, 40);
-        batch.draw(base, 235, 160, 390, 150);
+        batch.draw(base, 240, 160, 390, 150);
     }
     private static void drawRedCard(SpriteBatch batch, Texture texture) {
         TextureRegion card = new TextureRegion(texture, 121, 0, 120, 135);

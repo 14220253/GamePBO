@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.gdx.game.Animator;
 import com.gdx.game.Static;
 import com.gdx.objects.Map.Ruangan;
@@ -63,8 +64,8 @@ public class StoneGolem extends Boss{
         facing = Facing.RIGHT;
         playerPosX = 0;
         playerPosY= 0;
-        projectileWidth = 300;
-        projectileHeight = 300;
+        projectileWidth = 100;
+        projectileHeight = 100;
         this.player = player;
         this.ruangan = ruangan;
         CENTERX = posX + (WIDTH /2);
@@ -159,9 +160,6 @@ public class StoneGolem extends Boss{
                         } else {
                             projectilePosX= posX - (WIDTH / 2);
                             projectilePosY = posY;
-                            System.out.println(kemiringan);
-                            System.out.println(playerPosX);
-                            System.out.println(playerPosY);
                         }
                     }
 

@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.Exceptions.NotEnoughCoinsException;
 import com.gdx.UI.ShopUI;
 import com.gdx.objects.Skills.ImpenetrableShield;
+import com.gdx.objects.playerAnimationHandling.RangedPlayerAnimation;
 import com.gdx.screen.MainMenuScreen;
 import com.gdx.objects.*;
 import com.gdx.objects.playerAnimationHandling.MagicPlayerAnimation;
@@ -195,22 +196,22 @@ public class GameMain extends Game implements Screen {
 
 	public Player makeMeleePlayer() {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
-		Weapon weapon = new Weapon("Excalibur", "OP", 100, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
+		Weapon weapon = new Weapon("Excalibur", "OP", 20, 1, 2.0F, 2.0F, 0.5F, meleeWeaponAnimation);
 		weapon.addTextureRegion(new TextureRegion(this.weapons, 0, 0, 16, 46));
 		return new Player(weapon, new MeleePlayerAnimation());
 	}
 
-	//public Player makeRangedPlayer() {
-//		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
-//		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0F, 1.5F, 1.0F, rangeWeaponAnimation);
-//		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
-//		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
-//		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
-//		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
-//		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
-//		Player player1 = new Player(weapon, new RangedPlayerAnimation());
-//		return player1;
-	//}
+	public Player makeRangedPlayer() {
+		RangeWeaponAnimation rangeWeaponAnimation = new RangeWeaponAnimation();
+		Weapon weapon = new Weapon("Bowsmth", "NotOP", 99, 1, 2.0F, 1.5F, 1.0F, rangeWeaponAnimation);
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 52, 48, 9, 31));
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 67, 50, 12, 27));
+		weapon.addTextureRegion(new TextureRegion(this.weapons, 80, 51, 15, 25));
+		Texture tmp = this.manager.get("Pixel Crawler - FREE - 1.8/Weapons/Wood/Wood.png");
+		this.activePlayerProjectile = new Sprite(tmp, 32, 4, 15, 6);
+		Player player1 = new Player(weapon, new RangedPlayerAnimation());
+		return player1;
+	}
 
 	public Player makeMagicPlayer() {
 		MagicWeaponAnimation magicWeaponAnimation = new MagicWeaponAnimation();
