@@ -44,6 +44,8 @@ public class GameMain extends Game implements Screen {
 	BitmapFont font;
 	BitmapFontCache text;
 	ShopUI shopUI;
+	public float masterSound = 0.5f;//GUNAKAN MASTERSOUND UNTUK SEMUA SOUND (bukan music)
+	public float masterMusic = 0.7f;//GUNAKAN MASTERMUSIC UNTUK SEMUA MUSIC (bukan sound)
 
 	public GameMain() {
 	}
@@ -74,6 +76,8 @@ public class GameMain extends Game implements Screen {
 		this.manager.load("heart.png", Texture.class);
 		this.manager.load("star.png", Texture.class);
 		this.manager.load("gameOverScreen.png", Texture.class);
+		manager.load("mainMenu/menuUI.png", Texture.class);
+		manager.load("mainMenu/menu.png", Texture.class);
 		manager.load("BuffLogos.png", Texture.class);
 		manager.load("GUI.png", Texture.class);
 		manager.load("healthbar/SleekBars.png", Texture.class);
@@ -240,7 +244,7 @@ public class GameMain extends Game implements Screen {
 			this.attackCooldown = this.player.getWeapon().getCooldown();
 
 			if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation) {
-				((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getSwingSound().play(0.5f);
+				((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getSwingSound().play(masterSound);
 			}
 		}
 
@@ -273,11 +277,11 @@ public class GameMain extends Game implements Screen {
 			this.attackStateTime = 0.0F;
 			this.attackCooldown = this.player.getWeapon().getCooldown();
 			player.addMana(-5);
-			((MagicWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
+			((MagicWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(masterSound);
 		}
 
 		if (this.player.getWeapon().getWeaponAnimation() instanceof CreateProjectile && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).getframeToCreateProjectile() <= this.attackStateTime && ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).canCreateProjectile()) {
-			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.5f);
+			((RangeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(masterSound);
 			Projectile p = ((CreateProjectile) this.player.getWeapon().getWeaponAnimation()).createProjectile(this.player, this.activePlayerProjectile);
 			this.projectiles.add(p);
 		}

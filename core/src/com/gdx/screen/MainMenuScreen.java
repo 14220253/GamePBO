@@ -33,7 +33,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
         parentGame = (GameMain) Gdx.app.getApplicationListener();
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
-        mainMenu = new Texture("mainMenu/menuUI.png");
+        mainMenu = parentGame.getManager().get("mainMenu/menuUI.png");
         menuWindow = new TextureRegion(mainMenu, 479, 0, 470, 300);
         startButtonIdle = new TextureRegion(mainMenu, 0, 1, 475, 133);
         optionsButtonIdle = new TextureRegion(mainMenu, 0, 429, 475, 133);

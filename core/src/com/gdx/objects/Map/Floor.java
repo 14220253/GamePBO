@@ -40,7 +40,7 @@ public class Floor {
         app = (GameMain) Gdx.app.getApplicationListener();
 
         music = app.getManager().get("Music.mp3");
-        music.setVolume(0.7f);
+        music.setVolume(app.masterMusic);
 
         rooms = new ArrayList<>();
         for (int i = 0; i < 7; i++) {

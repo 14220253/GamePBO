@@ -181,15 +181,15 @@ public class Ruangan {
                 if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), drops.get(i).getHitbox())) {
                     if (drops.get(i).getType() == Drops.Type.COIN && drops.get(i).getState() != Drops.State.COLLECTED) {
                         PLAYER.getInventory().addCoin(drops.get(i).getAmount());
-                        drops.get(i).getCollectSound().play(0.5f);
+                        drops.get(i).getCollectSound().play(app.masterSound);
                     }
                     if (drops.get(i).getType() == Drops.Type.HEALTH && drops.get(i).getState() != Drops.State.COLLECTED) {
                         PLAYER.addHealth(drops.get(i).getAmount());
-                        drops.get(i).getCollectSound().play(0.3f);
+                        drops.get(i).getCollectSound().play(app.masterSound);
                     }
                     if (drops.get(i).getType() == Drops.Type.MANA && drops.get(i).getState() != Drops.State.COLLECTED) {
                         PLAYER.addMana(drops.get(i).getAmount());
-                        drops.get(i).getCollectSound().play(0.8f);
+                        drops.get(i).getCollectSound().play(app.masterSound);
                     }
                     drops.get(i).setState(Drops.State.COLLECTED);
                 }
@@ -214,14 +214,14 @@ public class Ruangan {
                         if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i],
                                 breakable.getHitbox())) {
                             breakable.setState(Breakable.State.HALFBROKEN);
-                            breakable.getBreakSound().play(0.25f);
+                            breakable.getBreakSound().play(app.masterSound);
                         }
                     }
                     for (Monster monster:monsters) {
                         if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i],
                                 monster.getHitBox())) {
                             if (PLAYER.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation && monster.getImmunityFrames() == 0) {
-                                ((MeleeWeaponAnimation) PLAYER.getWeapon().getWeaponAnimation()).getAttackSound().play(0.8f);
+                                ((MeleeWeaponAnimation) PLAYER.getWeapon().getWeaponAnimation()).getAttackSound().play(app.masterSound);
                             }
                             monster.takeDamage(PLAYER.getAttack());
                         }
@@ -310,7 +310,7 @@ public class Ruangan {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     showingCard = false;
                     PLAYER.canMoveFree();
-                    closeDoor.play(1.2f);
+                    closeDoor.play(app.masterSound);
                 }
                 //BUTTONS
                 batch.draw(button, (float) leftButtonHitbox.getX(), 700 - (float) leftButtonHitbox.getY() - (float) leftButtonHitbox.getHeight(),
@@ -338,12 +338,12 @@ public class Ruangan {
                     if (Static.rectangleCollisionDetect(leftButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         showingCard = false;
                         PLAYER.canMoveFree();
-                        closeDoor.play(1.2f);
+                        closeDoor.play(app.masterSound);
                     }
                     if (Static.rectangleCollisionDetect(rightButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         done = true;
                         selectedBuff.activate(PLAYER);
-                        closeDoor.play(1.2f);
+                        closeDoor.play(app.masterSound);
                     }
                 }
             }

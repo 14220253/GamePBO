@@ -308,7 +308,7 @@ public class Player extends Karakter { //interface Skill belum tau
         }
         if (isRunning) {
             if (soundTimer <= 0) {
-                steps.play(0.3f);
+                steps.play(app.masterSound);
                 soundTimer = 0.6f;
             }
             else {
