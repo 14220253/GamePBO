@@ -27,6 +27,20 @@ public class Animator {
         return frames;
     }
 
+    public static TextureRegion[] textureSplitterReverse(Texture texture, int column, int row) {
+        TextureRegion[] frames;
+        TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / column, texture.getHeight() / row);
+        frames = new TextureRegion[column * row];
+        int index = 0;
+
+        for (int j = column - 1; j >= 0; j--) {
+            for (int i = row - 1; i >= 0; i--) {
+                frames[index++] = temp[i][j];
+            }
+        }
+        return frames;
+    }
+
     /**
      * mereturn class animation untuk animasi
      * @param texture texture animasi
@@ -38,16 +52,32 @@ public class Animator {
         return animate(texture, column, row, flipX, flipY, 0.2f);
     }
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, int redundantFrames) {
-        return animate(texture, column, row, flipX, flipY, 0.2f, redundantFrames);
+        return animate(texture, column, row, flipX, flipY, 0.2f, redundantFrames, false);
     }
     public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration) {
-        return animate(texture, column, row, flipX, flipY, duration, 0);
+        return animate(texture, column, row, flipX, flipY, duration, 0, false);
     }
-    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration, int redundantFrames) {
-        TextureRegion[] array = textureSplitter(texture, column, row, redundantFrames);
-        if (flipX || flipY) {
-            for (TextureRegion t : array) {
-                t.flip(flipX, flipY);
+    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration, boolean reverse) {
+        return animate(texture, column, row, flipX, flipY, duration, 0, true);
+    }
+    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, boolean reverse) {
+        return animate(texture, column, row, flipX, flipY, 0.2f, 0, true);
+    }
+    public static Animation<TextureRegion> animate(Texture texture, int column, int row, boolean flipX, boolean flipY, float duration, int redundantFrames, boolean reverse) {
+        TextureRegion[] array;
+        if (!reverse) {
+            array = textureSplitter(texture, column, row, redundantFrames);
+            if (flipX || flipY) {
+                for (TextureRegion t : array) {
+                    t.flip(flipX, flipY);
+                }
+            }
+        } else {
+            array = textureSplitterReverse(texture, column, row);
+            if (flipX || flipY) {
+                for (TextureRegion t : array) {
+                    t.flip(flipX, flipY);
+                }
             }
         }
         return new Animation<>(duration, array);

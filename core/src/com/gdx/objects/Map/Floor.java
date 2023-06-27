@@ -1,9 +1,10 @@
-package com.gdx.objects;
+package com.gdx.objects.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gdx.game.GameMain;
+import com.gdx.objects.Player;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -55,7 +56,7 @@ public class Floor {
                 rooms.add(ruanganShop);
             }
             if (i == 6) {
-                Ruangan ruanganBoss = new Ruangan("dungeon", player);
+                Ruangan ruanganBoss = new Ruangan("boss", player);
                 ruanganBoss.initialize(0, this.LEVEL, (i + 1));
                 rooms.add(ruanganBoss);
             }
@@ -79,8 +80,8 @@ public class Floor {
                 room++;
                 currentRoom = rooms.get(room);
                 if (room == 5) {
-                    player.setPosX(400);
-                    player.setPosY(200);
+                    player.setPosX(300);
+                    player.setPosY(220);
                     player.canMoveFree();
                 } else {
                     player.setPosX(400);

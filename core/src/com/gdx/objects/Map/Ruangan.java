@@ -1,4 +1,4 @@
-package com.gdx.objects;
+package com.gdx.objects.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,9 +10,15 @@ import com.gdx.game.Animator;
 import com.gdx.game.Drawer;
 import com.gdx.game.Static;
 import com.gdx.game.GameMain;
+import com.gdx.objects.Bosses.Boss;
+import com.gdx.objects.Bosses.StoneGolem;
+import com.gdx.objects.Breakable;
+import com.gdx.objects.Buffs;
+import com.gdx.objects.Drops;
 import com.gdx.objects.Monsters.Monster;
 import com.gdx.objects.Monsters.Orc;
 import com.gdx.objects.Monsters.Skeleton;
+import com.gdx.objects.Player;
 import com.gdx.objects.weaponAnimationHandling.MeleeWeaponAnimation;
 
 import java.awt.*;
@@ -25,7 +31,6 @@ public class Ruangan {
     private Rectangle rightBorder;
     private Rectangle bottomBorder;
     private Rectangle upperborder;
-    private Texture texture;
     private final String TYPE;
     private ArrayList<Monster> monsters;
     private ArrayList<Breakable> breakables;
@@ -44,13 +49,14 @@ public class Ruangan {
     private Rectangle rightButtonHitbox;
     private Buffs selectedBuff;
     private boolean done;
-    private Player player;
+    private final Player PLAYER;
     private Sound openDoor;
     private Sound closeDoor;
+    private Boss boss;
 
     public Ruangan(String type, Player player) {
         this.TYPE = type;
-        this.player = player;
+        PLAYER = player;
     }
 
     /**
@@ -117,8 +123,8 @@ public class Ruangan {
 
     public void draw(SpriteBatch batch, float stateTime) {
         //map
-        if (TYPE.equalsIgnoreCase("Dungeon")) {
-            player.canMoveFree();
+        if (TYPE.equalsIgnoreCase("Dungeon") || TYPE.equalsIgnoreCase("boss")) {
+            PLAYER.canMoveFree();
 
             Drawer.drawDungeon(batch);
             leftBorder = new Rectangle(48, 40, 5, 500);
@@ -127,9 +133,8 @@ public class Ruangan {
             upperborder = new Rectangle(48, 525, 705, 8);
         }
         else if (TYPE.equalsIgnoreCase("Shop")) {
-            player.canMoveFree();
+            PLAYER.canMoveFree();
 
-            texture = app.getManager().get("Pixel Crawler - FREE - 1.8/Environment/Dungeon Prison/Assets/Tiles.png");
             Drawer.drawDungeonShop(batch);
             rightBorder = new Rectangle(510, 203, 5, 300);
             leftBorder = new Rectangle(205, 203, 5, 300);
@@ -142,10 +147,10 @@ public class Ruangan {
             TextureRegion currentFrame = NPCAnimation.getKeyFrame(stateTime,true);
             batch.draw(currentFrame, 400,300, 64, 64);
             //test
-            if(Static.rectangleCollisionDetect(new Rectangle(400,300,64,64),player.getHitBox())) {
+            if(Static.rectangleCollisionDetect(new Rectangle(400,300,64,64),PLAYER.getHitBox())) {
                 app.openShopUI();//this
             }
-            if(player.getPosY() == 300 && player.getPosX() ==400){
+            if(PLAYER.getPosY() == 300 && PLAYER.getPosX() ==400){
                 app.openShopUI();
             }
             centerDoorHitbox.setLocation(350, 320);
@@ -165,7 +170,7 @@ public class Ruangan {
             for (Monster monster : monsters) {
                 if (monster.isRunsToPlayer()){
                     if (monster.getState() != Monster.State.DYING) {
-                        monster.moveToCoordinates(player.posX, player.posY, Gdx.graphics.getDeltaTime());
+                        monster.moveToCoordinates(PLAYER.getPosX(), PLAYER.getPosY(), Gdx.graphics.getDeltaTime());
                     }
                 }
                 monster.draw(batch, stateTime);
@@ -173,17 +178,17 @@ public class Ruangan {
             }
             //COLLECT FLOOR ITEMS
             for (int i = 0; i < drops.size(); i++) {
-                if (Static.rectangleCollisionDetect(player.getHitBox(), drops.get(i).getHitbox())) {
+                if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), drops.get(i).getHitbox())) {
                     if (drops.get(i).getType() == Drops.Type.COIN && drops.get(i).getState() != Drops.State.COLLECTED) {
-                        player.getInventory().addCoin(drops.get(i).getAmount());
+                        PLAYER.getInventory().addCoin(drops.get(i).getAmount());
                         drops.get(i).getCollectSound().play(0.5f);
                     }
                     if (drops.get(i).getType() == Drops.Type.HEALTH && drops.get(i).getState() != Drops.State.COLLECTED) {
-                        player.addHealth(drops.get(i).getAmount());
+                        PLAYER.addHealth(drops.get(i).getAmount());
                         drops.get(i).getCollectSound().play(0.3f);
                     }
                     if (drops.get(i).getType() == Drops.Type.MANA && drops.get(i).getState() != Drops.State.COLLECTED) {
-                        player.addMana(drops.get(i).getAmount());
+                        PLAYER.addMana(drops.get(i).getAmount());
                         drops.get(i).getCollectSound().play(0.8f);
                     }
                     drops.get(i).setState(Drops.State.COLLECTED);
@@ -193,57 +198,87 @@ public class Ruangan {
                     drops.remove(i);
                 }
             }
-        }
-
-        //MONSTER HIT PLAYER
-        for(Monster monster: monsters) {
-            if (Static.rectangleCollisionDetect(monster.getHitBox(), player.getHitBox())) {
-                if (player.getImmunityFrames() == 0) {
-                    monster.takeDamage(player.getAttack());
-                    player.takeDamage(monster.getAttack());
-                }
-            }
-        }
-
-        //PLAYER ATTACKING
-        if (player.isAttacking()) {
-            for (int i = 0; i < player.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
-                for (Breakable breakable : breakables) {
-                    if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
-                            breakable.getHitbox())) {
-                        breakable.setState(Breakable.State.HALFBROKEN);
-                        breakable.getBreakSound().play(0.25f);
+            //MONSTER HIT PLAYER
+            for(Monster monster: monsters) {
+                if (Static.rectangleCollisionDetect(monster.getHitBox(), PLAYER.getHitBox())) {
+                    if (PLAYER.getImmunityFrames() == 0) {
+                        monster.takeDamage(PLAYER.getAttack());
+                        PLAYER.takeDamage(monster.getAttack());
                     }
                 }
-                for (Monster monster:monsters) {
-                    if (Static.rectangleCollisionDetect(player.getWeapon().getWeaponAnimation().getHitboxes()[i],
-                            monster.getHitBox())) {
-                        if (player.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation && monster.getImmunityFrames() == 0) {
-                            ((MeleeWeaponAnimation) player.getWeapon().getWeaponAnimation()).getAttackSound().play(0.8f);
+            }
+            //PLAYER ATTACKING
+            if (PLAYER.isAttacking()) {
+                for (int i = 0; i < PLAYER.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
+                    for (Breakable breakable : breakables) {
+                        if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i],
+                                breakable.getHitbox())) {
+                            breakable.setState(Breakable.State.HALFBROKEN);
+                            breakable.getBreakSound().play(0.25f);
                         }
-                        monster.takeDamage(player.getAttack());
+                    }
+                    for (Monster monster:monsters) {
+                        if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i],
+                                monster.getHitBox())) {
+                            if (PLAYER.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation && monster.getImmunityFrames() == 0) {
+                                ((MeleeWeaponAnimation) PLAYER.getWeapon().getWeaponAnimation()).getAttackSound().play(0.8f);
+                            }
+                            monster.takeDamage(PLAYER.getAttack());
+                        }
+                    }
+                }
+            }
+            //MONSTER DIES
+            for (int i = 0; i < monsters.size(); i++) {
+                if (monsters.get(i).getState() == Monster.State.DEAD) {
+                    drops.add(new Drops(monsters.get(i).getPosX(), monsters.get(i).getPosY(), level, Drops.Type.COIN));
+                    monsters.remove(i);
+                }
+            }
+        }
+
+
+
+
+
+
+        if (TYPE.equalsIgnoreCase("boss")){
+            if (boss instanceof StoneGolem) {
+                boss.draw(batch, stateTime);
+                if (((StoneGolem) boss).isSpawning()) {
+                    PLAYER.cannotMove();
+                }
+                else {
+                    PLAYER.canMoveFree();
+
+                    if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), boss.getHitBox())) {
+                        PLAYER.takeDamage(boss.getAttack());
+                        boss.takeDamage(PLAYER.getAttack());
+                    }
+
+                    if (Static.rectangleCollisionDetect(((StoneGolem) boss).getCurrentSkill().getHurtBox(), PLAYER.getHitBox())) {
+                        PLAYER.takeDamage(boss.getAttack());
+                    }
+
+                    for (int i = 0; i < PLAYER.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
+                        if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i], boss.getHitBox())) {
+                            boss.takeDamage(PLAYER.getAttack());
+                        }
                     }
                 }
             }
         }
 
-        //MONSTER DIES
-        for (int i = 0; i < monsters.size(); i++) {
-            if (monsters.get(i).getState() == Monster.State.DEAD) {
-                drops.add(new Drops(monsters.get(i).getPosX(), monsters.get(i).getPosY(), level, Drops.Type.COIN));
-                monsters.remove(i);
-            }
-        }
 
         //PINTU
-        if ((Static.rectangleCollisionDetect(player.hitBox, centerDoorHitbox) ||
-                Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox) ||
-                        Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) && monsters.size() == 0) {
+        if ((Static.rectangleCollisionDetect(PLAYER.getHitBox(), centerDoorHitbox) ||
+                Static.rectangleCollisionDetect(PLAYER.getHitBox(), leftDoorHitbox) ||
+                        Static.rectangleCollisionDetect(PLAYER.getHitBox(), rightDoorHitbox)) && monsters.size() == 0) {
 
             BitmapFont font = new BitmapFont();
             font.getData().setScale(1.5f);
             BitmapFontCache text = new BitmapFontCache(font);
-            text.setText("Press Spacebar", player.getPosX() - 40, player.getPosY() + player.getHeight() * 2);
+            text.setText("Press Spacebar", PLAYER.getPosX() - 40, PLAYER.getPosY() + PLAYER.getHeight() * 2);
             text.draw(batch);
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -259,22 +294,22 @@ public class Ruangan {
 
 
             if (showingCard && !TYPE.equalsIgnoreCase("shop")) {
-                player.cannotMove();
-                if (Static.rectangleCollisionDetect(player.hitBox, centerDoorHitbox)) {
+                PLAYER.cannotMove();
+                if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), centerDoorHitbox)) {
                     Drawer.drawCard(batch, buffs.get(0));
                     selectedBuff = buffs.get(0);
                 }
-                if (Static.rectangleCollisionDetect(player.hitBox, leftDoorHitbox)) {
+                if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), leftDoorHitbox)) {
                     Drawer.drawCard(batch, buffs.get(1));
                     selectedBuff = buffs.get(1);
                 }
-                if (Static.rectangleCollisionDetect(player.hitBox, rightDoorHitbox)) {
+                if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), rightDoorHitbox)) {
                     Drawer.drawCard(batch, buffs.get(2));
                     selectedBuff = buffs.get(2);
                 }
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     showingCard = false;
-                    player.canMoveFree();
+                    PLAYER.canMoveFree();
                     closeDoor.play(1.2f);
                 }
                 //BUTTONS
@@ -302,19 +337,19 @@ public class Ruangan {
                 if (Gdx.input.isButtonJustPressed(0)) {
                     if (Static.rectangleCollisionDetect(leftButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         showingCard = false;
-                        player.canMoveFree();
+                        PLAYER.canMoveFree();
                         closeDoor.play(1.2f);
                     }
                     if (Static.rectangleCollisionDetect(rightButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
                         done = true;
-                        selectedBuff.activate(player);
+                        selectedBuff.activate(PLAYER);
                         closeDoor.play(1.2f);
                     }
                 }
             }
         }
         //remove semua monster kalau player mati
-        if (player.isDying()){
+        if (PLAYER.isDying()){
             if (monsters.size() > 0) {
                 monsters.subList(0, monsters.size()).clear();
             }
@@ -332,15 +367,15 @@ public class Ruangan {
         double defenseMultiplier = ((double) level / 10);
 
         if (template == 0) {
-            Monster boss = new Skeleton(health * 10, attack * 2, defense + (defense / 10) + 5, level,
-                    hpMultiplier, damageMultiplier, defenseMultiplier);
-            monsters.add(boss);
+            boss = new StoneGolem(health * 20, attack * 5, defense * 5, level,
+                    hpMultiplier, damageMultiplier, defenseMultiplier,
+                    PLAYER, this);
         }
         if (template == 1) {
             int posX = 200;
             int posY = 400;
             for (int i = 1; i <= 3; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -363,7 +398,7 @@ public class Ruangan {
             int posX;
             int posY;
             for (int i = 1; i <= 3; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -418,7 +453,7 @@ public class Ruangan {
             int posX = 150;
             int posY = 400;
             for (int i = 1; i <= 4; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -441,7 +476,7 @@ public class Ruangan {
             int posX = 250;
             int posY = 450;
             for (int i = 1; i <= 2; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -462,7 +497,7 @@ public class Ruangan {
             posX = 100;
             posY = 250;
             for (int i = 1; i <= 2; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -485,7 +520,7 @@ public class Ruangan {
             int posX = 150;
             int posY = 250;
             for (int i = 1; i <= 2; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -506,7 +541,7 @@ public class Ruangan {
             posX = 250;
             posY = 450;
             for (int i = 1; i <= 2; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -529,7 +564,7 @@ public class Ruangan {
             int posX = 250;
             int posY = 375;
             for (int i = 1; i <= 2; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -550,7 +585,7 @@ public class Ruangan {
             posX = 150;
             posY = 250;
             for (int i = 1; i <= 2; i++) {
-                int coinFlip = Static.coinFlip();
+                int coinFlip = Static.randomizer(2);
                 Monster monster;
                 switch (coinFlip) {
                     case 0:
@@ -570,7 +605,7 @@ public class Ruangan {
             }
             posX = 400;
             posY = 450;
-            int coinFlip = Static.coinFlip();
+            int coinFlip = Static.randomizer(2);
             Monster monster;
             switch (coinFlip) {
                 case 0:

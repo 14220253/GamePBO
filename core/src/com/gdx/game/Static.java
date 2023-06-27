@@ -27,10 +27,14 @@ public class Static {
     }
     /**
      * coin flip 0/1
+     * @param n batas atas(tidak termasuk)
      * @return 0/1
      */
-    public static int coinFlip() {
-        return new Random().nextInt(0, 2);
+    public static int randomizer(int n) {
+        return new Random().nextInt(0, n);
+    }
+    public static int randomizer(int n1, int n2) {
+        return new Random().nextInt(n1, n2);
     }
 
 

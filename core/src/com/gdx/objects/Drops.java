@@ -27,12 +27,12 @@ public class Drops {
     private GameMain app;
     private float startCollect = 0f;
     private Sound collectSound;
-    enum Type {
+    public enum Type {
         COIN,
         HEALTH,
         MANA
     }
-    enum State{
+    public enum State{
         AVALABLE,
         COLLECTED,
         GONE
