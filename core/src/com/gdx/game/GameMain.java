@@ -7,15 +7,22 @@ package com.gdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.Exceptions.NotEnoughCoinsException;
 import com.gdx.UI.ShopUI;
 import com.gdx.objects.Skills.ImpenetrableShield;
@@ -45,6 +52,8 @@ public class GameMain extends Game implements Screen {
 	BitmapFont font;
 	BitmapFontCache text;
 	ShopUI shopUI;
+	Viewport viewport;
+	Camera camera;
 	public float masterSound = 0.5f;//GUNAKAN MASTERSOUND UNTUK SEMUA SOUND (bukan music)
 	public float masterMusic = 0.7f;//GUNAKAN MASTERMUSIC UNTUK SEMUA MUSIC (bukan sound)
 
@@ -94,7 +103,7 @@ public class GameMain extends Game implements Screen {
 		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/head glow.png", Texture.class);
 		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/idle.png", Texture.class);
 		manager.load("Bosses/Mecha-stone Golem 0.1/PNG sheet/invunerable.png", Texture.class);
-		manager.load("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile.png", Texture.class);
+		manager.load("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile_resize.png", Texture.class);
 		manager.load("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile_glowing.png", Texture.class);
 		manager.load("Bosses/Mecha-stone Golem 0.1/weapon PNG/Laser_sheet.png", Texture.class);
 
@@ -139,6 +148,9 @@ public class GameMain extends Game implements Screen {
 		this.player.canMoveFree();
 		shopUI = new ShopUI();
 		this.setScreen(new MainMenuScreen(batch));
+
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(800, 700, camera);
 	}
 	public void openShopUI(){
 		shopUI.show();
@@ -191,8 +203,7 @@ public class GameMain extends Game implements Screen {
 
 	}
 
-	public void resize(int width, int height) {
-	}
+
 
 	public Player makeMeleePlayer() {
 		MeleeWeaponAnimation meleeWeaponAnimation = new MeleeWeaponAnimation();
@@ -290,5 +301,13 @@ public class GameMain extends Game implements Screen {
 
 	public SpriteBatch getBatch() {
 		return batch;
+	}
+
+	public void resize(int width, int height) {
+		viewport.update(width, height);;
+	}
+
+	public  Vector3 getMousePos() {
+		return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 	}
 }

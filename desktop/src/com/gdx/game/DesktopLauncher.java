@@ -9,6 +9,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("Dungeons");
 		config.setWindowedMode(800, 700);
+		config.setResizable(false);
 		new Lwjgl3Application(new GameMain(), config);
 	}
 }

@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.game.Animator;
 import com.gdx.game.Static;
 import com.gdx.objects.Map.Ruangan;
 import com.gdx.objects.Player;
-import jdk.tools.jlink.plugin.PluginException;
 
 import java.awt.*;
 
@@ -24,6 +24,8 @@ public class StoneGolem extends Boss{
     private Animation<TextureRegion> idleAnimationLeft;
     private Animation<TextureRegion> normalArmLaunchLeft;
     private Animation<TextureRegion> normalArmLaunchRight;
+    private Animation<TextureRegion> retractArmLaunchLeft;
+    private Animation<TextureRegion> retractArmLaunchRight;
     private Texture armLaunchProjectile;
     private Sprite armLaunchSprite;
     private Rectangle armLaunchHitbox;
@@ -35,15 +37,18 @@ public class StoneGolem extends Boss{
     private float skillCooldown;
     private BossSkill armLaunch;
     private Facing facing;
-    private int playerPosX;
-    private int playerPosY;
-    private double projectilePosX;
-    private double projectilePosY;
+    private Vector2 playerPosition;
+    private Vector2 projectilePosition;
     private int projectileWidth;
     private int projectileHeight;
     private Player player;
     private Ruangan ruangan;
     private float immunityFrame;
+    private float degree;
+    private double kemiringan;
+    private boolean armLaunchDone;
+    private float animationTimer;
+    private float animationDoneTimer;
     enum Facing{
         LEFT,
         RIGHT
@@ -55,29 +60,30 @@ public class StoneGolem extends Boss{
         super(health, attack, defense, level, hpMultiplier, damageMultiplier, defenceMultiplier);
         spawnTimer = 0f;
         spawning = true;
+        int multiplier = 3;
         posX = 270;
         posY = 200;
-        WIDTH = 288;
-        HEIGHT = 300;
-        hitBox = new Rectangle(posX, posY, WIDTH, HEIGHT);
-        skillCooldown = 5f;
+        WIDTH = 96 * multiplier;
+        HEIGHT = 100 * multiplier;
+        hitBox = new Rectangle(posX + (25 * multiplier), posY + (25 * multiplier)
+                , WIDTH - (50 * multiplier), HEIGHT - (50 * multiplier));
+        skillCooldown = 2f;
         facing = Facing.RIGHT;
-        playerPosX = 0;
-        playerPosY= 0;
-        projectileWidth = 100;
-        projectileHeight = 100;
+        playerPosition = new Vector2(0, 0);
         this.player = player;
         this.ruangan = ruangan;
         CENTERX = posX + (WIDTH /2);
         CENTERY = posY + (HEIGHT / 2);
-        projectilePosX= posX;
-        projectilePosY = posY;
+        projectilePosition = new Vector2(CENTERX, CENTERY);
+        armLaunchDone = false;
+        kemiringan = 0;
+        degree = 0;
+        animationTimer = 0f;
+        animationDoneTimer = 0f;
 
         initializeIdle();
         initializeSpawnAnimation();
         initializeNormalArmLaunch();
-
-        TES = 0f;
     }
 
 
@@ -88,117 +94,142 @@ public class StoneGolem extends Boss{
 
     @Override
     public void draw(SpriteBatch batch, float stateTime) {
-        if (playerPosX < posX) {
+        if (player.getPosX() < posX) {
             facing = Facing.LEFT;
         }
         else {
             facing = Facing.RIGHT;
         }
 
-        if (immunityFrame != 0) {
-            currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
-            batch.setColor(Color.RED);
-            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
-            immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
-            batch.setColor(1, 1, 1, 1);
-        }
 
         //SPAWNING
-        if (spawnTimer < 1.5f) {
+        if (!spawnAnimation.isAnimationFinished(spawnTimer)) {
             currentFrame = spawnAnimation.getKeyFrame(spawnTimer, false);
             batch.draw(currentFrame, posX - 10, posY, WIDTH, HEIGHT);
             spawnTimer += 1 * Gdx.graphics.getDeltaTime();
         } //BATTLE
         else {
             spawning = false;
-//            currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
-//            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
-
-            armLaunch.drawSkill(batch, TES, player, ruangan);
-            TES += 1.5 * Gdx.graphics.getDeltaTime();
+            if (immunityFrame > 0) {
+                currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
+                batch.setColor(Color.RED);
+                batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
+                batch.setColor(1, 1, 1, 1);
+            }
+            else {
+                System.out.println(skillCooldown);
+                if (skillCooldown <= 0) {
+                    armLaunch.drawSkill(batch, player, ruangan);
+                } else {
+                    switch (facing) {
+                        case LEFT:
+                            currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
+                            break;
+                        case RIGHT:
+                            currentFrame = idleAnimationLeft.getKeyFrame(stateTime, true);
+                            break;
+                    }
+                    skillCooldown -= 1 * Gdx.graphics.getDeltaTime();
+                    batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                }
+//                System.out.println(skillCooldown);
+                immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
+            }
         }
     }
-    //TEST
-    private float TES;
-    double degree = 0;
-    double angle = 0;
-    double kemiringan = 0;
+
     public void initializeNormalArmLaunch() {
-        final Texture armLaunchTexture = app.getManager().get("Bosses/Mecha-stone Golem 0.1/PNG sheet/arm launch.png");
+        Texture armLaunchTexture = app.getManager().get("Bosses/Mecha-stone Golem 0.1/PNG sheet/arm launch.png");
         normalArmLaunchLeft = Animator.animate(armLaunchTexture, 9, 1, true,false);
         normalArmLaunchRight = Animator.animate(armLaunchTexture, 9, 1, false, false);
-        armLaunchProjectile = app.getManager().get("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile.png");
+        armLaunchProjectile = app.getManager().get("Bosses/Mecha-stone Golem 0.1/weapon PNG/arm_projectile_resize.png");
+        retractArmLaunchRight= Animator.animate(armLaunchTexture, 9, 1, false, false, true);
+        retractArmLaunchLeft= Animator.animate(armLaunchTexture, 9, 1, true, false, true);
         armLaunchHitbox = new Rectangle();
-        armLaunchHitbox.setSize(100, 100);
-        armLaunchSprite = new Sprite(armLaunchProjectile);
+        armLaunchHitbox.setSize(50, 20);
+        projectileWidth = armLaunchHitbox.width;
+        projectileHeight = armLaunchHitbox.height;
         armLaunch = new BossSkill() {
             @Override
-            public void drawSkill(SpriteBatch batch, float stateTime, Player player, Ruangan ruangan) {
-                switch (facing) {
-                    case LEFT:
-                        currentFrame = normalArmLaunchLeft.getKeyFrame(stateTime, false);
-                        batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
-                        break;
-                    case RIGHT:
-                        currentFrame = normalArmLaunchRight.getKeyFrame(stateTime, false);
-                        batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
-                        break;
-                }
-                if (normalArmLaunchLeft.isAnimationFinished(stateTime) || normalArmLaunchRight.isAnimationFinished(stateTime)) {
-                    if (playerPosX == 0 && playerPosY == 0) {
-                        playerPosX = player.getPosX();
-                        playerPosY = player.getPosY();
-                        angle = Math.atan2(CENTERY - playerPosY, CENTERX - playerPosX);
-                        degree = Math.toDegrees(angle);
-                        kemiringan = (double) (playerPosY - posY) / (playerPosX - posX) + Static.randomizer(-2, 3);
-                        armLaunchSprite.setOrigin((float)armLaunchTexture.getWidth() / 2, (float) armLaunchTexture.getHeight() / 2);
-                        armLaunchSprite.rotate((float) degree);
-
-                        if (playerPosX > CENTERX) {
-                            projectilePosX= posX;
-                            projectilePosY = posY;
-                        } else {
-                            projectilePosX= posX - (WIDTH / 2);
-                            projectilePosY = posY;
-                        }
+            public void drawSkill(SpriteBatch batch, Player player, Ruangan ruangan) {
+                if (!armLaunchDone) {
+                    switch (facing) {
+                        case LEFT:
+                            currentFrame = normalArmLaunchLeft.getKeyFrame(animationTimer, false);
+                            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                            animationTimer += 1.5 * Gdx.graphics.getDeltaTime();
+                            break;
+                        case RIGHT:
+                            currentFrame = normalArmLaunchRight.getKeyFrame(animationTimer, false);
+                            batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                            animationTimer += 1.5 * Gdx.graphics.getDeltaTime();
+                            break;
                     }
-
-                    //in border
-                    if ((projectilePosX < ruangan.getRightBorder().getX() &&
-                            projectilePosX > ruangan.getLeftBorder().getX() - projectileWidth) &&
-                            (projectilePosY > ruangan.getBottomBorder().getY() - projectileHeight &&
-                                    projectilePosY < ruangan.getUpperborder().getY())) {
-
-                        if (playerPosX > CENTERX) {
-                            projectilePosX += 5f;
-                            projectilePosY = ((projectilePosX - posX) * kemiringan) + (posX / 2);
-                        } else {
-                            //TODO
-                            projectilePosX -= 5f;
-                            projectilePosY = ((projectilePosX - posX) * kemiringan) + posX;
+                    if (normalArmLaunchLeft.isAnimationFinished(animationTimer)
+                            || normalArmLaunchRight.isAnimationFinished(animationTimer) &&
+                            !armLaunchDone) {
+                        if (playerPosition.x == 0 && playerPosition.y == 0) {
+                            projectilePosition.set(CENTERX, CENTERY);
+                            playerPosition.set(player.getPosX(), player.getPosY());
+                            degree = projectilePosition.angleDeg(playerPosition);
+                            armLaunchSprite = new Sprite(armLaunchProjectile);
+                            kemiringan = ((CENTERY - playerPosition.y)
+                                    / (CENTERX - playerPosition.x))
+                                    + Static.randomizer(-2, 3)
+                            ;
                         }
 
-                        //draw projectile
-                        batch.draw(armLaunchSprite, (float) projectilePosX, (float) projectilePosY, projectileWidth, projectileHeight);
-                    } else {
-                        //stop projectile
-                        if (playerPosX > CENTERX) {
-                            projectilePosX= posX;
-                            projectilePosY = posY;
+                        //in border
+                        if ((projectilePosition.x <= ruangan.getRightBorder().getX() &&
+                                projectilePosition.x > ruangan.getLeftBorder().getX() - projectileWidth) &&
+                                (projectilePosition.y >= ruangan.getBottomBorder().getY() - projectileHeight &&
+                                        projectilePosition.y < ruangan.getUpperborder().getY())) {
+
+                            if (playerPosition.x >= CENTERX) {
+                                projectilePosition.x += 5f;
+                            } else {
+                                projectilePosition.x -= 5f;
+                            }
+                            projectilePosition.y = (float)
+                                    (playerPosition.y + (
+                                            (projectilePosition.x - playerPosition.x) * kemiringan));
+
+
+                            armLaunchHitbox.setLocation((int) projectilePosition.x, (int) projectilePosition.y);
+                            //draw projectile
+                            armLaunchSprite.rotate(degree);
+                            batch.draw(armLaunchSprite, projectilePosition.x, projectilePosition.y
+                                    , projectileWidth * 2, projectileHeight * 2);
+
                         } else {
-                            projectilePosX= posX - (WIDTH / 2);
-                            projectilePosY = posY;
+                            //stop projectile
+                            projectilePosition.set(0, 0);
+                            playerPosition.set(0, 0);
+                            if (retractArmLaunchRight.isAnimationFinished(animationDoneTimer) ||
+                                    retractArmLaunchLeft.isAnimationFinished(animationDoneTimer)) {
+                                switch (facing) {
+                                    case RIGHT:
+                                        currentFrame = retractArmLaunchRight.getKeyFrame(animationDoneTimer, false);
+                                        animationDoneTimer += 1.5 * Gdx.graphics.getDeltaTime();
+                                        break;
+                                    case LEFT:
+                                        currentFrame = retractArmLaunchLeft.getKeyFrame(animationDoneTimer, false);
+                                        animationDoneTimer += 1.5 * Gdx.graphics.getDeltaTime();
+                                        break;
+                                }
+                            } else {
+                                skillCooldown = 5f;
+                                armLaunchDone = true;
+                                System.out.println("BRUHBRUHBRUH");
+                            }
                         }
-                        playerPosX = 0;
-                        playerPosY = 0;
                     }
                 }
             }
 
             @Override
             public Rectangle getHurtBox() {
-                armLaunchHitbox.setLocation((int) projectilePosX, (int) projectilePosY);
-                armLaunchHitbox.setSize(projectileWidth, projectileHeight);
                 return armLaunchHitbox;
             }
         };

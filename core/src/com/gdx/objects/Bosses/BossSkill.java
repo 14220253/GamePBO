@@ -7,6 +7,6 @@ import com.gdx.objects.Player;
 import java.awt.*;
 
 public interface BossSkill {
-    void drawSkill(SpriteBatch batch, float stateTime, Player player, Ruangan ruangan);
+    void drawSkill(SpriteBatch batch, Player player, Ruangan ruangan);
     Rectangle getHurtBox();
 }

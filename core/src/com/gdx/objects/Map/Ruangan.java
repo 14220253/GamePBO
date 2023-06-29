@@ -270,6 +270,8 @@ public class Ruangan {
         }
 
 
+
+
         //PINTU
         if ((Static.rectangleCollisionDetect(PLAYER.getHitBox(), centerDoorHitbox) ||
                 Static.rectangleCollisionDetect(PLAYER.getHitBox(), leftDoorHitbox) ||
