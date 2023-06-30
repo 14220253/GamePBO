@@ -88,6 +88,7 @@ public class Player extends Karakter { //interface Skill belum tau
         soundTimer = 0f;
     }
 
+
     public Skill getSkill() {
         return skill;
     }

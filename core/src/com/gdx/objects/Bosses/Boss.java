@@ -24,6 +24,7 @@ public abstract class Boss extends Karakter {
     protected boolean deathSoundPlayed;
     protected Texture healthBar;
     protected GameMain app;
+    protected boolean isDead;
 
     public Boss(double health, double attack, double defense, int level,
         double hpMultiplier, double damageMultiplier, double defenceMultiplier) {
@@ -35,6 +36,7 @@ public abstract class Boss extends Karakter {
         app = (GameMain) Gdx.app.getApplicationListener();
         healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
         deathSoundPlayed = false;
+        isDead = false;
     }
 
     @Override
@@ -54,5 +56,9 @@ public abstract class Boss extends Karakter {
             return 1;
         }
         else return dmg;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 }

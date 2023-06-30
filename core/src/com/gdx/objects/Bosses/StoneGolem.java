@@ -49,6 +49,11 @@ public class StoneGolem extends Boss{
     private boolean armLaunchDone;
     private float animationTimer;
     private float animationDoneTimer;
+    private Texture healthBar;
+    private double maxHealth;
+    private boolean canTakeDamage;
+    private Animation<TextureRegion> deathAnimation;
+    private float deathTimer;
     enum Facing{
         LEFT,
         RIGHT
@@ -80,8 +85,13 @@ public class StoneGolem extends Boss{
         degree = 0;
         animationTimer = 0f;
         animationDoneTimer = 0f;
+        maxHealth = health;
+        healthBar = app.getManager().get("healthbar/monsterHealthBar.png");
+        canTakeDamage = true;
+        deathTimer = 0;
 
         initializeIdle();
+        initializeDeath();
         initializeSpawnAnimation();
         initializeNormalArmLaunch();
     }
@@ -89,15 +99,14 @@ public class StoneGolem extends Boss{
 
     @Override
     public void die(SpriteBatch batch, float stateTime) {
-
+        hitBox.setLocation(0, 0);
+        hitBox.setSize(0, 0);
+        currentFrame = deathAnimation.getKeyFrame(stateTime, false);
+        batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
     }
 
     @Override
     public void draw(SpriteBatch batch, float stateTime) {
-        ShapeRenderer render = new ShapeRenderer();
-//        render.begin(ShapeRenderer.ShapeType.Line);
-//        render.rect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-//        render.end();
         if (player.getPosX() < posX) {
             facing = Facing.LEFT;
         }
@@ -113,39 +122,54 @@ public class StoneGolem extends Boss{
             spawnTimer += 1 * Gdx.graphics.getDeltaTime();
         } //BATTLE
         else {
+            //HEALTH BAR
+            batch.setColor(Color.RED);
+            batch.draw(healthBar, 50, 50, (float) (700 * getHealthPercent()), 10);
+            batch.setColor(1, 1, 1, 1);
+
             spawning = false;
-            if (immunityFrame > 0) {
-                switch (facing) {
-                    case RIGHT:
-                        currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
-                        break;
-                    case LEFT:
-                        currentFrame = idleAnimationLeft.getKeyFrame(stateTime, true);
-                }
-                batch.setColor(Color.RED);
-                batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
-                immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
-                batch.setColor(1, 1, 1, 1);
-            }
-            else {
-                if (skillCooldown <= 0) {
-                    armLaunchDone = false;
-                    armLaunch.drawSkill(batch, player, ruangan);
-                } else {
+            if (health > 0) {
+                if (immunityFrame > 0) {
                     switch (facing) {
-                        case LEFT:
+                        case RIGHT:
                             currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
                             break;
-                        case RIGHT:
+                        case LEFT:
                             currentFrame = idleAnimationLeft.getKeyFrame(stateTime, true);
-                            break;
                     }
-                    skillCooldown -= 1 * Gdx.graphics.getDeltaTime();
+                    batch.setColor(Color.RED);
                     batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                    immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
+                    batch.setColor(1, 1, 1, 1);
+                } else {
+                    if (skillCooldown <= 0) {
+                        armLaunchDone = false;
+                        armLaunch.drawSkill(batch, player, ruangan);
+                    } else {
+                        switch (facing) {
+                            case LEFT:
+                                currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
+                                break;
+                            case RIGHT:
+                                currentFrame = idleAnimationLeft.getKeyFrame(stateTime, true);
+                                break;
+                        }
+                        skillCooldown -= 1 * Gdx.graphics.getDeltaTime();
+                        batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
+                    }
+                    immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
                 }
-                immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
+            }
+            else {
+                die(batch, deathTimer);
+                deathTimer += 1 * Gdx.graphics.getDeltaTime();
+                isDead = true;
             }
         }
+    }
+    public void initializeDeath() {
+        Texture death = app.getManager().get("Bosses/Mecha-stone Golem 0.1/PNG sheet/death animation.png");
+        deathAnimation = Animator.animate(death, 10, 3, false, false, 6);
     }
 
     public void initializeNormalArmLaunch() {
@@ -230,6 +254,7 @@ public class StoneGolem extends Boss{
                                 animationTimer = 0;
                                 skillCooldown = 1.5f;
                                 armLaunchDone = true;
+                                canTakeDamage = true;
                             }
                         }
                     }
@@ -259,14 +284,22 @@ public class StoneGolem extends Boss{
     }
     @Override
     public void takeDamage(double dmg) {
-        System.out.println(immunityFrame);
         if (immunityFrame <= 0) {
             health -= checkNegativeDmg(dmg-defense);
             checkHealth();
             immunityFrame = 2.5f;
+            canTakeDamage = false;
         }
     }
+
+    public boolean canTakeDamage() {
+        return canTakeDamage;
+    }
+
     public BossSkill getCurrentSkill() {
         return armLaunch;
+    }
+    private double getHealthPercent() {
+        return (health / maxHealth);
     }
 }

@@ -131,8 +131,10 @@ public class Ruangan {
             rightBorder = new Rectangle(710, 40, 5, 500);
             bottomBorder = new Rectangle(48, 55, 705, 8);
             upperborder = new Rectangle(48, 525, 705, 8);
-        }
-        else if (TYPE.equalsIgnoreCase("Shop")) {
+            centerDoorHitbox.setLocation(365, 475);
+            leftDoorHitbox.setLocation(-25, 265);
+            rightDoorHitbox.setLocation(675, 265);
+        } else if (TYPE.equalsIgnoreCase("Shop")) {
             PLAYER.canMoveFree();
 
             Drawer.drawDungeonShop(batch);
@@ -143,14 +145,14 @@ public class Ruangan {
 
             //NPC
             Texture NPC = app.getManager().get("Idle Working.png");
-            Animation<TextureRegion> NPCAnimation = Animator.animate(NPC,8,1,false, false);
-            TextureRegion currentFrame = NPCAnimation.getKeyFrame(stateTime,true);
-            batch.draw(currentFrame, 400,300, 64, 64);
+            Animation<TextureRegion> NPCAnimation = Animator.animate(NPC, 8, 1, false, false);
+            TextureRegion currentFrame = NPCAnimation.getKeyFrame(stateTime, true);
+            batch.draw(currentFrame, 400, 300, 64, 64);
             //test
-            if(Static.rectangleCollisionDetect(new Rectangle(400,300,64,64),PLAYER.getHitBox())) {
+            if (Static.rectangleCollisionDetect(new Rectangle(400, 300, 64, 64), PLAYER.getHitBox())) {
                 app.openShopUI();//this
             }
-            if(PLAYER.getPosY() == 300 && PLAYER.getPosX() ==400){
+            if (PLAYER.getPosY() == 300 && PLAYER.getPosX() == 400) {
                 app.openShopUI();
             }
             centerDoorHitbox.setLocation(350, 320);
@@ -168,7 +170,7 @@ public class Ruangan {
             }
             //MONSTERS
             for (Monster monster : monsters) {
-                if (monster.isRunsToPlayer()){
+                if (monster.isRunsToPlayer()) {
                     if (monster.getState() != Monster.State.DYING) {
                         monster.moveToCoordinates(PLAYER.getPosX(), PLAYER.getPosY(), Gdx.graphics.getDeltaTime());
                     }
@@ -199,7 +201,7 @@ public class Ruangan {
                 }
             }
             //MONSTER HIT PLAYER
-            for(Monster monster: monsters) {
+            for (Monster monster : monsters) {
                 if (Static.rectangleCollisionDetect(monster.getHitBox(), PLAYER.getHitBox())) {
                     if (PLAYER.getImmunityFrames() == 0) {
                         monster.takeDamage(PLAYER.getAttack());
@@ -217,7 +219,7 @@ public class Ruangan {
                             breakable.getBreakSound().play(app.masterSound);
                         }
                     }
-                    for (Monster monster:monsters) {
+                    for (Monster monster : monsters) {
                         if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i],
                                 monster.getHitBox())) {
                             if (PLAYER.getWeapon().getWeaponAnimation() instanceof MeleeWeaponAnimation && monster.getImmunityFrames() == 0) {
@@ -238,17 +240,12 @@ public class Ruangan {
         }
 
 
-
-
-
-
-        if (TYPE.equalsIgnoreCase("boss")){
+        if (TYPE.equalsIgnoreCase("boss")) {
             if (boss instanceof StoneGolem) {
                 boss.draw(batch, stateTime);
                 if (((StoneGolem) boss).isSpawning()) {
                     PLAYER.cannotMove();
-                }
-                else {
+                } else {
                     PLAYER.canMoveFree();
 
                     if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), boss.getHitBox())) {
@@ -261,7 +258,8 @@ public class Ruangan {
                     }
 
                     for (int i = 0; i < PLAYER.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
-                        if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i], boss.getHitBox())) {
+                        if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i]
+                                , boss.getHitBox()) && ((StoneGolem) boss).canTakeDamage()) {
                             ((StoneGolem) boss).takeDamage(PLAYER.getAttack());
                         }
                     }
@@ -270,94 +268,102 @@ public class Ruangan {
         }
 
 
-
-
         //PINTU
         if ((Static.rectangleCollisionDetect(PLAYER.getHitBox(), centerDoorHitbox) ||
                 Static.rectangleCollisionDetect(PLAYER.getHitBox(), leftDoorHitbox) ||
-                        Static.rectangleCollisionDetect(PLAYER.getHitBox(), rightDoorHitbox)) && monsters.size() == 0) {
-
-            BitmapFont font = new BitmapFont();
-            font.getData().setScale(1.5f);
-            BitmapFontCache text = new BitmapFontCache(font);
-            text.setText("Press Spacebar", PLAYER.getPosX() - 40, PLAYER.getPosY() + PLAYER.getHeight() * 2);
-            text.draw(batch);
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                if (!showingCard) {
-                    showingCard = true;
-                    openDoor.play(1.2f);
-                }
-                if  (TYPE.equalsIgnoreCase("shop")) {
-                    done = true;
-                    closeDoor.play(1.2f);
+                Static.rectangleCollisionDetect(PLAYER.getHitBox(), rightDoorHitbox))) {
+            if (TYPE.equalsIgnoreCase("dungeon") || TYPE.equalsIgnoreCase("shop")) {
+                if (monsters.size() == 0) {
+                    exitRuangan(batch);
                 }
             }
-
-
-            if (showingCard && !TYPE.equalsIgnoreCase("shop")) {
-                PLAYER.cannotMove();
-                if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), centerDoorHitbox)) {
-                    Drawer.drawCard(batch, buffs.get(0));
-                    selectedBuff = buffs.get(0);
-                }
-                if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), leftDoorHitbox)) {
-                    Drawer.drawCard(batch, buffs.get(1));
-                    selectedBuff = buffs.get(1);
-                }
-                if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), rightDoorHitbox)) {
-                    Drawer.drawCard(batch, buffs.get(2));
-                    selectedBuff = buffs.get(2);
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                    showingCard = false;
-                    PLAYER.canMoveFree();
-                    closeDoor.play(app.masterSound);
-                }
-                //BUTTONS
-                batch.draw(button, (float) leftButtonHitbox.getX(), 700 - (float) leftButtonHitbox.getY() - (float) leftButtonHitbox.getHeight(),
-                        (float) leftButtonHitbox.getWidth(), (float) leftButtonHitbox.getHeight());
-                batch.draw(button, (float) rightButtonHitbox.getX(), 700 - (float) rightButtonHitbox.getY() - (float) rightButtonHitbox.getHeight(),
-                        (float) rightButtonHitbox.getWidth(), (float) rightButtonHitbox.getHeight());
-                font.getData().setScale(2f);
-                text = new BitmapFontCache(font);
-                text.setColor(Color.BLACK);
-                text.setText("Exit", 255,128);
-                text.draw(batch);
-                text.setColor(Color.WHITE);
-                text.setText("Exit", 255, 123);
-                text.draw(batch);
-
-                text.setColor(Color.BLACK);
-                text.setText("Select", 520,128);
-                text.draw(batch);
-                text.setColor(Color.WHITE);
-                text.setText("Select", 520, 123);
-                text.draw(batch);
-
-                //mouse
-                if (Gdx.input.isButtonJustPressed(0)) {
-                    if (Static.rectangleCollisionDetect(leftButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
-                        showingCard = false;
-                        PLAYER.canMoveFree();
-                        closeDoor.play(app.masterSound);
-                    }
-                    if (Static.rectangleCollisionDetect(rightButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
-                        done = true;
-                        selectedBuff.activate(PLAYER);
-                        closeDoor.play(app.masterSound);
-                    }
-                }
+        } else if (TYPE.equalsIgnoreCase("boss")) {
+            if (boss.isDead()) {
+                exitRuangan(batch);
             }
         }
         //remove semua monster kalau player mati
-        if (PLAYER.isDying()){
+        if (PLAYER.isDying()) {
             if (monsters.size() > 0) {
                 monsters.subList(0, monsters.size()).clear();
             }
         }
     }
 
+    private void exitRuangan(SpriteBatch batch) {
+        BitmapFont font = new BitmapFont();
+        font.getData().setScale(1.5f);
+        BitmapFontCache text = new BitmapFontCache(font);
+        text.setText("Press Spacebar", PLAYER.getPosX() - 40, PLAYER.getPosY() + PLAYER.getHeight() * 2);
+        text.draw(batch);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (!showingCard) {
+                showingCard = true;
+                openDoor.play(1.2f);
+            }
+            if (TYPE.equalsIgnoreCase("shop")) {
+                done = true;
+                closeDoor.play(1.2f);
+            }
+        }
+
+
+        if (showingCard && !TYPE.equalsIgnoreCase("shop")) {
+            PLAYER.cannotMove();
+            if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), centerDoorHitbox)) {
+                Drawer.drawCard(batch, buffs.get(0));
+                selectedBuff = buffs.get(0);
+            }
+            if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), leftDoorHitbox)) {
+                Drawer.drawCard(batch, buffs.get(1));
+                selectedBuff = buffs.get(1);
+            }
+            if (Static.rectangleCollisionDetect(PLAYER.getHitBox(), rightDoorHitbox)) {
+                Drawer.drawCard(batch, buffs.get(2));
+                selectedBuff = buffs.get(2);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                showingCard = false;
+                PLAYER.canMoveFree();
+                closeDoor.play(app.masterSound);
+            }
+            //BUTTONS
+            batch.draw(button, (float) leftButtonHitbox.getX(), 700 - (float) leftButtonHitbox.getY() - (float) leftButtonHitbox.getHeight(),
+                    (float) leftButtonHitbox.getWidth(), (float) leftButtonHitbox.getHeight());
+            batch.draw(button, (float) rightButtonHitbox.getX(), 700 - (float) rightButtonHitbox.getY() - (float) rightButtonHitbox.getHeight(),
+                    (float) rightButtonHitbox.getWidth(), (float) rightButtonHitbox.getHeight());
+            font.getData().setScale(2f);
+            text = new BitmapFontCache(font);
+            text.setColor(Color.BLACK);
+            text.setText("Exit", 255, 128);
+            text.draw(batch);
+            text.setColor(Color.WHITE);
+            text.setText("Exit", 255, 123);
+            text.draw(batch);
+
+            text.setColor(Color.BLACK);
+            text.setText("Select", 520, 128);
+            text.draw(batch);
+            text.setColor(Color.WHITE);
+            text.setText("Select", 520, 123);
+            text.draw(batch);
+
+            //mouse
+            if (Gdx.input.isButtonJustPressed(0)) {
+                if (Static.rectangleCollisionDetect(leftButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
+                    showingCard = false;
+                    PLAYER.canMoveFree();
+                    closeDoor.play(app.masterSound);
+                }
+                if (Static.rectangleCollisionDetect(rightButtonHitbox, new Rectangle(Gdx.input.getX(), Gdx.input.getY(), 1, 1))) {
+                    done = true;
+                    selectedBuff.activate(PLAYER);
+                    closeDoor.play(app.masterSound);
+                }
+            }
+        }
+    }
 
 
     private void initializeTemplate(int template, int level) {
