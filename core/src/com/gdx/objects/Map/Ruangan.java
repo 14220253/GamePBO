@@ -131,9 +131,6 @@ public class Ruangan {
             rightBorder = new Rectangle(710, 40, 5, 500);
             bottomBorder = new Rectangle(48, 55, 705, 8);
             upperborder = new Rectangle(48, 525, 705, 8);
-            centerDoorHitbox.setLocation(365, 475);
-            leftDoorHitbox.setLocation(-25, 265);
-            rightDoorHitbox.setLocation(675, 265);
         } else if (TYPE.equalsIgnoreCase("Shop")) {
             PLAYER.canMoveFree();
 
@@ -277,9 +274,10 @@ public class Ruangan {
                     exitRuangan(batch);
                 }
             }
-        } else if (TYPE.equalsIgnoreCase("boss")) {
-            if (boss.isDead()) {
-                exitRuangan(batch);
+            else if (TYPE.equalsIgnoreCase("boss")) {
+                if (boss.isDead()) {
+                    exitRuangan(batch);
+                }
             }
         }
         //remove semua monster kalau player mati
