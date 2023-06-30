@@ -118,8 +118,8 @@ public class StoneGolem extends Boss{
                 batch.setColor(1, 1, 1, 1);
             }
             else {
-                System.out.println(skillCooldown);
                 if (skillCooldown <= 0) {
+                    armLaunchDone = false;
                     armLaunch.drawSkill(batch, player, ruangan);
                 } else {
                     switch (facing) {
@@ -133,7 +133,6 @@ public class StoneGolem extends Boss{
                     skillCooldown -= 1 * Gdx.graphics.getDeltaTime();
                     batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
                 }
-//                System.out.println(skillCooldown);
                 immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
             }
         }
@@ -185,7 +184,6 @@ public class StoneGolem extends Boss{
                                 projectilePosition.x > ruangan.getLeftBorder().getX() - projectileWidth) &&
                                 (projectilePosition.y >= ruangan.getBottomBorder().getY() - projectileHeight &&
                                         projectilePosition.y < ruangan.getUpperborder().getY())) {
-
                             if (playerPosition.x >= CENTERX) {
                                 projectilePosition.x += 5f;
                             } else {
@@ -219,9 +217,9 @@ public class StoneGolem extends Boss{
                                         break;
                                 }
                             } else {
-                                skillCooldown = 5f;
+                                animationTimer = 0;
+                                skillCooldown = 1.5f;
                                 armLaunchDone = true;
-                                System.out.println("BRUHBRUHBRUH");
                             }
                         }
                     }
