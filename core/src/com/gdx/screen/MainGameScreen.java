@@ -13,6 +13,7 @@ import com.gdx.objects.*;
 import com.gdx.objects.Map.Floor;
 import com.gdx.objects.Monsters.Monster;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class
@@ -123,6 +124,9 @@ MainGameScreen implements Screen {
         for (Drops d: floors.get(floorCount).getCurrentRoom().getDrops()) {
             shapeRenderer.rect(d.getHitbox().x, d.getHitbox().y, d.getHitbox().width, d.getHitbox().height);
         }
+        Rectangle hitBox = new Rectangle(345, 275
+                , 138, 150);
+        shapeRenderer.rect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
         shapeRenderer.end();
     }
     public void getEnities() {

@@ -262,7 +262,7 @@ public class Ruangan {
 
                     for (int i = 0; i < PLAYER.getWeapon().getWeaponAnimation().getHitboxes().length; i++) {
                         if (Static.rectangleCollisionDetect(PLAYER.getWeapon().getWeaponAnimation().getHitboxes()[i], boss.getHitBox())) {
-                            boss.takeDamage(PLAYER.getAttack());
+                            ((StoneGolem) boss).takeDamage(PLAYER.getAttack());
                         }
                     }
                 }

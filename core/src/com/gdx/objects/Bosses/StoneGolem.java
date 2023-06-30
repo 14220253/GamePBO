@@ -94,6 +94,10 @@ public class StoneGolem extends Boss{
 
     @Override
     public void draw(SpriteBatch batch, float stateTime) {
+        ShapeRenderer render = new ShapeRenderer();
+//        render.begin(ShapeRenderer.ShapeType.Line);
+//        render.rect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//        render.end();
         if (player.getPosX() < posX) {
             facing = Facing.LEFT;
         }
@@ -111,7 +115,13 @@ public class StoneGolem extends Boss{
         else {
             spawning = false;
             if (immunityFrame > 0) {
-                currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
+                switch (facing) {
+                    case RIGHT:
+                        currentFrame = idleAnimationRight.getKeyFrame(stateTime, true);
+                        break;
+                    case LEFT:
+                        currentFrame = idleAnimationLeft.getKeyFrame(stateTime, true);
+                }
                 batch.setColor(Color.RED);
                 batch.draw(currentFrame, posX, posY, WIDTH, HEIGHT);
                 immunityFrame -= 1 * Gdx.graphics.getDeltaTime();
@@ -185,9 +195,9 @@ public class StoneGolem extends Boss{
                                 (projectilePosition.y >= ruangan.getBottomBorder().getY() - projectileHeight &&
                                         projectilePosition.y < ruangan.getUpperborder().getY())) {
                             if (playerPosition.x >= CENTERX) {
-                                projectilePosition.x += 5f;
+                                projectilePosition.x += 3f;
                             } else {
-                                projectilePosition.x -= 5f;
+                                projectilePosition.x -= 3f;
                             }
                             projectilePosition.y = (float)
                                     (playerPosition.y + (
@@ -249,10 +259,11 @@ public class StoneGolem extends Boss{
     }
     @Override
     public void takeDamage(double dmg) {
-        if (immunityFrame == 0) {
+        System.out.println(immunityFrame);
+        if (immunityFrame <= 0) {
             health -= checkNegativeDmg(dmg-defense);
             checkHealth();
-            immunityFrame = 30;
+            immunityFrame = 2.5f;
         }
     }
     public BossSkill getCurrentSkill() {
